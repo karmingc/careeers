@@ -1,6 +1,7 @@
 # Resumehub
 
 Resumehub's official source code, covering the frontend + backend.
+<br/>
 Visit live: https://www.resumehub.org
 
 ## About
@@ -11,7 +12,9 @@ Resumehub's version 1.0 was released on November 10th, 2019 and hasn't been main
 - media queries
 - styling in different pages (fonts, color palette, sizing, etc.)
 - reusability of different components
-  As a result, a redesign is underway.
+
+<br/>
+As a result, a redesign is underway.
 
 ### Timeline
 

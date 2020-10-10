@@ -20,7 +20,9 @@ Oct 10th, 2020 - Migrated to Typescript + Hooks.
 ## Development Team
 
 Karming Chin - [https://www.karmingchin.com]
+<br/>
 Neroli Ko - [https://www.neroliko.com/]
+<br/>
 Curtis Lin - [https://github.com/CurtisMIT]
 
 ## Setup and Installation

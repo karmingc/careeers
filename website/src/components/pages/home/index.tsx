@@ -43,6 +43,7 @@ const HomePage: React.FC = () => {
       company: 'linkedin'
     }
   ];
+
   return (
     <div
       css={css`
@@ -136,7 +137,7 @@ const HomePage: React.FC = () => {
       </div>
       <section
         css={css`
-          @media only screen and (min-width: 769px) {
+          @media (min-width: 769px) {
             display: flex;
 
             flex-wrap: wrap;

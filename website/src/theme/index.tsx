@@ -5,6 +5,11 @@ import {
   verticalStackCss,
   calcSpaceConstraints
 } from 'theme/styles/spacing';
+import {
+  cssForMediaSize,
+  MediaSize,
+  useMatchesMediaSize
+} from './mediaQueries';
 
 /* Heavily inspired from Flat Design
 https://htmlcolorcodes.com/color-chart/flat-design-color-chart/
@@ -50,5 +55,8 @@ export {
   calcSpaceConstraints,
   rawSpacing,
   horizontalStackCss,
-  verticalStackCss
+  verticalStackCss,
+  cssForMediaSize,
+  MediaSize,
+  useMatchesMediaSize
 };

@@ -1,5 +1,5 @@
 import css, { SerializedStyles } from '@emotion/css/macro';
-import { mapValues } from 'utilities/index';
+import { mapValues } from 'utilities';
 
 /**
  * Spacing in terms of pixels

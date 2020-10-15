@@ -1,5 +1,5 @@
 import css, { SerializedStyles } from '@emotion/css/macro';
-import { mapValues } from 'utilities/index';
+import { mapValues } from 'utilities';
 import { rawSpacing } from 'theme/styles/spacing';
 
 // font families

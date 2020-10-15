@@ -1,3 +1,4 @@
+import { css } from '@emotion/core';
 import { truncateText } from 'theme/styles/font';
 import {
   rawSpacing,
@@ -9,29 +10,39 @@ import {
   cssForMediaSize,
   MediaSize,
   useMatchesMediaSize
-} from './mediaQueries';
+} from './media_queries';
+import { NotoSerif, NotoSansHK } from './styles/font';
 
-/* Heavily inspired from Flat Design
-https://htmlcolorcodes.com/color-chart/flat-design-color-chart/
-*/
+// material design palette
+// https://htmlcolorcodes.com/color-chart/material-design-color-chart/
 
 /**
  * palette used everywhere in app
  */
 export const palette = {
-  lightSky: '#ffffff',
+  white: '#FFFFFF',
   black: '#000000',
   secondaryBlack: 'rgba(0,0,0,0.8)',
-  lightPurple: '#f8f8fb',
-  purple: '#495378',
-  secondaryPurple: 'rgba(73,83,120, 0.8)',
-  orange: '#EE7367'
+  grey10: '#fafafa',
+  grey20: '#f5f5f5',
+  grey30: '#eeeeee',
+  grey40: '#e0e0e0',
+  grey50: '#bdbdbd',
+  grey60: '#9e9e9e',
+  grey70: '#757575',
+  grey80: '#616161',
+  grey90: '#424242',
+  grey100: '#212121',
+  blue10: '#E3F2FD',
+  blue40: '#64B5F6',
+  blue60: '#2196F3',
+  blue90: '#1565C0'
 };
 
 /**
  * zIndex for components
  */
-export const zIndex = {
+const zIndex = {
   page: 1,
   header: 2,
   sidebar: 3,
@@ -41,16 +52,64 @@ export const zIndex = {
 /**
  * Global theme used throughout
  */
-export const theme = {
-  background: palette.lightSky,
-  backgroundSecondary: palette.lightPurple,
-  textPrimaryBlack: palette.black,
-  textSecondaryBlack: palette.secondaryBlack,
-  textPrimaryPurple: palette.purple,
-  textSecondaryPurple: palette.secondaryPurple
+const theme = {
+  backgroundWhite: palette.white,
+  backgroundGrey: palette.grey100,
+  activeGrey: palette.grey100,
+  blurGrey: palette.grey50,
+  fontPrimaryGrey: palette.grey100,
+  fontSecondaryGrey: palette.grey90,
+  fontPrimaryWhite: 'white',
+
+  outlineBlue: palette.blue60
 };
 
+/**
+ * transition + animation speed
+ */
+const transition = {
+  /**
+   * 500
+   */
+  standard: 500,
+  overlay: 1000,
+  menuIcon: 500
+};
+
+/**
+ * Global sizes for references
+ */
+const size = {
+  page: {
+    width: {
+      desktop: '100%',
+      tablet: '100%'
+    },
+    padding: {
+      desktop: `${rawSpacing.m}px ${rawSpacing.xxxl}px`,
+      tablet: `${rawSpacing.m}px ${rawSpacing.l}px`
+    },
+    maxWidth: '1200px'
+  },
+  card: {}
+};
+
+export const outlineFocus = css`
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: 4px solid ${theme.outlineBlue};
+    background: transparent;
+  }
+`;
+
 export {
+  theme,
+  zIndex,
+  size,
+  transition,
   truncateText,
   calcSpaceConstraints,
   rawSpacing,
@@ -58,5 +117,7 @@ export {
   verticalStackCss,
   cssForMediaSize,
   MediaSize,
-  useMatchesMediaSize
+  useMatchesMediaSize,
+  NotoSerif,
+  NotoSansHK
 };

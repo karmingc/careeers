@@ -43,7 +43,7 @@ const ProfilePreview = React.memo<ProfileProps>(function ProfilePreviewImpl(
         background-color: white;
         border-radius: 5px;
         box-shadow: 0 7px 65px 0px rgba(0, 0, 0, 0.15);
-        margin-top: ${rawSpacing.xxl}px;
+        /* margin-top: ${rawSpacing.xxl}px; */
       `}
     >
       <section
@@ -86,7 +86,7 @@ const ProfilePreview = React.memo<ProfileProps>(function ProfilePreviewImpl(
           <span
             css={css`
               font-size: 12px;
-              color: ${theme.textSecondaryPurple};
+              color: ${theme.fontSecondaryGrey};
             `}
           >
             {position}

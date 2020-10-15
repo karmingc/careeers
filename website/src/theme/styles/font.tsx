@@ -2,6 +2,21 @@ import css, { SerializedStyles } from '@emotion/css/macro';
 import { mapValues } from 'utilities/index';
 import { rawSpacing } from 'theme/styles/spacing';
 
+// font families
+/**
+ * Font for articles
+ */
+export const NotoSerif = css`
+  font-family: 'Noto Serif', serif;
+`;
+
+/**
+ * General font used
+ */
+export const NotoSansHK = css`
+  font-family: 'Noto Sans HK', sans-serif;
+`;
+
 /**
  * text sizes
  */

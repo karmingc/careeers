@@ -14,16 +14,16 @@ interface ContentCssProps {
 const STYLES_NO_MARGINS = css`
   margin-top: 0px;
   margin-bottom: 0px;
-  color: ${theme.textPrimaryPurple};
-  letter-spacing: 1px;
+  color: ${theme.fontPrimaryGrey};
+  letter-spacing: 0.5px;
 `;
 
 /* Headings */
 /* Always use lowest one unless stated otherwise */
 
 /**
- * Default padding: rawSpacing.xxl / 40px
- * if separating from top: 2x / 80px
+ * Default padding: rawSpacing.xl / 32px
+ * if separating from top: 2x / 64px
  * used for page banner / main product name
  * @param props contentCss if needed
  */
@@ -46,8 +46,8 @@ export const H1 = React.memo<ContentCssProps>((props) => {
 });
 
 /**
- * Default padding: rawSpacing.xl / 32px
- * if separating from top: 2x / 64px
+ * Default padding: rawSpacing.l / 24px
+ * if separating from top: 2x / 48px
  * used for page banner / main product name
  * @param props contentCss if needed
  */
@@ -61,8 +61,8 @@ export const H2 = React.memo<ContentCssProps>((props) => {
 });
 
 /**
- * Default padding: rawSpacing.l / 24px
- * Separating from top: 2x / 48px
+ * Default padding: rawSpacing.m / 16px
+ * Separating from top: 2x / 32px
  * Used for section header
  * @param props contentCss if needed
  */
@@ -108,6 +108,9 @@ const STYLES_TEXT = css`
   line-height: 1.5;
 `;
 
+/**
+ * Default padding: rawSpacing.s
+ */
 export const P = React.memo<ContentCssProps>((props) => {
   const { contentCss, children } = props;
   return <p css={[STYLES_NO_MARGINS, STYLES_TEXT, contentCss]}>{children}</p>;

@@ -4,12 +4,12 @@ import { jsx } from '@emotion/core';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import { H1 } from 'components/common/system';
 
-const ResourcesPage: React.FC = () => {
+const AboutPage: React.FC = () => {
   return (
-    <DefaultPageLayout pageTitle={'Resources'}>
-      <H1>Resources</H1>
+    <DefaultPageLayout pageTitle={'About'}>
+      <H1>About</H1>
     </DefaultPageLayout>
   );
 };
 
-export default ResourcesPage;
+export default AboutPage;

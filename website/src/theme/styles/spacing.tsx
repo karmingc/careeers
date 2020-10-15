@@ -32,6 +32,7 @@ export const horizontalStackCss: {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 
     > :not(:last-child) {
       margin-right: ${sizePx}px;
@@ -55,6 +56,8 @@ export const verticalStackCss: {
   mapper: (sizePx: number) => css`
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     > :not(:last-child) {
       margin-bottom: ${sizePx}px;
@@ -67,18 +70,23 @@ export const verticalStackCss: {
 });
 
 /**
- * Space constraints to determine each card width
+ * Space constraints to subtract from each card width
  * @param cardsPerRow self explanatory
  * @param paddingInCard self explanatory
  */
-export const calcSpaceConstraints = (
-  cardsPerRow: number,
-  paddingInCard: number
-) => {
+export const calcSpaceConstraints = ({
+  spacing,
+  cardsPerRow,
+  paddingInCard
+}: {
+  spacing: number;
+  cardsPerRow: number;
+  paddingInCard: number;
+}) => {
   // keep spacing constant throughout cards
-  const spacing = rawSpacing.l * (cardsPerRow - 1);
+  const totalSpacing = spacing * (cardsPerRow - 1);
   const totalBorder = 2 * cardsPerRow;
   const totalPadding = 2 * paddingInCard * cardsPerRow;
 
-  return spacing + totalBorder + totalPadding;
+  return totalSpacing + totalBorder + totalPadding;
 };

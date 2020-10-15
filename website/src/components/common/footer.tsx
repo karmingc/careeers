@@ -1,13 +1,18 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import { theme } from 'theme';
 
 const Footer: React.FC = () => {
   return (
     <footer
       css={css`
-        margin: 50px;
+        height: 100px;
+        width: 100%;
+        background-color: ${theme.backgroundGrey};
       `}
-    ></footer>
+    >
+      hi
+    </footer>
   );
 };
 

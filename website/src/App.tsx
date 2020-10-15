@@ -7,7 +7,13 @@ import { globalStyle } from 'theme/styles/global';
 import Header from 'components/common/header';
 import Footer from 'components/common/footer';
 import HomePage from './components/pages/home';
-import ResourcesPage from './components/pages/resources';
+import NotFoundPage from 'components/common/layout/not_found';
+import ScrollToTop from 'components/common/system/scroll_to_top';
+import ResumesFeed from 'components/pages/resumes/feed';
+import ResourcesPage from 'components/pages/resources';
+import InterviewsPage from 'components/pages/interviews';
+import AboutPage from 'components/pages/about';
+import ResumePage from 'components/pages/resumes';
 
 const App = () => {
   return (
@@ -16,28 +22,21 @@ const App = () => {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-
-        > * {
-          width: 85%;
-        }
+        justify-content: space-between;
       `}
     >
       <Global styles={globalStyle} />
       <Router>
+        <ScrollToTop />
         <Header />
         <Switch>
-          <div
-            css={css`
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-            `}
-          >
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/resources" component={ResourcesPage} />
-          </div>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/resumes" component={ResumesFeed} />
+          <Route exact path="/resumes/:id" component={ResumePage} />
+          <Route exact path="/interviews" component={InterviewsPage} />
+          <Route exact path="/resources" component={ResourcesPage} />
+          <Route exact path="/about" component={AboutPage} />
+          <Route path="*" component={NotFoundPage} />
         </Switch>
         <Footer />
       </Router>

@@ -5,13 +5,12 @@ export const globalStyle = css`
   body,
   textarea {
     margin: 0;
-    font-family: 'Fira Sans', sans-serif;
+    font-family: 'Noto Sans HK', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: black;
-
+    color: ${theme.fontPrimaryGrey};
     height: 100%;
-    background-color: ${theme.background};
+    background-color: ${theme.backgroundWhite};
   }
 
   code {

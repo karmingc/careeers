@@ -39,7 +39,7 @@ export const ProfileCard = React.memo((props) => {
       >
         <H3
           contentCss={css`
-            color: ${theme.textPrimaryBlack};
+            color: ${theme.fontPrimaryGrey};
           `}
         >
           Karming C.
@@ -47,7 +47,7 @@ export const ProfileCard = React.memo((props) => {
         <H4
           contentCss={css`
             font-weight: normal;
-            color: ${theme.textSecondaryBlack};
+            color: ${theme.fontSecondaryGrey};
           `}
         >
           McGill University
@@ -116,7 +116,7 @@ export const ExperienceCard = React.memo((props) => {
       >
         <H4
           contentCss={css`
-            color: ${theme.textPrimaryBlack};
+            color: ${theme.fontPrimaryGrey};
           `}
         >
           Software Engineering Intern
@@ -124,7 +124,7 @@ export const ExperienceCard = React.memo((props) => {
         <H5
           contentCss={css`
             font-weight: normal;
-            color: ${theme.textSecondaryBlack};
+            color: ${theme.fontSecondaryGrey};
           `}
         >
           Menlo Park • Summer 2019

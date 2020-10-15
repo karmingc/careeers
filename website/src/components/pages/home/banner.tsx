@@ -16,7 +16,7 @@ const Banner: React.FC = () => {
         display: flex;
         height: 500px;
         width: 1000px;
-        background-color: ${theme.backgroundSecondary};
+        background-color: ${theme.backgroundGrey};
         border-radius: 25px;
 
         @media only screen and (max-width: 768px) {
@@ -46,7 +46,7 @@ const Banner: React.FC = () => {
         <H1>Discover and learn.</H1>
         <H4
           contentCss={css`
-            color: ${theme.textSecondaryPurple};
+            color: ${theme.fontSecondaryGrey};
             font-weight: lighter;
             line-height: 1.5;
           `}
@@ -69,7 +69,7 @@ const Banner: React.FC = () => {
               }
 
               div:last-child {
-                border-right: 1px solid ${theme.backgroundSecondary};
+                border-right: 1px solid ${theme.backgroundGrey};
               }
             }
 
@@ -110,7 +110,7 @@ const Banner: React.FC = () => {
                   contentCss={css`
                     margin-top: ${rawSpacing.s}px;
                     font-weight: lighter;
-                    color: ${theme.textSecondaryPurple};
+                    color: ${theme.fontSecondaryGrey};
                   `}
                 >
                   {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -124,8 +124,8 @@ const Banner: React.FC = () => {
           css={css`
             margin-right: auto;
             padding: ${rawSpacing.l}px ${rawSpacing.xxxl}px;
-            background-color: ${palette.purple};
-            color: ${theme.background};
+            background-color: ${palette.grey100};
+            color: ${theme.backgroundWhite};
             font-size: 16px;
             font-weight: bold;
             border-radius: 50px;

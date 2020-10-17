@@ -1,4 +1,4 @@
-import css, { SerializedStyles } from '@emotion/css/macro';
+import css, { SerializedStyles } from '@emotion/css';
 import { mapValues } from 'utilities';
 
 /**

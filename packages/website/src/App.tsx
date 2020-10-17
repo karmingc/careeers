@@ -6,7 +6,7 @@ import { globalStyle } from 'theme/styles/global';
 
 import Header from 'components/common/header';
 import Footer from 'components/common/footer';
-import HomePage from './components/pages/home';
+
 import NotFoundPage from 'components/common/layout/not_found';
 import ScrollToTop from 'components/common/system/scroll_to_top';
 import ResumesFeed from 'components/pages/resumes/feed';
@@ -14,6 +14,8 @@ import ResourcesPage from 'components/pages/resources';
 import InterviewsPage from 'components/pages/interviews';
 import AboutPage from 'components/pages/about';
 import ResumePage from 'components/pages/resumes';
+import { PrivacyPage } from 'components/pages/privacy';
+import HomePage from './components/pages/home';
 
 const App = () => {
   return (
@@ -36,6 +38,8 @@ const App = () => {
           <Route exact path="/interviews" component={InterviewsPage} />
           <Route exact path="/resources" component={ResourcesPage} />
           <Route exact path="/about" component={AboutPage} />
+          <Route exact path="/privacy" component={PrivacyPage} />
+
           <Route path="*" component={NotFoundPage} />
         </Switch>
         <Footer />

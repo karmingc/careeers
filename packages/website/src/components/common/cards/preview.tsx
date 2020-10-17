@@ -14,12 +14,14 @@ import {
 } from 'theme';
 import { H3, P } from '../system';
 
-interface ResumeProps {
+interface PreviewProps {
   resume: {
     name: string;
     company: string;
     description: string;
+    img: string;
   };
+  type: string;
 }
 
 const STYLES_CARD = css`
@@ -68,8 +70,9 @@ const STYLES_CARD = css`
 /**
  * Resume preview card
  */
-const ResumePreview = React.memo<ResumeProps>((props) => {
-  const { name, company, description } = props.resume;
+const PreviewCard = React.memo<PreviewProps>((props) => {
+  const { name, company, description, img } = props.resume;
+  const { type } = props;
   return (
     <div css={STYLES_CARD}>
       <Link
@@ -78,8 +81,12 @@ const ResumePreview = React.memo<ResumeProps>((props) => {
           text-decoration: none;
           :hover {
             cursor: pointer;
+
             img {
-              border: 1px solid ${theme.activeGrey};
+              border: ${type === 'resume'
+                ? `1px solid ${theme.activeGrey}`
+                : `1px solid transparent`};
+              opacity: ${type === 'interview' ? 0.85 : 1};
             }
             h3 {
               opacity: 0.75;
@@ -91,10 +98,13 @@ const ResumePreview = React.memo<ResumeProps>((props) => {
           css={css`
             width: 100%;
             box-sizing: border-box;
-            border: 1px solid ${theme.blurGrey};
-            transition: border ease ${transition.standard}ms;
+            border: ${type === 'resume'
+              ? `1px solid ${theme.blurSoftGrey}`
+              : '1px solid transparent'};
+
+            transition: all ease ${transition.standard}ms;
           `}
-          src={require('../../../media/images/karming_pdf.png')}
+          src={require(`../../../media/images/${img}`)}
           alt={'resume'}
         />
         <H3>
@@ -112,4 +122,4 @@ const ResumePreview = React.memo<ResumeProps>((props) => {
   );
 });
 
-export default ResumePreview;
+export default PreviewCard;

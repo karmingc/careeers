@@ -30,6 +30,7 @@ module.exports = {
         project: ['./packages/*/tsconfig.json'],
     },
     rules: {
+        "react/prop-types": "off",
         'linebreak-style': 'off',
         "quotes": ["error", "single", { "avoidEscape": true }],
         'prettier/prettier': [

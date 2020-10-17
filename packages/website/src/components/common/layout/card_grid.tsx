@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
+import Masonry from 'react-masonry-css';
+
 import {
   cssForMediaSize,
   horizontalStackCss,

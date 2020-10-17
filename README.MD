@@ -6,28 +6,32 @@ Visit live: https://www.resumehub.org
 
 ## About
 
-Resumehub's version 1.0 was released on November 10th, 2019 and hasn't been maintained since. A little under a year later, we've decided to rewrite the application using Typescript and moved from class components to functional components, utilizing the power of Hooks + Context instead of Redux. During the migration, we've noticed that there was a lot of inconsistencies in areas such as:
+Resumehub's redesign was released on March 23rd, 2020 and hasn't been maintained since. As a result, we've decided to rewrite the application using Typescript and moved from class components to functional components, utilizing the power of Hooks + Context instead of Redux. During the migration, we've noticed that there was a lot of inconsistencies in areas such as:
 <br/>
 
 - media queries
-- styling in different pages (fonts, color palette, sizing, etc.)
+- styling in different pages (fonts, spacings, color palette, sizing, etc.)
 - reusability of different components
 - accessibility
 
 <br/>
-As a result, a redesign is underway.
+As a result, a redesign is currently underway.
 
 ### Timeline
 
-Oct 10th, 2020 - Migrated to Typescript + Hooks.
+Nov 10th, 2019 - Launch of ResumeHub
+<br/>
+Mar 23rd, 2020 - Redesign of ResumeHub
+<br/>
+Oct 10th, 2020 - Migrated to Typescript + Hooks
 
 ## Development Team
 
-Karming Chin - [https://www.karmingchin.com]
+Karming Chin - [https://www.karmingchin.com] - Engineer, Design, Product
 <br/>
-Neroli Ko - [https://www.neroliko.com/]
+Neroli Ko - [https://www.neroliko.com/] - Design
 <br/>
-Curtis Lin - [https://github.com/CurtisMIT]
+Curtis Lin - [https://github.com/CurtisMIT] - Engineer
 
 ## Setup and Installation
 

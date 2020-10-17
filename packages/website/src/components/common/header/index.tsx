@@ -16,7 +16,8 @@ import {
   useMatchesMediaSize,
   outlineFocus,
   transition,
-  rawSpacing
+  rawSpacing,
+  zIndex
 } from 'theme';
 import { H1 } from '../system';
 
@@ -25,15 +26,15 @@ const STYLES_HEADER = css`
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
-  border: 1px dotted grey;
+  z-index: ${zIndex.header};
 
   ${cssForMediaSize({
     max: MediaSize.TABLET,
     contentCss: css`
       width: ${size.page.width.tablet};
-      padding: ${size.page.padding.tablet};
+      padding: ${size.header.padding.tablet};
       align-items: center;
-      background-color: ${theme.backgroundGrey};
+      background-color: ${theme.backgroundWhite};
     `
   })}
 
@@ -42,7 +43,7 @@ const STYLES_HEADER = css`
     contentCss: css`
       width: ${size.page.width.desktop};
       background-color: ${theme.backgroundWhite};
-      padding: ${size.page.padding.desktop};
+      padding: ${size.header.padding.desktop};
       align-items: center;
     `
   })}
@@ -99,7 +100,7 @@ const STYLES_MENU_ICON = (isMenuOpen: boolean) => css`
     max: MediaSize.TABLET,
     contentCss: css`
       span {
-        background-color: ${theme.backgroundWhite};
+        background-color: ${theme.backgroundGrey};
       }
     `
   })}
@@ -113,22 +114,22 @@ const STYLES_MENU_OVERLAY = (isMenuOpen: boolean) => css`
   left: 0;
   width: 100%;
   box-sizing: border-box;
-  padding-top: ${rawSpacing.xxxl}px;
-  border-top: 1px solid white;
 
   background-size: 100% 200%;
   background-image: linear-gradient(
     to bottom,
     transparent 50%,
-    ${theme.backgroundGrey} 50%
+    ${theme.backgroundWhite} 50%
   );
   transition: background-position ${transition.overlay}ms;
 
   /* aligns -100% of background image to -100% of container */
   ${isMenuOpen
-    ? `background-position: 0 -100%;
+    ? `background-position: 0 -100%;    
+    border-top: 1px solid ${theme.blurSoftGrey};
+    padding-top: ${rawSpacing.xxxl}px;
   height: 100vh;`
-    : `animation: removeOverlay ${transition.overlay}ms;              
+    : `animation: removeOverlay ${transition.overlay}ms;            
   @keyframes removeOverlay {
     0% {
       height: 100vh;      
@@ -139,21 +140,13 @@ const STYLES_MENU_OVERLAY = (isMenuOpen: boolean) => css`
   }`}
 `;
 
-const STYLES_NAV = ({
-  selected,
-  isDesktop
-}: {
-  selected: boolean;
-  isDesktop: boolean;
-}) => css`
+const STYLES_NAV = ({ selected }: { selected: boolean }) => css`
   font-weight: bolder;
   text-decoration: none;
   transition: border-bottom ease ${transition.standard}ms;
 
-  border-bottom: ${selected && isDesktop
+  border-bottom: ${selected
     ? `1px solid ${theme.fontPrimaryGrey}`
-    : selected
-    ? `1px solid ${theme.fontPrimaryWhite}`
     : `1px solid transparent`};
 
   @keyframes fade {
@@ -168,11 +161,11 @@ const STYLES_NAV = ({
   ${cssForMediaSize({
     max: MediaSize.TABLET,
     contentCss: css`
-      color: ${theme.fontPrimaryWhite};
+      color: ${theme.fontPrimaryGrey};
       animation: fade ${transition.overlay}ms;
 
       :hover {
-        border-bottom: 1px solid ${theme.backgroundWhite};
+        border-bottom: 1px solid ${theme.activeGrey};
       }
     `
   })}
@@ -270,7 +263,7 @@ const Header: React.FC = () => {
           <H1
             contentCss={[
               css`
-                color: ${theme.fontPrimaryWhite};
+                color: ${theme.fontPrimaryGrey};
               `,
               NotoSerif
             ]}
@@ -279,7 +272,7 @@ const Header: React.FC = () => {
             Careeers.
           </H1>
         </Link>
-        <div></div>
+        <span />
         <div css={STYLES_MENU_OVERLAY(isMenuOpen)}>
           {isMenuOpen &&
             options.map((option) => {
@@ -289,11 +282,10 @@ const Header: React.FC = () => {
                   key={name}
                   css={STYLES_NAV({
                     selected:
-                      removeTrailingSlash(currentPathname) === path ?? false,
-                    isDesktop: !!isDesktop
+                      removeTrailingSlash(currentPathname) === path ?? false
                   })}
                   onClick={toggleMenu}
-                  to={name}
+                  to={path}
                 >
                   {name.charAt(0).toUpperCase() + name.slice(1)}
                 </Link>
@@ -334,11 +326,9 @@ const Header: React.FC = () => {
             <Link
               key={name}
               css={STYLES_NAV({
-                selected:
-                  removeTrailingSlash(currentPathname) === path ?? false,
-                isDesktop: isDesktop
+                selected: removeTrailingSlash(currentPathname) === path ?? false
               })}
-              to={name === 'resumes' ? path : name}
+              to={path}
             >
               {name.charAt(0).toUpperCase() + name.slice(1)}
             </Link>

@@ -36,7 +36,9 @@ export const palette = {
   blue10: '#E3F2FD',
   blue40: '#64B5F6',
   blue60: '#2196F3',
-  blue90: '#1565C0'
+  blue70: '#1E88E5',
+  blue90: '#1565C0',
+  blue100: '#0D47A1'
 };
 
 /**
@@ -44,7 +46,7 @@ export const palette = {
  */
 const zIndex = {
   page: 1,
-  header: 2,
+  header: 1,
   sidebar: 3,
   modal: 4
 };
@@ -55,8 +57,10 @@ const zIndex = {
 const theme = {
   backgroundWhite: palette.white,
   backgroundGrey: palette.grey100,
+  activeBlue: palette.blue90,
   activeGrey: palette.grey100,
-  blurGrey: palette.grey50,
+  blurStrongGrey: palette.grey70,
+  blurSoftGrey: palette.grey50,
   fontPrimaryGrey: palette.grey100,
   fontSecondaryGrey: palette.grey90,
   fontPrimaryWhite: 'white',
@@ -86,10 +90,22 @@ const size = {
       tablet: '100%'
     },
     padding: {
-      desktop: `${rawSpacing.m}px ${rawSpacing.xxxl}px`,
-      tablet: `${rawSpacing.m}px ${rawSpacing.l}px`
+      desktop: `${rawSpacing.m}px ${rawSpacing.xxxl}px ${rawSpacing.xxxxl}px`,
+      tablet: `${rawSpacing.m}px ${rawSpacing.l}px ${rawSpacing.xxxxl}px`
     },
     maxWidth: '1200px'
+  },
+  header: {
+    padding: {
+      desktop: `${rawSpacing.m}px ${rawSpacing.xxxl}px`,
+      tablet: `${rawSpacing.m}px ${rawSpacing.l}px`
+    }
+  },
+  footer: {
+    padding: {
+      desktop: `${rawSpacing.xxxxl}px ${rawSpacing.xxxl}px`,
+      tablet: `${rawSpacing.xxxxl}px ${rawSpacing.l}px`
+    }
   },
   card: {}
 };

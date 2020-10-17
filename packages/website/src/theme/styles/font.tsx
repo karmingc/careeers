@@ -1,6 +1,4 @@
-import css, { SerializedStyles } from '@emotion/css/macro';
-import { mapValues } from 'utilities';
-import { rawSpacing } from 'theme/styles/spacing';
+import css from '@emotion/css';
 
 // font families
 /**
@@ -18,28 +16,30 @@ export const NotoSansHK = css`
 `;
 
 /**
- * text sizes
+ * font size
  */
-const rawTextSize = {
-  text: 14,
-  title: 16,
-  sectionHeader: 18.72,
-  header: 24
+export const fontSize = {
+  /**
+   * h5 size
+   */
+  x_small: 13.28,
+  /**
+   * p size, used for normal text
+   */
+  small: 16,
+  /**
+   * h3 size, card title, headers for p size
+   */
+  medium: 18.72,
+  /**
+   * h2 size - page sub titles
+   */
+  large: 24,
+  /**
+   * h1 size - used for page titles
+   */
+  x_large: 32
 };
-
-/**
- * font size used throughtout
- * refer to rawTextSize for sizing
- * text: 13.28 / h5, title: 16 / h4, sectionHeader: 18.72 / h3, header: 24 /h2
- */
-export const fontSize: {
-  [key: string]: SerializedStyles;
-} = mapValues({
-  obj: rawTextSize,
-  mapper: (sizePx: number) => css`
-    font-size: ${sizePx}px;
-  `
-});
 
 /**
  * truncating text to # maxLine
@@ -53,24 +53,3 @@ export const truncateText = (maxLine: number) => {
     -webkit-box-orient: vertical;
   `;
 };
-
-/* styles for font */
-export const STYLES_FONT_NORMAL = css`
-  font-weight: 400;
-`;
-
-export const STYLES_FONT_HEIGHT = css`
-  line-height: 1.5;
-`;
-
-export const STYLES_FONT_UPPERCASE = css`
-  text-transform: uppercase;
-`;
-
-/**
- * margins for normal H2
- */
-export const STYLES_H2_SPACING = css`
-  margin-top: ${rawSpacing.xl}px;
-  margin-bottom: ${rawSpacing.xl}px;
-`;

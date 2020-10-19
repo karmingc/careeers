@@ -6,6 +6,8 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "outDir": "dist",
         "baseUrl": "./src",
         "paths": {
@@ -14,7 +16,5 @@
             ]
         }
     },
-    "include": [
-        "src/**/*"
-    ]
+    "include": ["src/**/*.ts"]
 }

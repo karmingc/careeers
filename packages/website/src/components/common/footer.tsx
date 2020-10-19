@@ -7,7 +7,7 @@ import {
   MediaSize,
   size,
   theme,
-  transition,
+  transitionTime,
   verticalStackCss
 } from 'theme';
 import { fontSize, NotoSerif } from 'theme/styles/font';
@@ -63,7 +63,7 @@ const STYLES_NAV_SECTION = css`
     text-decoration: none;
     border-bottom: 1px solid transparent;
     color: ${theme.fontPrimaryWhite};
-    transition: border-bottom ease ${transition.standard}ms;
+    transition: border-bottom ease ${transitionTime.standard}ms;
 
     :hover {
       color: ${theme.fontPrimaryWhite};

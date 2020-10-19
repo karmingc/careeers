@@ -3,15 +3,7 @@ import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  calcSpaceConstraints,
-  cssForMediaSize,
-  MediaSize,
-  rawSpacing,
-  theme,
-  transition,
-  verticalStackCss
-} from 'theme';
+import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
 import { H3, P } from '../system';
 
 interface PreviewProps {
@@ -24,76 +16,41 @@ interface PreviewProps {
   type: string;
 }
 
-const STYLES_CARD = css`
+const STYLES_CARD = ({ type }: { type: string }) => css`
   ${verticalStackCss.s}
-  margin-top: ${rawSpacing.xxxxl}px;
+  margin-bottom: ${rawSpacing.xxxxl}px;
   align-items: flex-start;
+  text-decoration: none;
 
-  a {
+  div {
     ${verticalStackCss.m}
     align-items: flex-start;
   }
 
-  ${cssForMediaSize({
-    max: MediaSize.TABLET,
-    contentCss: css`
-      width: calc(
-        (
-            100% -
-              ${calcSpaceConstraints({
-                spacing: rawSpacing.xxl,
-                cardsPerRow: 2,
-                paddingInCard: 0
-              })}px
-          ) / 2
-      );
-    `
-  })}
+  :hover {
+    cursor: pointer;
 
-  ${cssForMediaSize({
-    min: MediaSize.DESKTOP,
-    contentCss: css`
-      width: calc(
-        (
-            100% -
-              ${calcSpaceConstraints({
-                spacing: rawSpacing.xxl,
-                cardsPerRow: 4,
-                paddingInCard: 0
-              })}px
-          ) / 4
-      );
-    `
-  })}
+    img {
+      border: ${type === 'resume'
+        ? `1px solid ${theme.activeGrey}`
+        : `1px solid transparent`};
+      opacity: ${type === 'interview' ? 0.85 : 1};
+    }
+    h3 {
+      opacity: 0.75;
+    }
+  }
 `;
 
 /**
  * Resume preview card
  */
-const PreviewCard = React.memo<PreviewProps>((props) => {
+const PreviewCard: React.FC<PreviewProps> = React.memo((props) => {
   const { name, company, description, img } = props.resume;
   const { type } = props;
   return (
-    <div css={STYLES_CARD}>
-      <Link
-        to="/resumes/karming"
-        css={css`
-          text-decoration: none;
-          :hover {
-            cursor: pointer;
-
-            img {
-              border: ${type === 'resume'
-                ? `1px solid ${theme.activeGrey}`
-                : `1px solid transparent`};
-              opacity: ${type === 'interview' ? 0.85 : 1};
-            }
-            h3 {
-              opacity: 0.75;
-            }
-          }
-        `}
-      >
+    <Link css={STYLES_CARD({ type })} to={`/${type}s/karming`}>
+      <div>
         <img
           css={css`
             width: 100%;
@@ -102,15 +59,15 @@ const PreviewCard = React.memo<PreviewProps>((props) => {
               ? `1px solid ${theme.blurSoftGrey}`
               : '1px solid transparent'};
 
-            transition: all ease ${transition.standard}ms;
+            transition: all ease ${transitionTime.standard}ms;
           `}
           src={require(`../../../media/images/${img}`)}
-          alt={'resume'}
+          alt={type}
         />
         <H3>
           {name} — {company}
         </H3>
-      </Link>
+      </div>
       <P
         contentCss={css`
           color: ${theme.fontSecondaryGrey};
@@ -118,7 +75,7 @@ const PreviewCard = React.memo<PreviewProps>((props) => {
       >
         {description}
       </P>
-    </div>
+    </Link>
   );
 });
 

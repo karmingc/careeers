@@ -12,6 +12,7 @@ import {
   useMatchesMediaSize
 } from './media_queries';
 import { NotoSerif, NotoSansHK } from './styles/font';
+import { transitionTime, STYLES_IMAGE_HOVER } from './styles/transition';
 
 // material design palette
 // https://htmlcolorcodes.com/color-chart/material-design-color-chart/
@@ -45,10 +46,8 @@ export const palette = {
  * zIndex for components
  */
 const zIndex = {
-  page: 1,
-  header: 1,
-  sidebar: 3,
-  modal: 4
+  title: 1,
+  header: 2
 };
 
 /**
@@ -64,20 +63,10 @@ const theme = {
   fontPrimaryGrey: palette.grey100,
   fontSecondaryGrey: palette.grey90,
   fontPrimaryWhite: 'white',
-
+  buttonBgBlur: palette.grey30,
+  buttonBgHover: palette.grey50,
+  buttonBgActive: palette.grey100,
   outlineBlue: palette.blue60
-};
-
-/**
- * transition + animation speed
- */
-const transition = {
-  /**
-   * 500
-   */
-  standard: 500,
-  overlay: 1000,
-  menuIcon: 500
 };
 
 /**
@@ -117,7 +106,7 @@ export const outlineFocus = css`
 
   :focus-visible {
     outline: 4px solid ${theme.outlineBlue};
-    background: transparent;
+    /* background: transparent; */
   }
 `;
 
@@ -125,7 +114,8 @@ export {
   theme,
   zIndex,
   size,
-  transition,
+  transitionTime,
+  STYLES_IMAGE_HOVER,
   truncateText,
   calcSpaceConstraints,
   rawSpacing,

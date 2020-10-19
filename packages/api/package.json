@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "NODE_PATH=dist node dist/index.js",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts --watch src",
+    "db:run": "./scripts/runDocker.sh",
     "postinstall": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,7 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.28"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",

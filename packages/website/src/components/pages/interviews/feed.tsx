@@ -1,41 +1,56 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-
 import PreviewCard from 'components/common/cards/preview';
 
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
 import { H1, H2 } from 'components/common/system';
-
 import { verticalStackCss } from 'theme';
 
-const ResumesFeed: React.FC = () => {
-  const resumes = [
+const InterviewsFeed: React.FC = () => {
+  const interviews = [
     {
-      name: 'K',
+      name: 'Karming C',
       company: 'Stripe',
       description: 'Interned at Stripe during Summer 2019.',
-      img: 'karming_pdf.png'
+      img: 'karming.jpg'
     },
     {
-      name: 'Kar',
+      name: 'Cesar',
       company: 'Microsoft',
       description: 'Interned at Stripe during Summer 2019.',
-      img: 'karming_pdf.png'
+      img: 'cesar.jpg'
     },
     {
-      name: 'Karming',
+      name: 'Aiony',
       company: 'UBC Med',
       description:
-        'Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.',
-      img: 'karming_pdf.png'
+        'Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.',
+      img: 'aiony.jpg'
+    },
+    {
+      name: 'Karming C',
+      company: 'Stripe',
+      description: 'Interned at Stripe during Summer 2019.',
+      img: 'karming.jpg'
+    },
+    {
+      name: 'Cesar',
+      company: 'Microsoft',
+      description: 'Interned at Stripe during Summer 2019.',
+      img: 'cesar.jpg'
+    },
+    {
+      name: 'Aiony',
+      company: 'UBC Med',
+      description:
+        'Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.',
+      img: 'aiony.jpg'
     }
   ];
-  console.log('resume');
-
   return (
     <DefaultPageLayout
-      pageTitle="Home"
+      pageTitle="Interviews"
       contentCss={css`
         ${verticalStackCss.xxl}
         justify-content: flex-start;
@@ -48,17 +63,17 @@ const ResumesFeed: React.FC = () => {
           align-items: flex-start;
         `}
       >
-        <H1>Resumes</H1>
+        <H1>Interviews</H1>
         <H2
           contentCss={css`
             font-weight: normal;
           `}
         >
-          A point of reference.
+          Be Inspired. To Inspire.
         </H2>
       </div>
       <img
-        src={require('../../../media/images/frame.jpg')}
+        src={require('../../../media/images/idea.jpg')}
         alt="banner"
         css={css`
           max-height: 500px;
@@ -66,11 +81,14 @@ const ResumesFeed: React.FC = () => {
           width: 100%;
         `}
       />
-
       <MasonryGrid>
-        {resumes.map((resume) => {
+        {interviews.map((interview) => {
           return (
-            <PreviewCard key={resume.name} resume={resume} type="resume" />
+            <PreviewCard
+              key={interview.name}
+              resume={interview}
+              type="interview"
+            />
           );
         })}
       </MasonryGrid>
@@ -78,4 +96,4 @@ const ResumesFeed: React.FC = () => {
   );
 };
 
-export default ResumesFeed;
+export default InterviewsFeed;

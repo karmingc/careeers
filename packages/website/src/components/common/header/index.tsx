@@ -15,7 +15,7 @@ import {
   verticalStackCss,
   useMatchesMediaSize,
   outlineFocus,
-  transition,
+  transitionTime,
   rawSpacing,
   zIndex
 } from 'theme';
@@ -63,7 +63,7 @@ const STYLES_MENU_ICON = (isMenuOpen: boolean) => css`
     height: 2px;
     width: 20px;
     background-color: ${theme.backgroundGrey};
-    transition: all ease ${transition.menuIcon}ms;
+    transition: all ease ${transitionTime.menuIcon}ms;
   }
 
   span:nth-of-type(2) {
@@ -121,7 +121,7 @@ const STYLES_MENU_OVERLAY = (isMenuOpen: boolean) => css`
     transparent 50%,
     ${theme.backgroundWhite} 50%
   );
-  transition: background-position ${transition.overlay}ms;
+  transition: background-position ${transitionTime.overlay}ms;
 
   /* aligns -100% of background image to -100% of container */
   ${isMenuOpen
@@ -129,7 +129,7 @@ const STYLES_MENU_OVERLAY = (isMenuOpen: boolean) => css`
     border-top: 1px solid ${theme.blurSoftGrey};
     padding-top: ${rawSpacing.xxxl}px;
   height: 100vh;`
-    : `animation: removeOverlay ${transition.overlay}ms;            
+    : `animation: removeOverlay ${transitionTime.overlay}ms;            
   @keyframes removeOverlay {
     0% {
       height: 100vh;      
@@ -143,7 +143,7 @@ const STYLES_MENU_OVERLAY = (isMenuOpen: boolean) => css`
 const STYLES_NAV = ({ selected }: { selected: boolean }) => css`
   font-weight: bolder;
   text-decoration: none;
-  transition: border-bottom ease ${transition.standard}ms;
+  transition: border-bottom ease ${transitionTime.standard}ms;
 
   border-bottom: ${selected
     ? `1px solid ${theme.fontPrimaryGrey}`
@@ -162,7 +162,7 @@ const STYLES_NAV = ({ selected }: { selected: boolean }) => css`
     max: MediaSize.TABLET,
     contentCss: css`
       color: ${theme.fontPrimaryGrey};
-      animation: fade ${transition.overlay}ms;
+      animation: fade ${transitionTime.overlay}ms;
 
       :hover {
         border-bottom: 1px solid ${theme.activeGrey};
@@ -234,8 +234,8 @@ const Header: React.FC = () => {
   const options = [
     { path: '/interviews', name: 'interviews' },
     { path: '/resumes', name: 'resumes' },
-    { path: '/resources', name: 'resources' },
-    { path: '/about', name: 'about' }
+    { path: '/resources', name: 'resources' }
+    // { path: '/about', name: 'about' }
   ];
 
   // For media of size TABLET or below
@@ -273,7 +273,7 @@ const Header: React.FC = () => {
           </H1>
         </Link>
         <span />
-        <div css={STYLES_MENU_OVERLAY(isMenuOpen)}>
+        <nav css={STYLES_MENU_OVERLAY(isMenuOpen)}>
           {isMenuOpen &&
             options.map((option) => {
               const { path, name } = option;
@@ -291,7 +291,7 @@ const Header: React.FC = () => {
                 </Link>
               );
             })}
-        </div>
+        </nav>
       </header>
     );
   }
@@ -315,7 +315,7 @@ const Header: React.FC = () => {
           Careeers.
         </H1>
       </Link>
-      <div
+      <nav
         css={css`
           ${horizontalStackCss.xxl}
         `}
@@ -334,7 +334,7 @@ const Header: React.FC = () => {
             </Link>
           );
         })}
-      </div>
+      </nav>
     </header>
   );
 };

@@ -9,10 +9,10 @@ interface RelatedContentProps {
   children: React.ReactNode;
 }
 
-const RelatedContent = React.memo<RelatedContentProps>((props) => {
+const RelatedContent: React.FC<RelatedContentProps> = React.memo((props) => {
   const { pageTitle, children } = props;
   return (
-    <section
+    <aside
       css={css`
         ${verticalStackCss.xxl}
         margin-top: ${rawSpacing.xxl}px;
@@ -26,7 +26,7 @@ const RelatedContent = React.memo<RelatedContentProps>((props) => {
     >
       <H1>Related {pageTitle}</H1>
       {children}
-    </section>
+    </aside>
   );
 });
 export default RelatedContent;

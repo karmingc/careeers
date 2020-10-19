@@ -30,7 +30,9 @@ export interface ModalProps {
   children?: React.ReactNode;
 }
 
-const ModalComponent = React.memo<ModalProps>(function ModalImpl(props) {
+const ModalComponent: React.FC<ModalProps> = React.memo(function ModalImpl(
+  props
+) {
   const { isOpen, closeModal, children } = props;
   return (
     <React.Fragment>

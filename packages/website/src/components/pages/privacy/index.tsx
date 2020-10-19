@@ -13,9 +13,56 @@ import {
 import { H1, H2, P } from 'components/common/system';
 
 import { DefaultPageLayout } from 'components/common/layout/default_page';
+import { fontSize } from 'theme/styles/font';
 
 const AppUrl = 'Careeers';
 const AppName = 'Careeers';
+
+interface SectionProps {
+  title?: string;
+  text?: string;
+  children?: React.ReactNode;
+  contentCss?: SerializedStyles;
+}
+
+export const PrivacySection: React.FC<SectionProps> = ({
+  title,
+  text,
+  children,
+  contentCss
+}) => {
+  return (
+    <section
+      css={[
+        css`
+          ${verticalStackCss.m};
+          align-items: flex-start;
+        `,
+        contentCss
+      ]}
+    >
+      {title && (
+        <H2
+          contentCss={css`
+            text-transform: uppercase;
+          `}
+        >
+          {title}
+        </H2>
+      )}
+      {text && (
+        <P
+          contentCss={css`
+            font-size: ${fontSize.medium}px;
+          `}
+        >
+          {text}
+        </P>
+      )}
+      {children}
+    </section>
+  );
+};
 
 const STYLES_MAIN = css`
   ${cssForMediaSize({
@@ -67,7 +114,7 @@ const STYLES_CONTENT = css`
     `
   })}
 `;
-export const PrivacyPage: React.FC = () => {
+const PrivacyPage: React.FC = () => {
   return (
     <DefaultPageLayout pageTitle="Privacy" contentCss={STYLES_MAIN}>
       <div>
@@ -107,40 +154,4 @@ export const PrivacyPage: React.FC = () => {
   );
 };
 
-interface SectionProps {
-  title?: string;
-  text?: string;
-  children?: React.ReactNode;
-  contentCss?: SerializedStyles;
-}
-
-export const PrivacySection: React.FC<SectionProps> = ({
-  title,
-  text,
-  children,
-  contentCss
-}) => {
-  return (
-    <section
-      css={[
-        css`
-          ${verticalStackCss.m};
-          align-items: flex-start;
-        `,
-        contentCss
-      ]}
-    >
-      {title && (
-        <H2
-          contentCss={css`
-            text-transform: uppercase;
-          `}
-        >
-          {title}
-        </H2>
-      )}
-      {text && <P>{text}</P>}
-      {children}
-    </section>
-  );
-};
+export default PrivacyPage;

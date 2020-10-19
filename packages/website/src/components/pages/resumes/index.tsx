@@ -1,13 +1,14 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import PreviewCard from 'components/common/cards/preview';
-import CardGridLayout from 'components/common/layout/card_grid';
 
 import { DefaultPageLayout } from 'components/common/layout/default_page';
+import MasonryGrid from 'components/common/layout/masonry';
 import PreviousHeader from 'components/common/layout/previous_header';
 import RelatedContent from 'components/common/layout/related_content';
 import { H1, P } from 'components/common/system';
 import { A } from 'components/common/system/typography';
+
 import {
   cssForMediaSize,
   horizontalStackCss,
@@ -17,6 +18,7 @@ import {
   useMatchesMediaSize,
   verticalStackCss
 } from 'theme';
+import { fontSize } from 'theme/styles/font';
 
 const STYLES_MAIN = css`
   ${cssForMediaSize({
@@ -121,6 +123,7 @@ const ResumePage: React.FC = () => {
           <H1>Karming Chin - Stripe</H1>
           <P
             contentCss={css`
+              font-size: ${fontSize.medium}px;
               margin-top: -${rawSpacing.s}px;
             `}
           >
@@ -137,13 +140,27 @@ const ResumePage: React.FC = () => {
               const { name, url } = link;
               if (name === 'website') {
                 return (
-                  <A href={url}>{url.replace(/^https?:\/\/(www.)?/, '')}</A>
+                  <A
+                    href={url}
+                    contentCss={css`
+                      font-size: ${fontSize.medium}px;
+                    `}
+                  >
+                    {url.replace(/^https?:\/\/(www.)?/, '')}
+                  </A>
                 );
               }
               return (
                 <span>
                   {name.charAt(0).toUpperCase() + name.slice(1)} {''}
-                  <A href={url}>@{url}</A>
+                  <A
+                    href={url}
+                    contentCss={css`
+                      font-size: ${fontSize.medium}px;
+                    `}
+                  >
+                    @{url}
+                  </A>
                 </span>
               );
             })}
@@ -157,13 +174,13 @@ const ResumePage: React.FC = () => {
         </div>
       </section>
       <RelatedContent pageTitle="Resumes">
-        <CardGridLayout>
+        <MasonryGrid>
           {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
             return (
               <PreviewCard key={resume.name} resume={resume} type="resume" />
             );
           })}
-        </CardGridLayout>
+        </MasonryGrid>
       </RelatedContent>
     </DefaultPageLayout>
   );

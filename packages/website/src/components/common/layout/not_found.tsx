@@ -5,11 +5,10 @@ import css from '@emotion/css/macro';
 
 import { DefaultPageLayout } from './default_page';
 import { verticalStackCss } from 'theme/';
+import { H1 } from '../system';
 
-const STYLES_SUPPORT = css`
-  ${verticalStackCss.xl}
-  align-items: center;
-  width: calc(85% / 2);
+const STYLES_ERROR = css`
+  ${verticalStackCss.xxl}
 `;
 
 const NotFoundPage: React.FC = () => {
@@ -17,8 +16,19 @@ const NotFoundPage: React.FC = () => {
     <DefaultPageLayout
       pageTitle={'PAGE ERROR'}
       header={'page not found'}
-      contentCss={STYLES_SUPPORT}
-    ></DefaultPageLayout>
+      contentCss={STYLES_ERROR}
+    >
+      <H1>Seems like an error... But here's something else.</H1>
+      <img
+        src={require('../../../media/images/help.jpg')}
+        alt="banner"
+        css={css`
+          max-height: 500px;
+          object-fit: cover;
+          width: 100%;
+        `}
+      />
+    </DefaultPageLayout>
   );
 };
 

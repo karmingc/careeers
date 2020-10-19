@@ -53,11 +53,11 @@ export const DefaultPageLayout: React.FC<PageProps> = ({
   pageTitle
 }) => {
   return (
-    <div css={[STYLES_PAGE, contentCss]}>
+    <main css={[STYLES_PAGE, contentCss]}>
       <HelmetComponent pageTitle={pageTitle} />
 
       {children}
-    </div>
+    </main>
   );
 };
 

@@ -3,8 +3,8 @@ import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
 import { H3, P } from '../system';
+import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
 
 interface PreviewProps {
   resume: {
@@ -33,7 +33,7 @@ const STYLES_CARD = ({ type }: { type: string }) => css`
     img {
       border: ${type === 'resume'
         ? `1px solid ${theme.activeGrey}`
-        : `1px solid transparent`};
+        : '1px solid transparent'};
       opacity: ${type === 'interview' ? 0.85 : 1};
     }
     h3 {

@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
 import css from '@emotion/css/macro';
+import React from 'react';
 
+import { H1 } from '../system';
 import { DefaultPageLayout } from './default_page';
 import { verticalStackCss } from 'theme/';
-import { H1 } from '../system';
 
 const STYLES_ERROR = css`
   ${verticalStackCss.xxl}
@@ -14,8 +14,8 @@ const STYLES_ERROR = css`
 const NotFoundPage: React.FC = () => {
   return (
     <DefaultPageLayout
-      pageTitle={'PAGE ERROR'}
-      header={'page not found'}
+      pageTitle="PAGE ERROR"
+      header="page not found"
       contentCss={STYLES_ERROR}
     >
       <H1>Seems like an error... But here's something else.</H1>

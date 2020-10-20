@@ -1,4 +1,3 @@
-// https://medium.com/@brygrill/create-react-app-with-typescript-eslint-prettier-and-github-actions-f3ce6a571c97
 module.exports = {
     extends: [
         'plugin:@typescript-eslint/recommended',
@@ -8,15 +7,15 @@ module.exports = {
     ],
     plugins: ['@typescript-eslint'],
     env: {
-        es6: true,
+        es6: true
     },
     parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaFeatures: {
-            jsx: true,
+            jsx: true
         },
         ecmaVersion: 2018,
         sourceType: 'module',
-        project: ['./packages/*/tsconfig.json'],
+        project: ['./packages/*/tsconfig.json']
     }
 };

@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
@@ -6,14 +6,15 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import { ApiRoutes } from './routes/index';
-import { HttpMethods } from './helpers/https';
+import { app, HttpMethods } from './helpers/https';
+import { getCloudinaryInstance } from './helpers/cloudinary';
 
 dotenv.config();
 
-// create express app
-const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
 const port = process.env.PORT || 8080; // default port to listen
 
 app.get('/', (req: Request, res: Response) => {
@@ -54,7 +55,9 @@ createConnection({
         }
       );
     });
+    getCloudinaryInstance();
   })
+
   .catch((error) => console.log(error));
 
 // start the Express server

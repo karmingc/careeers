@@ -1,6 +1,11 @@
 import express from 'express';
-const app = express();
 
+/** Instantiate express app */
+export const app = express();
+
+/**
+ * GET, POST, DELETE, PUT, PATCH
+ */
 export enum HTTP {
   GET = 'GET',
   POST = 'POST',

@@ -1,7 +1,10 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
+import ResourcesCard from './card';
+import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
 import PageIndicator from 'components/common/layout/page_indicator';
@@ -9,11 +12,36 @@ import PageIndicator from 'components/common/layout/page_indicator';
 import { H1, H2 } from 'components/common/system';
 import { verticalStackCss } from 'theme';
 
-import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
-import ResourcesCard from './card';
-
 const ResourcesFeed: React.FC = () => {
   const [currPage, setPage] = useState(useMatchesPathPageNumber());
+  const [isLoading, setLoading] = useState(true);
+  const [resources, setResources] = useState([
+    {
+      cloudinaryId: '',
+      createdAt: '',
+      description: '',
+      id: '',
+      link: '',
+      name: '',
+      updatedAt: ''
+    }
+  ]);
+
+  useEffect(() => {
+    const fetchData = () => {
+      axios
+        .get('http://localhost:8080/api/resources')
+        .then((response) => {
+          setResources(response.data);
+          console.log(response.data);
+          setLoading(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchData();
+  }, [isLoading]);
 
   return (
     <DefaultPageLayout
@@ -54,10 +82,9 @@ const ResourcesFeed: React.FC = () => {
       )}
       {currPage !== 1 && <H1>Resources</H1>}
       <MasonryGrid>
-        <ResourcesCard />
-        <ResourcesCard />
-        <ResourcesCard />
-        <ResourcesCard />
+        {resources.map((resource) => {
+          return <ResourcesCard key={resource.id} resource={resource} />;
+        })}
       </MasonryGrid>
       <PageIndicator numOfCards={33} currPage={currPage} setPage={setPage} />
     </DefaultPageLayout>

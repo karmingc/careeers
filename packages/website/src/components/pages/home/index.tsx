@@ -1,14 +1,15 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+// import ResourcesCard from '../resources/card';
 import PreviewCard from 'components/common/cards/preview';
 import { Icon, IconName, IconSize } from 'components/common/icons';
 import CardGridLayout from 'components/common/layout/card_grid';
-
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 
 import { H1 } from 'components/common/system';
-import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   horizontalStackCss,
   MediaSize,
@@ -18,7 +19,6 @@ import {
   useMatchesMediaSize,
   verticalStackCss
 } from 'theme';
-import ResourcesCard from '../resources/card';
 
 interface HomeSectionProps {
   children: React.ReactNode;
@@ -183,9 +183,9 @@ const HomePage: React.FC = () => {
           );
         })}
       </HomeSection>
-      <HomeSection path="resources">
+      {/* <HomeSection path="resources">
         <ResourcesCard />
-      </HomeSection>
+      </HomeSection> */}
     </DefaultPageLayout>
   );
 };

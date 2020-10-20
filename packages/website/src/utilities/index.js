@@ -1,4 +1,3 @@
-
 /**
  * Mapping obj values to new properties
  * @param obj the object you are going through
@@ -12,16 +11,20 @@ export function mapValues(params) {
 }
 
 /**
- * returns url without https and www 
- * @param {*} url 
+ * returns url without https and www
+ * @param {*} url
  */
 export function prettierUrl(url) {
+    /* for referral teehee */
+    if (url.includes('morningbrew.com')) {
+        return 'morningbrew.com';
+    }
     return url.replace(/^https?:\/\/(www.)?/, '');
 }
 
 /**
  * returning the page number of the path
- * @param {*} path 
+ * @param {*} path
  */
 export function findPathPageNumber(path) {
     const pageNumber = path.indexOf('/page/') + 6;

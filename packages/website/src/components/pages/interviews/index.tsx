@@ -245,7 +245,7 @@ const InterviewPage: React.FC = () => {
                 }
                 return (
                   <span>
-                    {name.charAt(0).toUpperCase() + name.slice(1)} {''}
+                    {name.charAt(0).toUpperCase() + name.slice(1)}
                     <A
                       href={url}
                       contentCss={css`

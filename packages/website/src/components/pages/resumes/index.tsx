@@ -112,7 +112,7 @@ const ResumePage: React.FC = () => {
       <section css={STYLES_MAIN}>
         <div css={STYLES_PROFILE}>
           <img
-            src={require('../../../media/images/karming.jpg')}
+            // src={require('../../../media/images/karming.jpg')}
             alt="profile"
             css={css`
               width: 100%;
@@ -152,7 +152,7 @@ const ResumePage: React.FC = () => {
               }
               return (
                 <span>
-                  {name.charAt(0).toUpperCase() + name.slice(1)} {''}
+                  {name.charAt(0).toUpperCase() + name.slice(1)}
                   <A
                     href={url}
                     contentCss={css`
@@ -168,7 +168,7 @@ const ResumePage: React.FC = () => {
         </div>
         <div css={STYLES_RESUME}>
           <img
-            src={require('../../../media/images/karming_pdf.png')}
+            // src={require('../../../media/images/karming_pdf.png')}
             alt="resume"
           />
         </div>

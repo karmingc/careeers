@@ -16,7 +16,7 @@ const MasonryGrid: React.FC<MasonryProps> = React.memo((props) => {
       breakpointCols={{ default: 4, 900: 2 }}
       css={css`
         display: flex;
-        width: auto;
+        width: 100%;
 
         /* causes issues with the header */
         /* margin-top: -${rawSpacing.xxxxl}px; */

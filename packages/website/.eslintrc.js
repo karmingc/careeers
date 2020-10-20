@@ -27,12 +27,15 @@ module.exports = {
         },
         ecmaVersion: 2018,
         sourceType: 'module',
-        project: ['./packages/*/tsconfig.json'],
+        project: ['./packages/web/tsconfig.json'],
     },
     rules: {
         "react/prop-types": "off",
         'linebreak-style': 'off',
         "quotes": ["error", "single", { "avoidEscape": true }],
+
+        "import/order": ["error", { "groups": ["builtin", "external", "parent", "sibling", "index"] }],
+        "import/order": ["error", { "alphabetize": { "order": "asc", "caseInsensitive": true } }],
         'prettier/prettier': [
             'error',
             {

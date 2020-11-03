@@ -8,6 +8,7 @@ import { fontSize } from 'theme/styles/font';
 
 interface PageIndicatorProps {
   numOfCards: number;
+  path: string;
   currPage: number;
   setPage: (target: number) => void;
 }
@@ -17,7 +18,7 @@ interface PageIndicatorProps {
  * less than 16 = 1 page, less than 32 = 2 pages...
  */
 const PageIndicator: React.FC<PageIndicatorProps> = React.memo((props) => {
-  const { numOfCards, currPage, setPage } = props;
+  const { numOfCards, path, currPage, setPage } = props;
   const numOfPages = Math.ceil(numOfCards / 16);
   const arrayOfPages = useMemo(() => {
     return Array.from(Array(numOfPages), (_, i) => i + 1);
@@ -33,7 +34,7 @@ const PageIndicator: React.FC<PageIndicatorProps> = React.memo((props) => {
       {arrayOfPages.map((page) => {
         return (
           <Link
-            to={`/resources/page/${page}`}
+            to={`/${path}/page/${page}`}
             key={page}
             onClick={() => setPage(page)}
           >

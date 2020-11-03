@@ -1,31 +1,90 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from '@emotion/core';
-import PreviewCard from 'components/common/cards/preview';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
+// import PreviewCard from 'components/common/cards/preview';
+
+import { ProfileProps } from '../resumes/feed';
+import { useMatchesPathSlugId } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
-import MasonryGrid from 'components/common/layout/masonry';
+// import MasonryGrid from 'components/common/layout/masonry';
 import PreviousHeader from 'components/common/layout/previous_header';
-import RelatedContent from 'components/common/layout/related_content';
-import { H1, P } from 'components/common/system';
-import { A, H2 } from 'components/common/system/typography';
+// import RelatedContent from 'components/common/layout/related_content';
+import { H1, P, A, H2 } from 'components/common/system';
+
 import {
   cssForMediaSize,
   horizontalStackCss,
   MediaSize,
   NotoSerif,
   rawSpacing,
-  useMatchesMediaSize,
+  // useMatchesMediaSize,
   verticalStackCss
 } from 'theme';
 import { fontSize } from 'theme/styles/font';
-import { prettierUrl } from 'utilities';
+import { prettierUrl, socialUrl } from 'utilities';
 
-interface SectionProps {
+interface QuestionPhotoProps {
+  cloudinaryId: string;
+}
+
+interface QuestionLinkProps {
+  name: string;
+  link: string;
+}
+
+interface InterviewQuestionProps {
   title: string;
   text: string;
+  photos: QuestionPhotoProps[];
+  links: QuestionLinkProps[];
   children?: React.ReactNode;
   contentCss?: SerializedStyles;
 }
+
+const STYLES_QUESTION = css`
+  ${verticalStackCss.m};
+  width: 100%;
+
+  ${cssForMediaSize({
+    max: MediaSize.TABLET,
+    contentCss: css`
+      /* includes question + answer */
+      > div:not(:last-of-type) {
+        ${verticalStackCss.m};
+        align-items: flex-start;
+        width: 100%;
+      }
+    `
+  })}
+  ${cssForMediaSize({
+    min: MediaSize.DESKTOP,
+    contentCss: css`
+      /* includes question + answer */
+      > div:not(:last-of-type) {
+        ${verticalStackCss.m};
+        align-items: flex-start;
+        width: calc(100% * 2 / 3);
+      }
+    `
+  })};
+`;
+
+const STYLES_QUESTION_PHOTO = css`
+  ${horizontalStackCss.m}
+  flex-wrap: wrap;
+
+  > img:nth-of-type(2n) {
+    margin-right: 0px;
+  }
+
+  > img {
+    width: calc(50% - ${rawSpacing.s}px);
+    margin-top: ${rawSpacing.m}px;
+    object-fit: cover;
+  }
+`;
 
 /**
  *
@@ -33,31 +92,62 @@ interface SectionProps {
  * @param text answer
  * @param children possibly images?
  */
-export const InterviewSection: React.FC<SectionProps> = ({
+export const InterviewQuestion: React.FC<InterviewQuestionProps> = ({
   title,
   text,
-  children,
-  contentCss
+  photos,
+  links,
+  children
 }) => {
   return (
-    <section
-      css={[
-        css`
-          ${verticalStackCss.m};
-          align-items: flex-start;
-        `,
-        contentCss
-      ]}
-    >
-      <H2>{title}</H2>
-      <P
-        contentCss={css`
-          font-size: ${fontSize.medium}px;
-          ${NotoSerif}
-        `}
-      >
-        {text}
-      </P>
+    <section css={STYLES_QUESTION}>
+      <div>
+        <H2>{title}</H2>
+        {text.split('\n').map((str) => {
+          return (
+            <P
+              key={str}
+              contentCss={css`
+                font-size: ${fontSize.medium}px;
+                ${NotoSerif};
+              `}
+            >
+              {str}
+            </P>
+          );
+        })}
+      </div>
+      <div>
+        {links.map((src) => {
+          return (
+            <A
+              key={src.name}
+              href={src.link}
+              contentCss={css`
+                font-size: ${fontSize.medium}px;
+                ${NotoSerif};
+              `}
+            >
+              {src.name}
+            </A>
+          );
+        })}
+      </div>
+      <div css={STYLES_QUESTION_PHOTO}>
+        {photos.map((src) => {
+          return (
+            <img
+              key={src.cloudinaryId}
+              src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${src.cloudinaryId}`}
+              alt="profile"
+              css={STYLES_QUESTION_PHOTO}
+              data-aos="fade-up"
+              data-aos-once="true"
+            />
+          );
+        })}
+      </div>
+
       {children}
     </section>
   );
@@ -117,76 +207,50 @@ const STYLES_ARTICLE = css`
   ${cssForMediaSize({
     min: MediaSize.DESKTOP,
     contentCss: css`
-      width: 50%;
+      width: 75%;
     `
   })};
 `;
 
+interface QuestionProps {
+  order: number;
+  question: string;
+  answer: string;
+  photos: QuestionPhotoProps[];
+  links: QuestionLinkProps[];
+}
+
+interface InterviewProps {
+  profile: ProfileProps;
+  questions: QuestionProps[];
+}
+
 const InterviewPage: React.FC = () => {
-  const interviews = [
-    {
-      name: 'Karming C',
-      company: 'Stripe',
-      description: 'Interned at Stripe during Summer 2019.',
-      img: 'karming.jpg'
-    },
-    {
-      name: 'Cesar',
-      company: 'Microsoft',
-      description: 'Interned at Stripe during Summer 2019.',
-      img: 'cesar.jpg'
-    }
-  ];
+  const [interview, setInterview] = useState<InterviewProps>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const slug = useMatchesPathSlugId();
 
-  const links = [
-    { name: 'website', url: 'https://www.karmingchin.com' },
-    { name: 'twitter', url: 'karmingc' },
-    { name: 'github', url: 'karmingc' }
-  ];
+  // const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
-  const interviewContent = [
-    {
-      question:
-        'What led you to pursue a career in [your field]? What do you enjoy about it?',
-      answer:
-        "I've always been really into graphics   and visual culture, as far back as I can remember. As a kid, I was really into album artwork and video games and loved messing around with computers. I also became kind of obsessed with the early internet and found pockets of real creativity and experimental work which excited me and gave me the hunger to want to learn to make things myself."
-    },
-    {
-      question: 'What is a constant challenge you face?',
-      answer: 'no idea'
-    },
-    {
-      question: 'Where do you get inspired?',
-      answer: 'no idea'
-    },
-    {
-      question: 'What does a typical day look like?',
-      answer: 'no idea'
-    },
-    {
-      question:
-        'What products or resources are you particularly fond of or find helpful?',
-      answer: 'no idea'
-    },
-    {
-      question: 'What is the best advice you’ve ever received?',
-      answer: 'no idea'
-    },
-    {
-      question: 'What do you like to do in your spare time?',
-      answer: 'no idea'
-    },
-    {
-      question: 'Any advice for people aiming for a career in [your field]?',
-      answer: 'no idea'
-    },
-    {
-      question: 'Anything you want to promote or plug?',
-      answer: 'no idea'
-    }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsError(false);
+      setIsLoading(true);
 
-  const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
+      try {
+        const result = await axios(`/api/interviews/${slug}`);
+
+        setInterview(result.data);
+      } catch (error) {
+        setIsError(true);
+      }
+
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [slug]);
+
   return (
     <DefaultPageLayout
       pageTitle="Resume ID"
@@ -196,80 +260,97 @@ const InterviewPage: React.FC = () => {
       `}
     >
       <PreviousHeader previousPage="interviews" />
-      <section css={STYLES_MAIN}>
-        <div css={STYLES_PROFILE}>
-          <img
-            src={require('../../../media/images/karming.jpg')}
-            alt="profile"
-            css={css`
-              width: 100%;
-              max-height: 400px;
-              object-fit: cover;
-            `}
-          />
-          <div
-            css={css`
-              ${verticalStackCss.xl};
-              align-items: flex-start;
-            `}
-          >
-            <H1>Karming Chin - Stripe</H1>
-            <P
-              contentCss={css`
-                margin-top: -${rawSpacing.s}px;
-                font-size: ${fontSize.medium}px;
-              `}
-            >
-              Interned at Stripe during Summer 2019.Interned at Stripe during
-              Summer 2019.
-            </P>
-            <div
-              css={css`
-                ${verticalStackCss.s};
-                align-items: flex-start;
-              `}
-            >
-              {links.map((link) => {
-                const { name, url } = link;
-                if (name === 'website') {
-                  return (
+      {isError && <div>error...</div>}
+      {!isLoading && interview && (
+        <React.Fragment>
+          <section css={STYLES_MAIN}>
+            <div css={STYLES_PROFILE}>
+              <img
+                src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${interview.profile.profileCloudinaryId}`}
+                alt="profile"
+                css={css`
+                  width: 100%;
+                  max-height: 400px;
+                  object-fit: cover;
+                `}
+              />
+              <div
+                css={css`
+                  ${verticalStackCss.xl};
+                  align-items: flex-start;
+                `}
+              >
+                <H1>
+                  {interview.profile.name} - {interview.profile.company}
+                </H1>
+                <P
+                  contentCss={css`
+                    margin-top: -${rawSpacing.s}px;
+                    font-size: ${fontSize.medium}px;
+                  `}
+                >
+                  {interview.profile.description}
+                </P>
+                <div
+                  css={css`
+                    ${verticalStackCss.s};
+                    align-items: flex-start;
+                  `}
+                >
+                  {interview.profile.website && (
                     <A
-                      href={url}
+                      href={interview.profile.website}
                       contentCss={css`
                         font-size: ${fontSize.medium}px;
                       `}
                     >
-                      {prettierUrl(url)}
+                      {prettierUrl(interview.profile.website)}
                     </A>
-                  );
-                }
-                return (
-                  <span>
-                    {name.charAt(0).toUpperCase() + name.slice(1)}
-                    <A
-                      href={url}
-                      contentCss={css`
-                        font-size: ${fontSize.medium}px;
-                      `}
-                    >
-                      @{url}
-                    </A>
-                  </span>
-                );
-              })}
+                  )}
+                  {interview.profile.profileLinks &&
+                    interview.profile.profileLinks.map((link) => {
+                      const { platform, handle } = link;
+                      return (
+                        <span
+                          key={platform}
+                          css={css`
+                            font-size: ${fontSize.medium}px;
+                          `}
+                        >
+                          {platform.charAt(0).toLowerCase() + platform.slice(1)}{' '}
+                          <A
+                            href={socialUrl({
+                              platform,
+                              handle
+                            })}
+                          >
+                            @{handle}
+                          </A>
+                        </span>
+                      );
+                    })}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
-      <article css={STYLES_ARTICLE}>
-        {interviewContent.map((block) => {
-          const { question, answer } = block;
-          return (
-            <InterviewSection key={question} title={question} text={answer} />
-          );
-        })}
-      </article>
-      <RelatedContent pageTitle="Interviews">
+          </section>
+          <article css={STYLES_ARTICLE}>
+            {interview.questions.map((block) => {
+              const { question, answer, photos, links } = block;
+              return (
+                <InterviewQuestion
+                  key={question}
+                  title={question}
+                  text={answer}
+                  photos={photos}
+                  links={links}
+                />
+              );
+            })}
+          </article>
+        </React.Fragment>
+      )}
+
+      {/* <RelatedContent pageTitle="Interviews">
         <MasonryGrid>
           {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
             return (
@@ -281,7 +362,7 @@ const InterviewPage: React.FC = () => {
             );
           })}
         </MasonryGrid>
-      </RelatedContent>
+      </RelatedContent> */}
     </DefaultPageLayout>
   );
 };

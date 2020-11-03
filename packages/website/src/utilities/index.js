@@ -1,3 +1,4 @@
+import { socialUrl } from './social_url';
 /**
  * Mapping obj values to new properties
  * @param obj the object you are going through
@@ -30,3 +31,14 @@ export function findPathPageNumber(path) {
     const pageNumber = path.indexOf('/page/') + 6;
     return parseInt(path.substring(pageNumber));
 }
+
+/**
+ * returns the slug id of path
+ * @param {*} path
+ */
+export function findPathSlugId(path) {
+    const position = path.indexOf('/', path.indexOf('/') + 1) + 1;
+    return path.substring(position);
+}
+
+export { socialUrl };

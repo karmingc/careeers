@@ -27,7 +27,7 @@ module.exports = {
         },
         ecmaVersion: 2018,
         sourceType: 'module',
-        project: ['./packages/web/tsconfig.json'],
+        project: ['./packages/*/tsconfig.json'],
     },
     rules: {
         "react/prop-types": "off",

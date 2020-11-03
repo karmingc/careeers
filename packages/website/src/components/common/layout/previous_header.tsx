@@ -2,9 +2,9 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Icon, IconName, IconSize } from '../icons';
 import { horizontalStackCss, theme, transitionTime } from 'theme';
 import { fontSize } from 'theme/styles/font';
-import { Icon, IconName, IconSize } from '../icons';
 
 interface PreviousHeaderProps {
   previousPage: string;

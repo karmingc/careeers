@@ -3,6 +3,7 @@ import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
+import Reading from '../../../media/images/reading.jpg';
 import ResourcesCard from './card';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
@@ -12,36 +13,42 @@ import PageIndicator from 'components/common/layout/page_indicator';
 import { H1, H2 } from 'components/common/system';
 import { verticalStackCss } from 'theme';
 
+export interface ResourcesProps {
+  name: string;
+  description: string;
+  link: string;
+  cloudinaryId: string;
+}
+
+interface ResourcesFeedProps {
+  count: number;
+  list: ResourcesProps[];
+}
+
 const ResourcesFeed: React.FC = () => {
   const [currPage, setPage] = useState(useMatchesPathPageNumber());
-  const [isLoading, setLoading] = useState(true);
-  const [resources, setResources] = useState([
-    {
-      cloudinaryId: '',
-      createdAt: '',
-      description: '',
-      id: '',
-      link: '',
-      name: '',
-      updatedAt: ''
-    }
-  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [resources, setResources] = useState<ResourcesFeedProps>();
 
   useEffect(() => {
-    const fetchData = () => {
-      axios
-        .get('http://localhost:8080/api/resources')
-        .then((response) => {
-          setResources(response.data);
-          console.log(response.data);
-          setLoading(true);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    const fetchData = async () => {
+      setIsError(false);
+      setIsLoading(true);
+
+      try {
+        const [list, resourcesInfo] = await Promise.all([
+          axios.get(`/api/resources/group/${currPage}`),
+          axios.get('/api/resources/count')
+        ]);
+        setResources({ list: list.data, count: resourcesInfo.data.count });
+      } catch (error) {
+        setIsError(true);
+      }
+      setIsLoading(false);
     };
     fetchData();
-  }, [isLoading]);
+  }, [currPage]);
 
   return (
     <DefaultPageLayout
@@ -70,7 +77,7 @@ const ResourcesFeed: React.FC = () => {
             </H2>
           </div>
           <img
-            src={require('../../../media/images/reading.jpg')}
+            src={Reading}
             alt="banner"
             css={css`
               max-height: 500px;
@@ -81,12 +88,30 @@ const ResourcesFeed: React.FC = () => {
         </React.Fragment>
       )}
       {currPage !== 1 && <H1>Resources</H1>}
-      <MasonryGrid>
-        {resources.map((resource) => {
-          return <ResourcesCard key={resource.id} resource={resource} />;
-        })}
-      </MasonryGrid>
-      <PageIndicator numOfCards={33} currPage={currPage} setPage={setPage} />
+      {isError && <div>error...</div>}
+      {!isLoading && resources && (
+        <React.Fragment>
+          <MasonryGrid>
+            {resources.list.map((resource) => {
+              return (
+                <ResourcesCard
+                  key={resource.name}
+                  name={resource.name}
+                  description={resource.description}
+                  link={resource.link}
+                  cloudinaryId={resource.cloudinaryId}
+                />
+              );
+            })}
+          </MasonryGrid>
+          <PageIndicator
+            numOfCards={resources.count}
+            path="resources"
+            currPage={currPage}
+            setPage={setPage}
+          />
+        </React.Fragment>
+      )}
     </DefaultPageLayout>
   );
 };

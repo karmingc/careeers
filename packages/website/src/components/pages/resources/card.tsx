@@ -2,6 +2,7 @@
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 
+import { ResourcesProps } from './feed';
 import { H3, P } from 'components/common/system';
 import { A } from 'components/common/system/typography';
 import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
@@ -12,42 +13,33 @@ const STYLES_CARD = css`
   margin-bottom: ${rawSpacing.xxxxl}px;
   align-items: flex-start;
   text-decoration: none;
+  word-break: break-word;
+
+  > div {
+    ${verticalStackCss.m};
+    align-items: flex-start;
+  }
 `;
 
-interface ResourcesProps {
-  resource: {
-    cloudinaryId: string;
-    createdAt: string;
-    description: string;
-    id: string;
-    link: string;
-    name: string;
-    updatedAt: string;
-  };
-}
+const STYLES_IMG = css`
+  width: 100%;
+  transition: opacity ease ${transitionTime.standard}ms;
+
+  :hover {
+    opacity: 0.85;
+  }
+`;
 
 const ResourcesCard: React.FC<ResourcesProps> = React.memo((props) => {
-  const { cloudinaryId, description, link, name } = props.resource;
+  const { cloudinaryId, description, link, name } = props;
   return (
     <div css={STYLES_CARD}>
-      <div
-        css={css`
-          ${verticalStackCss.m};
-          align-items: flex-start;
-        `}
-      >
-        <A href="https://www.typewolf.com">
+      <div>
+        <A href={link}>
           <img
-            css={css`
-              width: 100%;
-
-              transition: opacity ease ${transitionTime.standard}ms;
-              :hover {
-                opacity: 0.85;
-              }
-            `}
+            css={STYLES_IMG}
             src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${cloudinaryId}`}
-            alt="typewolf"
+            alt={name}
           />
         </A>
         <H3>{name}</H3>
@@ -59,7 +51,14 @@ const ResourcesCard: React.FC<ResourcesProps> = React.memo((props) => {
       >
         {description}
       </P>
-      <A href={link}>{prettierUrl(link)}</A>
+      <A
+        href={link}
+        contentCss={css`
+          word-wrap: break-word;
+        `}
+      >
+        {prettierUrl(link)}
+      </A>
     </div>
   );
 });

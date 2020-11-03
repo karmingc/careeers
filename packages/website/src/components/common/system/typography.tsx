@@ -130,7 +130,9 @@ export const A = React.memo<AProps>((props) => {
         STYLES_BASE,
         STYLES_TEXT,
         css`
-          text-decoration: none;
+          /* text-decoration: none; */
+          text-decoration-color: ${theme.activeBlue};
+
           :hover {
             color: ${theme.activeBlue};
             cursor: pointer;

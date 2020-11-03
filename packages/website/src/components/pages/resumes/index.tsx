@@ -1,13 +1,16 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import PreviewCard from 'components/common/cards/preview';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
+import { ProfileProps, ResumesProps } from './feed';
+import PreviewCard from 'components/common/cards/preview';
+import { useMatchesPathSlugId } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
 import PreviousHeader from 'components/common/layout/previous_header';
 import RelatedContent from 'components/common/layout/related_content';
-import { H1, P } from 'components/common/system';
-import { A } from 'components/common/system/typography';
+import { H1, P, A } from 'components/common/system';
 
 import {
   cssForMediaSize,
@@ -19,6 +22,7 @@ import {
   verticalStackCss
 } from 'theme';
 import { fontSize } from 'theme/styles/font';
+import { prettierUrl, socialUrl } from 'utilities';
 
 const STYLES_MAIN = css`
   ${cssForMediaSize({
@@ -84,22 +88,35 @@ const STYLES_RESUME = css`
 `;
 
 const ResumePage: React.FC = () => {
-  const resumes = [
-    {
-      name: 'K',
-      company: 'Stripe',
-      description: 'Interned at Stripe during Summer 2019.',
-      img: 'karming_pdf.png'
-    }
-  ];
-
-  const links = [
-    { name: 'website', url: 'https://www.karmingchin.com' },
-    { name: 'twitter', url: 'karmingc' },
-    { name: 'github', url: 'karmingc' }
-  ];
+  const [resume, setResume] = useState<ResumesProps>();
+  const [relatedResumes, setRelatedResumes] = useState<ProfileProps[]>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const slug = useMatchesPathSlugId();
 
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsError(false);
+      setIsLoading(true);
+
+      try {
+        const result = await axios(`/api/resumes/${slug}`);
+        const relatedResult = await axios(
+          `/api/profiles/resumes/related/${slug}`
+        );
+        setResume(result.data);
+        setRelatedResumes(relatedResult.data);
+      } catch (error) {
+        setIsError(true);
+      }
+
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [slug]);
+
   return (
     <DefaultPageLayout
       pageTitle="Resume ID"
@@ -108,80 +125,101 @@ const ResumePage: React.FC = () => {
         align-items: flex-start;
       `}
     >
-      <PreviousHeader previousPage="resumes" />
-      <section css={STYLES_MAIN}>
-        <div css={STYLES_PROFILE}>
-          <img
-            // src={require('../../../media/images/karming.jpg')}
-            alt="profile"
-            css={css`
-              width: 100%;
-              max-height: 400px;
-              object-fit: cover;
-            `}
-          />
-          <H1>Karming Chin - Stripe</H1>
-          <P
-            contentCss={css`
-              font-size: ${fontSize.medium}px;
-              margin-top: -${rawSpacing.s}px;
-            `}
-          >
-            Interned at Stripe during Summer 2019.Interned at Stripe during
-            Summer 2019.
-          </P>
-          <div
-            css={css`
-              ${verticalStackCss.s};
-              align-items: flex-start;
-            `}
-          >
-            {links.map((link) => {
-              const { name, url } = link;
-              if (name === 'website') {
-                return (
+      {isError && <div>error...</div>}
+      {!isLoading && resume && (
+        <React.Fragment>
+          <PreviousHeader previousPage="resumes" />
+          <section css={STYLES_MAIN}>
+            <div css={STYLES_PROFILE}>
+              <img
+                src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${resume.profile.profileCloudinaryId}`}
+                alt="profile"
+                css={css`
+                  width: 100%;
+                  max-height: 400px;
+                  object-fit: cover;
+                `}
+              />
+              <H1>
+                {resume.profile.name} - {resume.profile.company}
+              </H1>
+              <P
+                contentCss={css`
+                  font-size: ${fontSize.medium}px;
+                  margin-top: -${rawSpacing.s}px;
+                `}
+              >
+                {resume.profile.description}
+              </P>
+              <div
+                css={css`
+                  ${verticalStackCss.s};
+                  align-items: flex-start;
+                `}
+              >
+                {resume.profile.website && (
                   <A
-                    href={url}
+                    href={resume.profile.website}
                     contentCss={css`
                       font-size: ${fontSize.medium}px;
                     `}
                   >
-                    {url.replace(/^https?:\/\/(www.)?/, '')}
+                    {prettierUrl(resume.profile.website)}
                   </A>
-                );
-              }
-              return (
-                <span>
-                  {name.charAt(0).toUpperCase() + name.slice(1)}
-                  <A
-                    href={url}
-                    contentCss={css`
-                      font-size: ${fontSize.medium}px;
-                    `}
-                  >
-                    @{url}
-                  </A>
-                </span>
-              );
-            })}
-          </div>
-        </div>
-        <div css={STYLES_RESUME}>
-          <img
-            // src={require('../../../media/images/karming_pdf.png')}
-            alt="resume"
-          />
-        </div>
-      </section>
-      <RelatedContent pageTitle="Resumes">
-        <MasonryGrid>
-          {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
-            return (
-              <PreviewCard key={resume.name} resume={resume} type="resume" />
-            );
-          })}
-        </MasonryGrid>
-      </RelatedContent>
+                )}
+                {resume.profile.profileLinks &&
+                  resume.profile.profileLinks.map((link) => {
+                    const { platform, handle } = link;
+                    return (
+                      <span
+                        css={css`
+                          font-size: ${fontSize.medium}px;
+                        `}
+                      >
+                        {platform.charAt(0).toLowerCase() + platform.slice(1)}{' '}
+                        <A
+                          href={socialUrl({
+                            platform,
+                            handle
+                          })}
+                        >
+                          @{handle}
+                        </A>
+                      </span>
+                    );
+                  })}
+              </div>
+            </div>
+            <div css={STYLES_RESUME}>
+              <img
+                src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${resume.resumeCloudinaryId}`}
+                alt="resume"
+              />
+            </div>
+          </section>
+          {relatedResumes && (
+            <RelatedContent pageTitle="Resumes">
+              <MasonryGrid>
+                {relatedResumes
+                  .slice(0, isDesktop ? 4 : 2)
+                  .map((relatedResume) => {
+                    return (
+                      <PreviewCard
+                        key={relatedResume.name}
+                        name={relatedResume.name}
+                        company={relatedResume.company}
+                        description={relatedResume.description}
+                        profileCloudinaryId={relatedResume.profileCloudinaryId}
+                        slug={relatedResume.slug}
+                        path="resumes"
+                      />
+                    );
+                  })}
+              </MasonryGrid>
+            </RelatedContent>
+          )}
+        </React.Fragment>
+      )}{' '}
     </DefaultPageLayout>
   );
 };

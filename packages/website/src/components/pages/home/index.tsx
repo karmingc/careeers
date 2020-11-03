@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // import ResourcesCard from '../resources/card';
-import PreviewCard from 'components/common/cards/preview';
+// import PreviewCard from 'components/common/cards/preview';
 import { Icon, IconName, IconSize } from 'components/common/icons';
 import CardGridLayout from 'components/common/layout/card_grid';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
@@ -12,11 +12,9 @@ import { DefaultPageLayout } from 'components/common/layout/default_page';
 import { H1 } from 'components/common/system';
 import {
   horizontalStackCss,
-  MediaSize,
   rawSpacing,
   theme,
   transitionTime,
-  useMatchesMediaSize,
   verticalStackCss
 } from 'theme';
 
@@ -78,56 +76,8 @@ const HomeSection: React.FC<HomeSectionProps> = React.memo((props) => {
 });
 
 const HomePage: React.FC = () => {
-  const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
-  const interviews = [
-    {
-      name: 'Karming C',
-      company: 'Stripe',
-      description: 'Interned at Stripe during Summer 2019.',
-      img: 'karming.jpg'
-    },
-    {
-      name: 'Cesar',
-      company: 'Microsoft',
-      description: 'Interned at Stripe during Summer 2019.',
-      img: 'cesar.jpg'
-    },
-    {
-      name: 'Aiony',
-      company: 'UBC Med',
-      description:
-        'Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.',
-      img: 'aiony.jpg'
-    },
-    {
-      name: 'Karming C',
-      company: 'Stripe',
-      description: 'Interned at Stripe during Summer 2019.',
-      img: 'karming.jpg'
-    }
-  ];
+  // const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
-  const resumes = [
-    {
-      name: 'K',
-      company: 'Stripe',
-      description: 'Interned at Stripe during Summer 2019.',
-      img: 'karming_pdf.png'
-    },
-    {
-      name: 'Kar',
-      company: 'Microsoft',
-      description: 'Interned at Stripe during Summer 2019.',
-      img: 'karming_pdf.png'
-    },
-    {
-      name: 'Karming',
-      company: 'UBC Med',
-      description:
-        'Interned at Stripe during Summer 2019.Interned at Stripe during Summer 2019.',
-      img: 'karming_pdf.png'
-    }
-  ];
   return (
     <DefaultPageLayout
       pageTitle="Resources"
@@ -166,7 +116,7 @@ const HomePage: React.FC = () => {
         />
       </div>
       <HomeSection path="interviews">
-        {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
+        {/* {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
           return (
             <PreviewCard
               key={interview.name}
@@ -174,14 +124,14 @@ const HomePage: React.FC = () => {
               type="interview"
             />
           );
-        })}
+        })} */}
       </HomeSection>
       <HomeSection path="resumes">
-        {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
+        {/* {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
           return (
             <PreviewCard key={resume.name} resume={resume} type="resume" />
           );
-        })}
+        })} */}
       </HomeSection>
       {/* <HomeSection path="resources">
         <ResourcesCard />

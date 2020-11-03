@@ -157,6 +157,7 @@ export const useMatchesMediaSize = (
     !!currMediaSize &&
     !!max &&
     compareMediaSizeMax({ toCompare: [currMediaSize, max] }) === max;
+
   return !!min && !!max
     ? satisfyMinBound && satisfyMaxBound
     : satisfyMinBound || satisfyMaxBound;

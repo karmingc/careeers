@@ -29,7 +29,7 @@ export async function uploadPhotoToCloudinary(
   let cloudinaryId;
   await cloudinary.v2.uploader.upload(
     source,
-    { folder: `careeers/${folderPath}`, use_filename: true, width: 1280 },
+    { folder: `careeers/${folderPath}`, use_filename: true },
     function (error, result) {
       if (error) {
         console.log({ error });

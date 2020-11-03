@@ -5,7 +5,7 @@ import { CommonBaseEntity } from './common_base';
 /**
  * Table displaying the list of products
  */
-export class Resources extends CommonBaseEntity {
+export class Resource extends CommonBaseEntity {
   @Column({ type: 'character varying', unique: true, nullable: false })
   name: string;
 

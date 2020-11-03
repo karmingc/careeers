@@ -5,15 +5,15 @@ import {
   deletePhotoFromCloudinary,
   uploadPhotoToCloudinary
 } from '../helpers/cloudinary';
-import { Resources } from '../entities/resources';
+import { Resource } from '../entities/resource';
 
 /**
  * Returns the row of the resource based on id provided, else false
  * @param request request params id, usually the parameter's ID after the get
  */
-async function resourcesHasId(request: Request): Promise<Resources | false> {
+async function resourcesHasId(request: Request): Promise<Resource | false> {
   const queryResourceById = await getManager()
-    .createQueryBuilder(Resources, 'resource')
+    .createQueryBuilder(Resource, 'resource')
     .where('resource.id = :id', { id: request.params.id })
     .getOne();
 
@@ -27,14 +27,16 @@ async function resourcesHasId(request: Request): Promise<Resources | false> {
 }
 
 /* GET METHODS */
-/**
- * Returns all rows from Resources table
- * @param request
- * @param response
- */
-export async function getResources(request: Request, response: Response) {
+
+export async function getResourcesByGroup(
+  request: Request,
+  response: Response
+): Promise<void> {
   const query = await getManager()
-    .createQueryBuilder(Resources, 'resources')
+    .createQueryBuilder(Resource, 'resource')
+    .orderBy({ 'resource.createdAt': 'DESC' })
+    .limit(16)
+    .offset((parseInt(request.params.group) - 1) * 16)
     .getMany();
 
   if (typeof query === 'undefined') {
@@ -47,19 +49,24 @@ export async function getResources(request: Request, response: Response) {
 }
 
 /**
- * Gets a specific row from Resources based on the given id
+ * Returns num of rows from Resources table
  * @param request
  * @param response
  */
-export async function getResourceById(request: Request, response: Response) {
-  const queryResourceById = await resourcesHasId(request);
-  if (!queryResourceById) {
-    response.status(404).send({
-      error: `id: ${request.params.id} does not exist in Resources table`
-    });
+export async function getResourcesCount(
+  request: Request,
+  response: Response
+): Promise<void> {
+  const query = await getManager()
+    .createQueryBuilder(Resource, 'resource')
+    .getCount();
+
+  if (typeof query === 'undefined') {
+    console.log({ error: 'Resources table does not exist' });
+    response.status(404).send({ error: 'Resources table does not exist' });
     return;
   }
-  response.status(200).send(queryResourceById);
+  response.status(200).send({ count: query });
   return;
 }
 
@@ -81,7 +88,7 @@ export async function addResource(request: Request, response: Response) {
   const query = await getManager()
     .createQueryBuilder()
     .insert()
-    .into(Resources)
+    .into(Resource)
     .values(queryValues)
     .execute();
 
@@ -96,7 +103,10 @@ export async function addResource(request: Request, response: Response) {
  * @param request
  * @param response
  */
-export async function updateResourceById(request: Request, response: Response) {
+export async function updateResourceById(
+  request: Request,
+  response: Response
+): Promise<void> {
   const queryResourceById = await resourcesHasId(request);
 
   /* Verifies if it exist */
@@ -107,10 +117,22 @@ export async function updateResourceById(request: Request, response: Response) {
     return;
   }
 
+  const queryValues = request.body;
+  /* remove current cloudinary pic */
+  if (request.body.cloudinaryId) {
+    await deletePhotoFromCloudinary(queryResourceById.cloudinaryId);
+
+    /* upload new cloudinary pic */
+    queryValues.cloudinaryId = await uploadPhotoToCloudinary(
+      request.body.cloudinaryId,
+      '/resources'
+    );
+  }
+
   const query = await getManager()
     .createQueryBuilder()
-    .update(Resources)
-    .set(request.body)
+    .update(Resource)
+    .set(queryValues)
     .where('id = :id', { id: request.params.id })
     .execute();
 
@@ -128,7 +150,10 @@ export async function updateResourceById(request: Request, response: Response) {
  * @param request
  * @param response
  */
-export async function deleteResourceById(request: Request, response: Response) {
+export async function deleteResourceById(
+  request: Request,
+  response: Response
+): Promise<void> {
   const queryResourceById = await resourcesHasId(request);
 
   /* Verifies if it exist */
@@ -145,7 +170,7 @@ export async function deleteResourceById(request: Request, response: Response) {
   const query = await getManager()
     .createQueryBuilder()
     .delete()
-    .from(Resources)
+    .from(Resource)
     .where('id = :id', { id: request.params.id })
     .execute();
 

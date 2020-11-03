@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import cors from 'cors';
+
 import dotenv from 'dotenv';
 
 import { ApiRoutes } from './routes/index';
@@ -12,8 +13,8 @@ import { getCloudinaryInstance } from './helpers/cloudinary';
 dotenv.config();
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
 const port = process.env.PORT || 8080; // default port to listen
 

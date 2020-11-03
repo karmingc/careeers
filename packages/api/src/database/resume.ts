@@ -1,26 +1,27 @@
 import { Request, Response } from 'express';
 import { getManager } from 'typeorm';
+import slugify from 'slugify';
 
 import {
   deletePhotoFromCloudinary,
   uploadPhotoToCloudinary
 } from '../helpers/cloudinary';
 
-import { Resumes } from '../entities/resumes';
+import { Resume } from '../entities/resume';
 
 /**
  *
  * @param request Returns the row of the resume based on id provided, else false
  */
-async function resumesHasId(request: Request): Promise<Resumes | false> {
+async function resumesHasId(request: Request): Promise<Resume | false> {
   const queryResumeById = await getManager()
-    .createQueryBuilder(Resumes, 'resume')
+    .createQueryBuilder(Resume, 'resume')
     .where('resume.id =:id', { id: request.params.id })
     .getOne();
 
   if (typeof queryResumeById === 'undefined') {
     console.log({
-      error: `id: ${request.params.id} does not exist in Resumes table`
+      error: `id: ${request.params.id} does not exist in Resume table`
     });
     return false;
   }
@@ -28,56 +29,57 @@ async function resumesHasId(request: Request): Promise<Resumes | false> {
 }
 
 /* GET METHODS */
-/**
- * Returns all rows from Resumes table
- * @param request
- * @param response
- */
-export async function getResumes(request: Request, response: Response) {
+export async function getResumesCount(request: Request, response: Response) {
   const query = await getManager()
-    .createQueryBuilder(Resumes, 'resumes')
-    .getMany();
+    .createQueryBuilder(Resume, 'resume')
+    .getCount();
 
   if (typeof query === 'undefined') {
     console.log({ error: 'Resumes table does not exist' });
     response.status(404).send({ error: 'Resumes table does not exist' });
     return;
   }
-  response.status(200).send(query);
+  response.status(200).send({ count: query });
   return;
 }
 
 /**
- * Gets a specific row from Resumes based on given id
+ * Gets a specific row from Resume based on given slug
  * @param request
  * @param response
  */
-export async function getResumeById(request: Request, response: Response) {
-  const queryResumeById = await resumesHasId(request);
-  if (!queryResumeById) {
-    response.status(404).send({
-      error: `id: ${request.params.id} does not exist in Resumes table`
+export async function getResumeBySlug(
+  request: Request,
+  response: Response
+): Promise<void> {
+  const query = await getManager()
+    .createQueryBuilder(Resume, 'resume')
+    .leftJoinAndSelect('resume.profile', 'profile')
+    .leftJoinAndSelect('profile.profileLinks', 'profileLinks')
+    .where('profile.slug =:slug', { slug: request.params.slug })
+    .getOne();
+
+  if (typeof query === 'undefined') {
+    console.log({
+      error: `slug: ${request.params.slug} does not exist in Profiles table`
     });
     return;
   }
-  response.status(200).send(queryResumeById);
+  response.status(200).send(query);
   return;
 }
 
 /* POST METHODS */
 /**
- * Inserts an entry into Resumes table
+ * Inserts an entry into Resume table
  * @param request
  * @param response
  */
-export async function addResume(request: Request, response: Response) {
+export async function addResume(
+  request: Request,
+  response: Response
+): Promise<void> {
   const queryValues = request.body;
-
-  /* get profile cloudinary id and updates it */
-  queryValues.profileCloudinaryId = await uploadPhotoToCloudinary(
-    request.body.profileCloudinaryId,
-    'resumes'
-  );
 
   /* get resume cloudinary id and updates it*/
   queryValues.resumeCloudinaryId = await uploadPhotoToCloudinary(
@@ -85,14 +87,16 @@ export async function addResume(request: Request, response: Response) {
     '/resumes'
   );
 
+  queryValues.slug = `${slugify(queryValues.name, { lower: true })}`;
+
   const query = await getManager()
     .createQueryBuilder()
     .insert()
-    .into(Resumes)
-    .values(queryValues)
+    .into(Resume)
+    .values({ resumeCloudinaryId: queryValues.resumeCloudinaryId })
     .execute();
 
-  console.log('added new entry to Resumes', query, queryValues);
+  console.log('added new entry to Resumes table', query, queryValues);
   response.status(200).send(query);
   return;
 }
@@ -100,11 +104,14 @@ export async function addResume(request: Request, response: Response) {
 /* UPDATE METHODS */
 
 /**
- * Updates a specific row from Resumes based on the given id
+ * Updates a specific row from Resume based on the given id
  * @param request
  * @param response
  */
-export async function updateResumeById(request: Request, response: Response) {
+export async function updateResumeById(
+  request: Request,
+  response: Response
+): Promise<void> {
   const queryResumeById = await resumesHasId(request);
 
   /* Verifies if it exist */
@@ -115,10 +122,22 @@ export async function updateResumeById(request: Request, response: Response) {
     return;
   }
 
+  const queryValues = request.body;
+  /* remove current cloudinary pic */
+  if (request.body.resumeCloudinaryId) {
+    await deletePhotoFromCloudinary(queryResumeById.resumeCloudinaryId);
+
+    /* upload new cloudinary pic */
+    queryValues.resumeCloudinaryId = await uploadPhotoToCloudinary(
+      request.body.resumeCloudinaryId,
+      '/resumes'
+    );
+  }
+
   const query = await getManager()
     .createQueryBuilder()
-    .update(Resumes)
-    .set(request.body)
+    .update(Resume)
+    .set(queryValues)
     .where('id = :id', { id: request.params.id })
     .execute();
 
@@ -132,7 +151,7 @@ export async function updateResumeById(request: Request, response: Response) {
 
 /* DELETE METHODS */
 /**
- * Deletes a specific row from Resumes based on the given id
+ * Deletes a specific row from Resume based on the given id
  * @param request
  * @param response
  */
@@ -148,13 +167,12 @@ export async function deleteResumeById(request: Request, response: Response) {
   }
 
   /* remove photo from cloudinary */
-  await deletePhotoFromCloudinary(queryResumeById.profileCloudinaryId);
   await deletePhotoFromCloudinary(queryResumeById.resumeCloudinaryId);
 
   const query = await getManager()
     .createQueryBuilder()
     .delete()
-    .from(Resumes)
+    .from(Resume)
     .where('id = :id', { id: request.params.id })
     .execute();
 

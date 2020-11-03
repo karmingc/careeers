@@ -5,6 +5,9 @@ import React, { useEffect, useState } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 
+import { H1 } from '../system';
+
+import { Scroll, useMatchesScrollDirection } from './nav_helpers';
 import {
   horizontalStackCss,
   theme,
@@ -19,7 +22,6 @@ import {
   rawSpacing,
   zIndex
 } from 'theme';
-import { H1 } from '../system';
 
 const STYLES_HEADER = css`
   position: fixed;
@@ -94,7 +96,7 @@ const STYLES_MENU_ICON = (isMenuOpen: boolean) => css`
     span:nth-of-type(3) {
       transform: rotate(-45deg);
     }`
-    : ``}
+    : ''}
 
   ${cssForMediaSize({
     max: MediaSize.TABLET,
@@ -147,7 +149,7 @@ const STYLES_NAV = ({ selected }: { selected: boolean }) => css`
 
   border-bottom: ${selected
     ? `1px solid ${theme.fontPrimaryGrey}`
-    : `1px solid transparent`};
+    : '1px solid transparent'};
 
   @keyframes fade {
     0% {
@@ -207,6 +209,7 @@ const Header: React.FC = () => {
   const [currentPathname, setCurrentPathname] = useState(pathname);
   const [isMenuOpen, setMenu] = useState(false);
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
+  const scrollDirection = useMatchesScrollDirection();
 
   const toggleMenu = () => {
     if (isMenuOpen) {
@@ -237,6 +240,10 @@ const Header: React.FC = () => {
     { path: '/resources', name: 'resources' }
     // { path: '/about', name: 'about' }
   ];
+
+  if (scrollDirection === Scroll.DOWN) {
+    return null;
+  }
 
   // For media of size TABLET or below
   if (!isDesktop) {

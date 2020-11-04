@@ -8,6 +8,7 @@ import PreviewCard from 'components/common/cards/preview';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
+import NotFoundPage from 'components/common/layout/not_found';
 import PageIndicator from 'components/common/layout/page_indicator';
 
 import { H1, H2 } from 'components/common/system';
@@ -110,7 +111,7 @@ const ResumesFeed: React.FC = () => {
         </React.Fragment>
       )}
       {currPage !== 1 && <H1>Resumes</H1>}
-      {isError && <div>error...</div>}
+      {isError && <NotFoundPage />}
       {!isLoading && resumes && (
         <React.Fragment>
           <MasonryGrid>

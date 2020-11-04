@@ -58,6 +58,31 @@ export async function getProfilesByInterviewsByGroup(
 }
 
 /**
+ * Get 4 profiles with interviews, used in homepage
+ * @param request
+ * @param response
+ */
+export async function getProfilesByInterviewsByRandom(
+  request: Request,
+  response: Response
+) {
+  const query = await getManager()
+    .createQueryBuilder(Profile, 'profile')
+    .innerJoin('profile.interview', 'interview')
+    .orderBy('RANDOM()')
+    .limit(4)
+    .getMany();
+
+  if (typeof query === 'undefined') {
+    console.log({ error: 'Profiles table does not exist' });
+    response.status(404).send({ error: 'Profiles table does not exist' });
+    return;
+  }
+  response.status(200).send(query);
+  return;
+}
+
+/**
  * Gets 16 entries from params.id - 1 (starts at 0) * 16 onward from Profiles in Resumes table
  * @param request
  * @param response
@@ -83,14 +108,45 @@ export async function getProfilesByResumesByGroup(
   return;
 }
 
+/**
+ * Get 4 profiles with resumes except slug
+ * @param request
+ * @param response
+ */
 export async function getProfilesByResumesByRelated(
   request: Request,
   response: Response
 ) {
   const query = await getManager()
     .createQueryBuilder(Profile, 'profile')
-    .where('profile.resume is not null')
+    .innerJoin('profile.resume', 'resume')
     .where('profile.slug != :slug', { slug: request.params.slug })
+    .orderBy('RANDOM()')
+    .limit(4)
+    .getMany();
+
+  if (typeof query === 'undefined') {
+    console.log({ error: 'Profiles table does not exist' });
+    response.status(404).send({ error: 'Profiles table does not exist' });
+    return;
+  }
+  response.status(200).send(query);
+  return;
+}
+
+/**
+ * Get 4 profiles with resumes, used in homepage
+ * @param request
+ * @param response
+ */
+export async function getProfilesByResumesByRandom(
+  request: Request,
+  response: Response
+) {
+  const query = await getManager()
+    .createQueryBuilder(Profile, 'profile')
+    .innerJoin('profile.resume', 'resume')
+    .orderBy('RANDOM()')
     .limit(4)
     .getMany();
 

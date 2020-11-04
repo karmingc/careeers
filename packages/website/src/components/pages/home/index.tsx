@@ -1,20 +1,26 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // import ResourcesCard from '../resources/card';
-// import PreviewCard from 'components/common/cards/preview';
+import Support from '../../../media/images/support.jpg';
+import { ProfileProps } from '../resumes/feed';
+import PreviewCard from 'components/common/cards/preview';
 import { Icon, IconName, IconSize } from 'components/common/icons';
 import CardGridLayout from 'components/common/layout/card_grid';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 
+import NotFoundPage from 'components/common/layout/not_found';
 import { H1 } from 'components/common/system';
 import {
   horizontalStackCss,
+  MediaSize,
   rawSpacing,
   theme,
   transitionTime,
+  useMatchesMediaSize,
   verticalStackCss
 } from 'theme';
 
@@ -76,7 +82,32 @@ const HomeSection: React.FC<HomeSectionProps> = React.memo((props) => {
 });
 
 const HomePage: React.FC = () => {
-  // const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
+  const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [resumes, setResumes] = useState<ProfileProps[]>();
+  const [interviews, setInterviews] = useState<ProfileProps[]>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsError(false);
+      setIsLoading(true);
+
+      try {
+        const [resumesList, interviewsList] = await Promise.all([
+          axios.get('/api/profiles/resumes/random'),
+          axios.get('/api/profiles/interviews/random')
+        ]);
+        setResumes(resumesList.data);
+        setInterviews(interviewsList.data);
+      } catch (error) {
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
 
   return (
     <DefaultPageLayout
@@ -106,7 +137,7 @@ const HomePage: React.FC = () => {
           Together.
         </H1>
         <img
-          src={require('../../../media/images/support.jpg')}
+          src={Support}
           alt="banner"
           css={css`
             max-height: 500px;
@@ -115,24 +146,41 @@ const HomePage: React.FC = () => {
           `}
         />
       </div>
-      <HomeSection path="interviews">
-        {/* {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
-          return (
-            <PreviewCard
-              key={interview.name}
-              resume={interview}
-              type="interview"
-            />
-          );
-        })} */}
-      </HomeSection>
-      <HomeSection path="resumes">
-        {/* {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
-          return (
-            <PreviewCard key={resume.name} resume={resume} type="resume" />
-          );
-        })} */}
-      </HomeSection>
+      {isError && <NotFoundPage />}
+      {!isLoading && interviews && (
+        <HomeSection path="interviews">
+          {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
+            return (
+              <PreviewCard
+                key={interview.name}
+                name={interview.name}
+                company={interview.company}
+                description={interview.description}
+                profileCloudinaryId={interview.profileCloudinaryId}
+                slug={interview.slug}
+                path="interviews"
+              />
+            );
+          })}
+        </HomeSection>
+      )}
+      {!isLoading && resumes && (
+        <HomeSection path="resumes">
+          {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
+            return (
+              <PreviewCard
+                key={resume.name}
+                name={resume.name}
+                company={resume.company}
+                description={resume.description}
+                profileCloudinaryId={resume.profileCloudinaryId}
+                slug={resume.slug}
+                path="resumes"
+              />
+            );
+          })}
+        </HomeSection>
+      )}
       {/* <HomeSection path="resources">
         <ResourcesCard />
       </HomeSection> */}

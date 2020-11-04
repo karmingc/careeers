@@ -15,7 +15,9 @@ import {
 import {
   getProfilesByResumesByGroup,
   getProfilesByResumesByRelated,
+  getProfilesByResumesByRandom,
   getProfilesByInterviewsByGroup,
+  getProfilesByInterviewsByRandom,
   addProfile,
   addProfileLink,
   deleteProfileById
@@ -38,6 +40,11 @@ export const ApiRoutes = [
     action: getProfilesByInterviewsByGroup
   },
   {
+    path: '/profiles/interviews/random',
+    method: HTTP.GET,
+    action: getProfilesByInterviewsByRandom
+  },
+  {
     path: '/profiles/resumes/group/:group',
     method: HTTP.GET,
     action: getProfilesByResumesByGroup
@@ -46,6 +53,11 @@ export const ApiRoutes = [
     path: '/profiles/resumes/related/:slug',
     method: HTTP.GET,
     action: getProfilesByResumesByRelated
+  },
+  {
+    path: '/profiles/resumes/random',
+    method: HTTP.GET,
+    action: getProfilesByResumesByRandom
   },
   { path: '/profiles', method: HTTP.POST, action: addProfile },
   { path: '/profiles/link', method: HTTP.POST, action: addProfileLink },

@@ -9,6 +9,7 @@ import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
+import NotFoundPage from 'components/common/layout/not_found';
 import PageIndicator from 'components/common/layout/page_indicator';
 import { H1, H2 } from 'components/common/system';
 import { verticalStackCss } from 'theme';
@@ -75,7 +76,7 @@ const InterviewsFeed: React.FC = () => {
           width: 100%;
         `}
       />
-      {isError && <div>error...</div>}
+      {isError && <NotFoundPage />}
       {!isLoading && interviews && (
         <React.Fragment>
           <MasonryGrid>

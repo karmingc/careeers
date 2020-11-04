@@ -8,6 +8,7 @@ import PreviewCard from 'components/common/cards/preview';
 import { useMatchesPathSlugId } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
+import NotFoundPage from 'components/common/layout/not_found';
 import PreviousHeader from 'components/common/layout/previous_header';
 import RelatedContent from 'components/common/layout/related_content';
 import { H1, P, A } from 'components/common/system';
@@ -125,7 +126,7 @@ const ResumePage: React.FC = () => {
         align-items: flex-start;
       `}
     >
-      {isError && <div>error...</div>}
+      {isError && <NotFoundPage />}
       {!isLoading && resume && (
         <React.Fragment>
           <PreviousHeader previousPage="resumes" />

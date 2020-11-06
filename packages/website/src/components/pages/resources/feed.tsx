@@ -28,7 +28,7 @@ interface ResourcesFeedProps {
 
 const ResourcesFeed: React.FC = () => {
   const [currPage, setPage] = useState(useMatchesPathPageNumber());
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [resources, setResources] = useState<ResourcesFeedProps>();
 
@@ -50,6 +50,10 @@ const ResourcesFeed: React.FC = () => {
     };
     fetchData();
   }, [currPage]);
+
+  if (isError) {
+    return <NotFoundPage />;
+  }
 
   return (
     <DefaultPageLayout
@@ -89,7 +93,6 @@ const ResourcesFeed: React.FC = () => {
         </React.Fragment>
       )}
       {currPage !== 1 && <H1>Resources</H1>}
-      {isError && <NotFoundPage />}
       {!isLoading && resources && (
         <React.Fragment>
           <MasonryGrid>

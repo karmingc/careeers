@@ -91,7 +91,7 @@ const STYLES_RESUME = css`
 const ResumePage: React.FC = () => {
   const [resume, setResume] = useState<ResumesProps>();
   const [relatedResumes, setRelatedResumes] = useState<ProfileProps[]>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const slug = useMatchesPathSlugId();
 

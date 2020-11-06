@@ -22,6 +22,26 @@ behaves in a predictable manner, regardless of your individual machine.
 psql -h localhost -U testuser -d careeers # password: testpassword
 ```
 
-### 2. In progress...lol
+### 2. Backup/Restore
 
 Ask karming for the dump file
+
+<!-- https://davejansen.com/how-to-dump-and-restore-a-postgresql-database-from-a-docker-container/ -->
+
+#### backup
+
+```bash
+docker exec -i pg-careeers-docker pg_dump --username testuser careeers > /desired/path/on/your/machine/dump.sql
+```
+
+#### restore
+
+```bash
+docker exec -i pg-careers-docker psql --username testuser [--password pg_password] careeers < /path/on/your/machine/dump.sql
+```
+
+if custom format:
+
+```bash
+pg_restore --verbose --clean --no-acl --no-owner -h localhost -U testuser -d careeers ./dump.sql
+```

@@ -84,7 +84,7 @@ const HomeSection: React.FC<HomeSectionProps> = React.memo((props) => {
 const HomePage: React.FC = () => {
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [resumes, setResumes] = useState<ProfileProps[]>();
   const [interviews, setInterviews] = useState<ProfileProps[]>();
@@ -108,6 +108,10 @@ const HomePage: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  if (isError) {
+    return <NotFoundPage />;
+  }
 
   return (
     <DefaultPageLayout
@@ -146,8 +150,7 @@ const HomePage: React.FC = () => {
           `}
         />
       </div>
-      {isError && <NotFoundPage />}
-      {!isLoading && interviews && (
+      {!isLoading && interviews && interviews.length > 0 && (
         <HomeSection path="interviews">
           {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
             return (
@@ -164,7 +167,7 @@ const HomePage: React.FC = () => {
           })}
         </HomeSection>
       )}
-      {!isLoading && resumes && (
+      {!isLoading && resumes && resumes.length > 0 && (
         <HomeSection path="resumes">
           {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
             return (

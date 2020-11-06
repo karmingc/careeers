@@ -50,7 +50,7 @@ interface ResumesFeedProps {
 
 const ResumesFeed: React.FC = () => {
   const [currPage, setPage] = useState(useMatchesPathPageNumber());
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [resumes, setResumes] = useState<ResumesFeedProps>();
 
@@ -73,6 +73,9 @@ const ResumesFeed: React.FC = () => {
     fetchData();
   }, [currPage]);
 
+  if (isError) {
+    return <NotFoundPage />;
+  }
   return (
     <DefaultPageLayout
       pageTitle="Home"
@@ -82,7 +85,7 @@ const ResumesFeed: React.FC = () => {
         align-items: flex-start;
       `}
     >
-      {currPage === 1 && (
+      {currPage === 1 ? (
         <React.Fragment>
           <div
             css={css`
@@ -109,9 +112,9 @@ const ResumesFeed: React.FC = () => {
             `}
           />
         </React.Fragment>
+      ) : (
+        <H1>Resumes</H1>
       )}
-      {currPage !== 1 && <H1>Resumes</H1>}
-      {isError && <NotFoundPage />}
       {!isLoading && resumes && (
         <React.Fragment>
           <MasonryGrid>

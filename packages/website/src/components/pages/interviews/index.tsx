@@ -227,7 +227,7 @@ interface InterviewProps {
 
 const InterviewPage: React.FC = () => {
   const [interview, setInterview] = useState<InterviewProps>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const slug = useMatchesPathSlugId();
 

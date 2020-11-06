@@ -18,7 +18,10 @@ const NotFoundPage: React.FC = () => {
       header="page not found"
       contentCss={STYLES_ERROR}
     >
-      <H1>Seems like an error... But here's something else.</H1>
+      <H1>
+        Seems like we have encountered an error...Please message our team or try
+        later. Here's something else in the mean time.
+      </H1>
       <img
         src={require('../../../media/images/help.jpg')}
         alt="banner"

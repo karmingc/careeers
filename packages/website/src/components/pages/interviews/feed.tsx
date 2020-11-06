@@ -21,7 +21,7 @@ interface InterviewsFeedProps {
 
 const InterviewsFeed: React.FC = () => {
   const [currPage, setPage] = useState(useMatchesPathPageNumber());
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [interviews, setInterviews] = useState<InterviewsFeedProps>();
 
@@ -43,6 +43,11 @@ const InterviewsFeed: React.FC = () => {
     };
     fetchData();
   }, [currPage]);
+
+  if (isError) {
+    return <NotFoundPage />;
+  }
+
   return (
     <DefaultPageLayout
       pageTitle="Interviews"
@@ -76,7 +81,6 @@ const InterviewsFeed: React.FC = () => {
           width: 100%;
         `}
       />
-      {isError && <NotFoundPage />}
       {!isLoading && interviews && (
         <React.Fragment>
           <MasonryGrid>

@@ -39,7 +39,7 @@ createConnection({
   username: process.env.TYPEORM_USERNAME,
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
-  entities: [__dirname + '/entities/*.ts'],
+  entities: [__dirname + '/entities/{*.ts,*.js}'],
   synchronize: true,
   logging: false,
   cache: true

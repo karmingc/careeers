@@ -8,11 +8,10 @@ import ResourcesCard from './card';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
-import NotFoundPage from 'components/common/layout/not_found';
 import PageIndicator from 'components/common/layout/page_indicator';
 
 import { H1, H2 } from 'components/common/system';
-import { verticalStackCss } from 'theme';
+import { fadeInAnim, verticalStackCss } from 'theme';
 
 export interface ResourcesProps {
   name: string;
@@ -27,8 +26,8 @@ interface ResourcesFeedProps {
 }
 
 const ResourcesFeed: React.FC = () => {
-  const [currPage, setPage] = useState(useMatchesPathPageNumber());
-  const [isLoading, setIsLoading] = useState(true);
+  const [currPage, setCurrPage] = useState(useMatchesPathPageNumber());
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [resources, setResources] = useState<ResourcesFeedProps>();
 
@@ -51,20 +50,19 @@ const ResourcesFeed: React.FC = () => {
     fetchData();
   }, [currPage]);
 
-  if (isError) {
-    return <NotFoundPage />;
-  }
-
   return (
     <DefaultPageLayout
       pageTitle="Resources"
+      isError={isError}
+      isLoading={isLoading}
       contentCss={css`
         ${verticalStackCss.xxl};
         align-items: flex-start;
         justify-content: flex-start;
+        ${fadeInAnim}
       `}
     >
-      {currPage === 1 && (
+      {currPage === 1 ? (
         <React.Fragment>
           <div
             css={css`
@@ -91,9 +89,10 @@ const ResourcesFeed: React.FC = () => {
             `}
           />
         </React.Fragment>
+      ) : (
+        <H1>Resources</H1>
       )}
-      {currPage !== 1 && <H1>Resources</H1>}
-      {!isLoading && resources && (
+      {resources ? (
         <React.Fragment>
           <MasonryGrid>
             {resources.list.map((resource) => {
@@ -111,11 +110,11 @@ const ResourcesFeed: React.FC = () => {
           <PageIndicator
             numOfCards={resources.count}
             path="resources"
-            currPage={currPage}
-            setPage={setPage}
+            currPageIndicator={currPage}
+            setCurrPageIndicator={setCurrPage}
           />
         </React.Fragment>
-      )}
+      ) : null}
     </DefaultPageLayout>
   );
 };

@@ -18,6 +18,7 @@ import PrivacyPage from 'components/pages/privacy';
 import ResourcesFeed from 'components/pages/resources/feed';
 import ResumePage from 'components/pages/resumes';
 import ResumesFeed from 'components/pages/resumes/feed';
+import { ContextProviders } from 'context';
 import { globalStyle } from 'theme/styles/global';
 
 AOS.init();
@@ -33,31 +34,33 @@ const App = () => {
       `}
     >
       <Global styles={globalStyle} />
-      <Router>
-        <ScrollToTop />
-        <Header />
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route
-            exact
-            path={['/resumes', '/resumes/page/:pageId']}
-            component={ResumesFeed}
-          />
-          <Route exact path="/resumes/:id" component={ResumePage} />
-          <Route exact path="/interviews" component={InterviewsFeed} />
-          <Route exact path="/interviews/:id" component={InterviewPage} />
-          <Route
-            exact
-            path={['/resources', '/resources/page/:pageId']}
-            component={ResourcesFeed}
-          />
-          {/* <Route exact path="/about" component={AboutPage} /> */}
-          <Route exact path="/privacy" component={PrivacyPage} />
+      <ContextProviders>
+        <Router>
+          <ScrollToTop />
+          <Header />
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route
+              exact
+              path={['/resumes', '/resumes/page/:pageId']}
+              component={ResumesFeed}
+            />
+            <Route exact path="/resumes/:id" component={ResumePage} />
+            <Route exact path="/interviews" component={InterviewsFeed} />
+            <Route exact path="/interviews/:id" component={InterviewPage} />
+            <Route
+              exact
+              path={['/resources', '/resources/page/:pageId']}
+              component={ResourcesFeed}
+            />
+            {/* <Route exact path="/about" component={AboutPage} /> */}
+            <Route exact path="/privacy" component={PrivacyPage} />
 
-          <Route path="*" component={NotFoundPage} />
-        </Switch>
-        <Footer />
-      </Router>
+            <Route path="*" component={NotFoundPage} />
+          </Switch>
+          <Footer />
+        </Router>
+      </ContextProviders>
     </div>
   );
 };

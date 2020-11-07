@@ -1,18 +1,19 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { ProfileProps, ResumesProps } from './feed';
 import PreviewCard from 'components/common/cards/preview';
 import { useMatchesPathSlugId } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
-import NotFoundPage from 'components/common/layout/not_found';
+
 import PreviousHeader from 'components/common/layout/previous_header';
 import RelatedContent from 'components/common/layout/related_content';
 import { H1, P, A } from 'components/common/system';
 
+import { ResumesContext } from 'context/resumes';
 import {
   cssForMediaSize,
   horizontalStackCss,
@@ -94,6 +95,7 @@ const ResumePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const slug = useMatchesPathSlugId();
+  const resumesState = useContext(ResumesContext);
 
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
@@ -121,15 +123,16 @@ const ResumePage: React.FC = () => {
   return (
     <DefaultPageLayout
       pageTitle="Resume ID"
+      isError={isError}
+      isLoading={isLoading}
       contentCss={css`
         ${verticalStackCss.xl}
         align-items: flex-start;
       `}
     >
-      {isError && <NotFoundPage />}
-      {!isLoading && resume && (
+      {resume && (
         <React.Fragment>
-          <PreviousHeader previousPage="resumes" />
+          <PreviousHeader path="resumes" pageIndex={resumesState.page} />
           <section css={STYLES_MAIN}>
             <div css={STYLES_PROFILE}>
               <img
@@ -173,6 +176,7 @@ const ResumePage: React.FC = () => {
                     const { platform, handle } = link;
                     return (
                       <span
+                        key={`${platform}-${handle}`}
                         css={css`
                           font-size: ${fontSize.medium}px;
                         `}

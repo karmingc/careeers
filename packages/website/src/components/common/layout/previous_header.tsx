@@ -7,41 +7,40 @@ import { horizontalStackCss, theme, transitionTime } from 'theme';
 import { fontSize } from 'theme/styles/font';
 
 interface PreviousHeaderProps {
-  previousPage: string;
+  path: string;
+  pageIndex: number;
 }
 
+const STYLES_MAIN = css`
+  ${horizontalStackCss.s}
+  text-decoration: none;
+  justify-content: flex-start;
+
+  :hover {
+    span {
+      transform: translate(5%);
+    }
+    path {
+      transform: translate(-5%);
+    }
+  }
+  :active {
+    span {
+      color: ${theme.blurStrongGrey};
+    }
+    path {
+      fill: ${theme.blurStrongGrey};
+    }
+  }
+`;
 /**
  * Adding previous page button to the top of page
- * @param previousPage add the path for it
+ * @param path add the path for it
  */
 const PreviousHeader: React.FC<PreviousHeaderProps> = React.memo((props) => {
-  const { previousPage } = props;
+  const { path, pageIndex } = props;
   return (
-    <Link
-      to={`/${previousPage}`}
-      css={css`
-        ${horizontalStackCss.s}
-        text-decoration: none;
-        justify-content: flex-start;
-
-        :hover {
-          span {
-            transform: translate(5%);
-          }
-          path {
-            transform: translate(-5%);
-          }
-        }
-        :active {
-          span {
-            color: ${theme.blurStrongGrey};
-          }
-          path {
-            fill: ${theme.blurStrongGrey};
-          }
-        }
-      `}
-    >
+    <Link to={`/${path}/page/${pageIndex}`} css={STYLES_MAIN}>
       <Icon
         name={IconName.ArrowLeft}
         size={IconSize.MEDIUM}
@@ -62,7 +61,7 @@ const PreviousHeader: React.FC<PreviousHeaderProps> = React.memo((props) => {
           color: ${theme.activeGrey};
         `}
       >
-        {previousPage.charAt(0).toUpperCase() + previousPage.slice(1)}
+        {path.charAt(0).toUpperCase() + path.slice(1)}
       </span>
     </Link>
   );

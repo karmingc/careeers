@@ -9,8 +9,8 @@ import { fontSize } from 'theme/styles/font';
 interface PageIndicatorProps {
   numOfCards: number;
   path: string;
-  currPage: number;
-  setPage: (target: number) => void;
+  currPageIndicator: number;
+  setCurrPageIndicator: (target: number) => void;
 }
 
 /**
@@ -18,7 +18,8 @@ interface PageIndicatorProps {
  * less than 16 = 1 page, less than 32 = 2 pages...
  */
 const PageIndicator: React.FC<PageIndicatorProps> = React.memo((props) => {
-  const { numOfCards, path, currPage, setPage } = props;
+  const { numOfCards, path, currPageIndicator, setCurrPageIndicator } = props;
+
   const numOfPages = Math.ceil(numOfCards / 16);
   const arrayOfPages = useMemo(() => {
     return Array.from(Array(numOfPages), (_, i) => i + 1);
@@ -31,21 +32,21 @@ const PageIndicator: React.FC<PageIndicatorProps> = React.memo((props) => {
         margin: auto;
       `}
     >
-      {arrayOfPages.map((page) => {
+      {arrayOfPages.map((pageIndicator) => {
         return (
           <Link
-            to={`/${path}/page/${page}`}
-            key={page}
-            onClick={() => setPage(page)}
+            to={`/${path}/page/${pageIndicator}`}
+            key={pageIndicator}
+            onClick={() => setCurrPageIndicator(pageIndicator)}
           >
             <button
               type="button"
               tabIndex={-1}
               css={css`
-                background-color: ${currPage === page
+                background-color: ${currPageIndicator === pageIndicator
                   ? theme.buttonBgActive
                   : theme.buttonBgBlur};
-                color: ${currPage === page
+                color: ${currPageIndicator === pageIndicator
                   ? theme.fontPrimaryWhite
                   : theme.fontPrimaryGrey};
                 padding: ${rawSpacing.m}px ${rawSpacing.l}px;
@@ -55,13 +56,13 @@ const PageIndicator: React.FC<PageIndicatorProps> = React.memo((props) => {
                 ${outlineFocus}
                 :hover {
                   cursor: pointer;
-                  background-color: ${currPage === page
+                  background-color: ${currPageIndicator === pageIndicator
                     ? ''
                     : theme.buttonBgHover};
                 }
               `}
             >
-              {page}
+              {pageIndicator}
             </button>
           </Link>
         );

@@ -1,4 +1,12 @@
 import { css } from '@emotion/core';
+import {
+  cssForMediaSize,
+  MediaSize,
+  useMatchesMediaSize
+} from './media_queries';
+import { fadeInAnim } from './styles/animation';
+import { NotoSerif, NotoSansHK } from './styles/font';
+import { transitionTime, STYLES_IMAGE_HOVER } from './styles/transition';
 import { truncateText } from 'theme/styles/font';
 import {
   rawSpacing,
@@ -6,13 +14,6 @@ import {
   verticalStackCss,
   calcSpaceConstraints
 } from 'theme/styles/spacing';
-import {
-  cssForMediaSize,
-  MediaSize,
-  useMatchesMediaSize
-} from './media_queries';
-import { NotoSerif, NotoSansHK } from './styles/font';
-import { transitionTime, STYLES_IMAGE_HOVER } from './styles/transition';
 
 // material design palette
 // https://htmlcolorcodes.com/color-chart/material-design-color-chart/
@@ -116,6 +117,7 @@ export {
   size,
   transitionTime,
   STYLES_IMAGE_HOVER,
+  fadeInAnim,
   truncateText,
   calcSpaceConstraints,
   rawSpacing,

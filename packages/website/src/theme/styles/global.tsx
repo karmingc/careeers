@@ -9,7 +9,6 @@ export const globalStyle = css`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: ${theme.fontPrimaryGrey};
-    height: 100%;
     background-color: ${theme.backgroundWhite};
   }
 

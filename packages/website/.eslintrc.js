@@ -33,7 +33,7 @@ module.exports = {
         "react/prop-types": "off",
         'linebreak-style': 'off',
         "quotes": ["error", "single", { "avoidEscape": true }],
-
+        "import/prefer-default-export": "off",
         "import/order": ["error", { "groups": ["builtin", "external", "parent", "sibling", "index"] }],
         "import/order": ["error", { "alphabetize": { "order": "asc", "caseInsensitive": true } }],
         'prettier/prettier': [

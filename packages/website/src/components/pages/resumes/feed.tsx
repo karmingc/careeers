@@ -8,11 +8,13 @@ import PreviewCard from 'components/common/cards/preview';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
-import NotFoundPage from 'components/common/layout/not_found';
+
 import PageIndicator from 'components/common/layout/page_indicator';
 
 import { H1, H2 } from 'components/common/system';
-import { verticalStackCss } from 'theme';
+import { updateResumesFeedPage } from 'context/resumes/actions';
+
+import { fadeInAnim, verticalStackCss } from 'theme';
 
 /**
  * Props for additional social links of profile
@@ -49,10 +51,15 @@ interface ResumesFeedProps {
 }
 
 const ResumesFeed: React.FC = () => {
-  const [currPage, setPage] = useState(useMatchesPathPageNumber());
+  const [currPage, setCurrPage] = useState(useMatchesPathPageNumber());
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [resumes, setResumes] = useState<ResumesFeedProps>();
+
+  const updatePage = (page: number) => {
+    setCurrPage(page);
+    updateResumesFeedPage({ page });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,16 +80,16 @@ const ResumesFeed: React.FC = () => {
     fetchData();
   }, [currPage]);
 
-  if (isError) {
-    return <NotFoundPage />;
-  }
   return (
     <DefaultPageLayout
-      pageTitle="Home"
+      pageTitle="Resumes"
+      isError={isError}
+      isLoading={isLoading}
       contentCss={css`
         ${verticalStackCss.xxl}
         justify-content: flex-start;
         align-items: flex-start;
+        ${fadeInAnim}
       `}
     >
       {currPage === 1 ? (
@@ -115,7 +122,7 @@ const ResumesFeed: React.FC = () => {
       ) : (
         <H1>Resumes</H1>
       )}
-      {!isLoading && resumes && (
+      {resumes && (
         <React.Fragment>
           <MasonryGrid>
             {resumes.list.map((resume) => {
@@ -135,8 +142,8 @@ const ResumesFeed: React.FC = () => {
           <PageIndicator
             numOfCards={resumes.count}
             path="resumes"
-            currPage={currPage}
-            setPage={setPage}
+            currPageIndicator={currPage}
+            setCurrPageIndicator={updatePage}
           />
         </React.Fragment>
       )}

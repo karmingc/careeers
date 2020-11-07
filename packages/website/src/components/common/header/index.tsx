@@ -2,12 +2,11 @@
 import { jsx } from '@emotion/core';
 import css from '@emotion/css';
 import React, { useEffect, useState } from 'react';
-
 import { Link, useLocation } from 'react-router-dom';
 
 import { H1 } from '../system';
-
 import { Scroll, useMatchesScrollDirection } from './nav_helpers';
+
 import {
   horizontalStackCss,
   theme,
@@ -274,7 +273,7 @@ const Header: React.FC = () => {
               `,
               NotoSerif
             ]}
-            onClick={toggleMenu}
+            onClick={isMenuOpen ? toggleMenu : undefined}
           >
             Careeers.
           </H1>

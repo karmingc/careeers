@@ -12,9 +12,9 @@ import { Icon, IconName, IconSize } from 'components/common/icons';
 import CardGridLayout from 'components/common/layout/card_grid';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 
-import NotFoundPage from 'components/common/layout/not_found';
 import { H1 } from 'components/common/system';
 import {
+  fadeInAnim,
   horizontalStackCss,
   MediaSize,
   rawSpacing,
@@ -109,17 +109,16 @@ const HomePage: React.FC = () => {
     fetchData();
   }, []);
 
-  if (isError) {
-    return <NotFoundPage />;
-  }
-
   return (
     <DefaultPageLayout
-      pageTitle="Resources"
+      pageTitle="Home"
+      isError={isError}
+      isLoading={isLoading}
       contentCss={css`
         ${verticalStackCss.xxl};
         align-items: flex-start;
         justify-content: flex-start;
+        ${fadeInAnim}
       `}
     >
       <div
@@ -150,7 +149,7 @@ const HomePage: React.FC = () => {
           `}
         />
       </div>
-      {!isLoading && interviews && interviews.length > 0 && (
+      {interviews && (
         <HomeSection path="interviews">
           {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
             return (
@@ -167,7 +166,7 @@ const HomePage: React.FC = () => {
           })}
         </HomeSection>
       )}
-      {!isLoading && resumes && resumes.length > 0 && (
+      {resumes && (
         <HomeSection path="resumes">
           {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
             return (

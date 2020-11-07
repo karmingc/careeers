@@ -5,22 +5,19 @@ import React from 'react';
 
 import { H1 } from '../system';
 import { DefaultPageLayout } from './default_page';
-import { verticalStackCss } from 'theme/';
+import { fadeInAnim, verticalStackCss } from 'theme/';
 
 const STYLES_ERROR = css`
   ${verticalStackCss.xxl}
+  ${fadeInAnim}
 `;
 
 const NotFoundPage: React.FC = () => {
   return (
-    <DefaultPageLayout
-      pageTitle="PAGE ERROR"
-      header="page not found"
-      contentCss={STYLES_ERROR}
-    >
+    <DefaultPageLayout pageTitle="PAGE ERROR" contentCss={STYLES_ERROR}>
       <H1>
         Seems like we have encountered an error...Please message our team or try
-        later. Here's something else in the mean time.
+        later. Here is something else in the mean time.
       </H1>
       <img
         src={require('../../../media/images/help.jpg')}

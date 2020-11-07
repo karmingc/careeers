@@ -259,7 +259,7 @@ const InterviewPage: React.FC = () => {
         align-items: flex-start;
       `}
     >
-      <PreviousHeader previousPage="interviews" />
+      <PreviousHeader path="interviews" pageIndex={1} />
       {isError && <div>error...</div>}
       {!isLoading && interview && (
         <React.Fragment>

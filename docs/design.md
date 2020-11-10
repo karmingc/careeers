@@ -2,7 +2,7 @@
 
 Documentation related to the website's design pattern and structure.
 
-In most case, you can find most design specs in the `src/theme` folder.
+In most case, you can find most design specs in the [src/theme](https://github.com/karmingc/resumehub/tree/main/packages/website/src/theme) folder.
 
 While it may vary depending in different situations, we generally use these specs for specific parts of our website. Please follow for consistency.
 
@@ -10,7 +10,7 @@ While it may vary depending in different situations, we generally use these spec
 
 In terms of font style, we use Noto Serif and Noto Sans HK. Serif is used for our interviews while Noto Sans HK is used everywhere else.
 
-In terms of font size, we generally import from `components/common/system/typography` since they usually have similar properties that can be predefined (think <A> tag with `href`).
+In terms of font size, we generally import from [components/common/system/typography](https://github.com/karmingc/resumehub/blob/main/packages/website/src/components/common/system/typography.tsx) since they usually have similar properties that can be predefined (think <A> tag with `href`).
 
 - H1/2em
   - page title
@@ -27,7 +27,7 @@ In terms of font size, we generally import from `components/common/system/typogr
 
 ## Palette
 
-In terms of palette, we use material design's palette as our base.
+In terms of palette, we use [material design](https://material.io/resources/color/#!/)'s color chart as our base.
 
 - background
   - white: #ffffff
@@ -43,11 +43,20 @@ In terms of palette, we use material design's palette as our base.
 
 In terms of spacing, we use a 8pt grid spacing style as our base ranging from zero (0p) to xxxxxl (64px).
 
-For our layouts, we separate each section with a spacing.xl within each page component, whether it is horizontally or vertically. For other general layout, such as page padding, you can use the const `size` within the `theme` file.
+For our layouts, we separate each section with a spacing.xl within each page component, whether it is horizontally or vertically. For other general layout, such as page padding, you can use the const `size` within the [theme](https://github.com/karmingc/resumehub/blob/main/packages/website/src/theme/index.tsx) file.
 
 For our fonts, we attribute each font to a specific spacing.
 
-In situations where different fonts are combined, we generally subtract spacing.s to the largest spacing. For e.g, if we have H1 and P together, the spacing in between should be spacing.l (xl - s).
+In situations where different fonts are combined, we generally subtract spacing.s to the largest spacing.
+
+For e.g, if we have H1 and P together, the spacing in between should be spacing.l (xl - s).
+
+```
+<div css=css`${verticalStackCss.xl}`>
+    <H1></H1>
+    <P css={css`margin-top: -${rawSpacing.s}px`}></P>
+<div>
+```
 
 - spacing.xl (32px)
   - H1

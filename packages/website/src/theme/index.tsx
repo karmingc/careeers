@@ -70,6 +70,8 @@ const theme = {
   outlineBlue: palette.blue60
 };
 
+const pagePaddingHorizontalDesktop = rawSpacing.xxxl;
+const pagePaddingHorizontalTablet = rawSpacing.l;
 /**
  * Global sizes for references
  */
@@ -80,21 +82,21 @@ const size = {
       tablet: '100%'
     },
     padding: {
-      desktop: `${rawSpacing.m}px ${rawSpacing.xxxl}px ${rawSpacing.xxxxl}px`,
-      tablet: `${rawSpacing.m}px ${rawSpacing.l}px ${rawSpacing.xxxxl}px`
+      desktop: `${rawSpacing.zero}px ${pagePaddingHorizontalDesktop}px ${rawSpacing.xxxxl}px`,
+      tablet: `${rawSpacing.zero}px ${pagePaddingHorizontalTablet}px ${rawSpacing.xxxxl}px`
     },
     maxWidth: '1200px'
   },
   header: {
     padding: {
-      desktop: `${rawSpacing.m}px ${rawSpacing.xxxl}px`,
-      tablet: `${rawSpacing.m}px ${rawSpacing.l}px`
+      desktop: `${rawSpacing.xl}px ${pagePaddingHorizontalDesktop}px`,
+      tablet: `${rawSpacing.xl}px ${pagePaddingHorizontalTablet}px`
     }
   },
   footer: {
     padding: {
-      desktop: `${rawSpacing.xxxxl}px ${rawSpacing.xxxl}px`,
-      tablet: `${rawSpacing.xxxxl}px ${rawSpacing.l}px`
+      desktop: `${rawSpacing.xl}px ${pagePaddingHorizontalDesktop}px`,
+      tablet: `${rawSpacing.xl}px ${pagePaddingHorizontalTablet}px`
     }
   },
   card: {}

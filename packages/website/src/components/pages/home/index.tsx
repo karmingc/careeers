@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 
 // import ResourcesCard from '../resources/card';
 import Support from '../../../media/images/support.jpg';
+import ResourcesCard from '../resources/card';
+import { ResourcesProps } from '../resources/feed';
 import { ProfileProps } from '../resumes/feed';
 import PreviewCard from 'components/common/cards/preview';
 import { Icon, IconName, IconSize } from 'components/common/icons';
@@ -35,7 +37,7 @@ const HomeSection: React.FC<HomeSectionProps> = React.memo((props) => {
   return (
     <section
       css={css`
-        ${verticalStackCss.xl};
+        ${verticalStackCss.l};
         align-items: flex-start;
         justify-content: flex-start;
       `}
@@ -88,6 +90,7 @@ const HomePage: React.FC = () => {
   const [isError, setIsError] = useState(false);
   const [resumes, setResumes] = useState<ProfileProps[]>();
   const [interviews, setInterviews] = useState<ProfileProps[]>();
+  const [resources, setResources] = useState<ResourcesProps[]>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,12 +98,14 @@ const HomePage: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const [resumesList, interviewsList] = await Promise.all([
+        const [resumesList, interviewsList, resourcesList] = await Promise.all([
           axios.get('/api/profiles/resumes/random'),
-          axios.get('/api/profiles/interviews/random')
+          axios.get('/api/profiles/interviews/random'),
+          axios.get('/api/resources/random')
         ]);
         setResumes(resumesList.data);
         setInterviews(interviewsList.data);
+        setResources(resourcesList.data);
       } catch (error) {
         setIsError(true);
       }
@@ -115,7 +120,7 @@ const HomePage: React.FC = () => {
       isError={isError}
       isLoading={isLoading}
       contentCss={css`
-        ${verticalStackCss.xxl};
+        ${verticalStackCss.xl};
         align-items: flex-start;
         justify-content: flex-start;
         ${fadeInAnim}
@@ -129,7 +134,7 @@ const HomePage: React.FC = () => {
         <H1
           contentCss={css`
             position: absolute;
-            top: ${rawSpacing.l}px;
+            top: ${rawSpacing.xl}px;
             left: ${rawSpacing.xxl}px;
             color: ${theme.fontPrimaryWhite};
           `}
@@ -161,6 +166,7 @@ const HomePage: React.FC = () => {
                 profileCloudinaryId={interview.profileCloudinaryId}
                 slug={interview.slug}
                 path="interviews"
+                margin={false}
               />
             );
           })}
@@ -178,14 +184,27 @@ const HomePage: React.FC = () => {
                 profileCloudinaryId={resume.profileCloudinaryId}
                 slug={resume.slug}
                 path="resumes"
+                margin={false}
               />
             );
           })}
         </HomeSection>
       )}
-      {/* <HomeSection path="resources">
-        <ResourcesCard />
-      </HomeSection> */}
+      {resources && (
+        <HomeSection path="resources">
+          {resources.slice(0, isDesktop ? 4 : 2).map((resource) => {
+            return (
+              <ResourcesCard
+                key={resource.name}
+                name={resource.name}
+                description={resource.description}
+                link={resource.link}
+                cloudinaryId={resource.cloudinaryId}
+              />
+            );
+          })}
+        </HomeSection>
+      )}
     </DefaultPageLayout>
   );
 };

@@ -41,4 +41,18 @@ export function findPathSlugId(path) {
     return path.substring(position);
 }
 
+/**
+ * Find out which path
+ * @param path
+ */
+export function removeTrailingSlash(path) {
+    const numSlash = (path.match(/[/]/g) || []).length;
+    if (numSlash <= 1) {
+        return path;
+    }
+    const position = path.indexOf('/', path.indexOf('/') + 1);
+
+    return path.substring(0, position);
+}
+
 export { socialUrl };

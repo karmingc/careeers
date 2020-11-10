@@ -30,16 +30,7 @@ const STYLES_BASE = css`
 export const H1 = React.memo<TextProps>((props) => {
   const { contentCss, children, onClick } = props;
   return (
-    <h1
-      onClick={onClick}
-      css={[
-        css`
-          font-size: 32px;
-        `,
-        STYLES_BASE,
-        contentCss
-      ]}
-    >
+    <h1 onClick={onClick} css={[STYLES_BASE, contentCss]}>
       {children}
     </h1>
   );
@@ -109,7 +100,7 @@ const STYLES_TEXT = css`
 `;
 
 /**
- * Default padding: rawSpacing.s
+ * Default padding: rawSpacing.m
  */
 export const P = React.memo<TextProps>((props) => {
   const { contentCss, children } = props;

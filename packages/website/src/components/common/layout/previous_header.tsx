@@ -54,7 +54,7 @@ const PreviousHeader: React.FC<PreviousHeaderProps> = React.memo((props) => {
       />
       <span
         css={css`
-          font-size: ${fontSize.medium}px;
+          font-size: ${fontSize.medium}em;
           font-weight: bolder;
           text-decoration: none;
           transition: all ease 500ms;

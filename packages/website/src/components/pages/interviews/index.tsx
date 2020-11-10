@@ -44,29 +44,30 @@ interface InterviewQuestionProps {
 }
 
 const STYLES_QUESTION = css`
-  ${verticalStackCss.m};
+  ${verticalStackCss.l};
   width: 100%;
+`;
 
+const STYLES_QUESTION_DIV = css`
+  > p:first-of-type {
+    margin-top: -${rawSpacing.s}px;
+  }
   ${cssForMediaSize({
     max: MediaSize.TABLET,
     contentCss: css`
       /* includes question + answer */
-      > div:not(:last-of-type) {
-        ${verticalStackCss.m};
-        align-items: flex-start;
-        width: 100%;
-      }
+      ${verticalStackCss.l};
+      align-items: flex-start;
+      width: 100%;
     `
   })}
   ${cssForMediaSize({
     min: MediaSize.DESKTOP,
     contentCss: css`
       /* includes question + answer */
-      > div:not(:last-of-type) {
-        ${verticalStackCss.m};
-        align-items: flex-start;
-        width: calc(100% * 2 / 3);
-      }
+      ${verticalStackCss.l};
+      align-items: flex-start;
+      width: calc(100% * 2 / 3);
     `
   })};
 `;
@@ -81,7 +82,7 @@ const STYLES_QUESTION_PHOTO = css`
 
   > img {
     width: calc(50% - ${rawSpacing.s}px);
-    margin-top: ${rawSpacing.m}px;
+    margin-bottom: ${rawSpacing.m}px;
     object-fit: cover;
   }
 `;
@@ -101,14 +102,14 @@ export const InterviewQuestion: React.FC<InterviewQuestionProps> = ({
 }) => {
   return (
     <section css={STYLES_QUESTION}>
-      <div>
+      <div css={STYLES_QUESTION_DIV}>
         <H2>{title}</H2>
         {text.split('\n').map((str) => {
           return (
             <P
               key={str}
               contentCss={css`
-                font-size: ${fontSize.medium}px;
+                font-size: ${fontSize.medium}em;
                 ${NotoSerif};
               `}
             >
@@ -117,61 +118,44 @@ export const InterviewQuestion: React.FC<InterviewQuestionProps> = ({
           );
         })}
       </div>
-      <div>
-        {links.map((src) => {
-          return (
-            <A
-              key={src.name}
-              href={src.link}
-              contentCss={css`
-                font-size: ${fontSize.medium}px;
-                ${NotoSerif};
-              `}
-            >
-              {src.name}
-            </A>
-          );
-        })}
-      </div>
-      <div css={STYLES_QUESTION_PHOTO}>
-        {photos.map((src) => {
-          return (
-            <img
-              key={src.cloudinaryId}
-              src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${src.cloudinaryId}`}
-              alt="profile"
-              css={STYLES_QUESTION_PHOTO}
-              data-aos="fade-up"
-              data-aos-once="true"
-            />
-          );
-        })}
-      </div>
-
+      {links.length > 0 ? (
+        <div css={STYLES_QUESTION_DIV}>
+          {links.map((src) => {
+            return (
+              <A
+                key={src.name}
+                href={src.link}
+                contentCss={css`
+                  font-size: ${fontSize.medium}em;
+                  ${NotoSerif};
+                `}
+              >
+                {src.name}
+              </A>
+            );
+          })}
+        </div>
+      ) : null}
+      {photos.length > 0 ? (
+        <div css={STYLES_QUESTION_PHOTO}>
+          {photos.map((src) => {
+            return (
+              <img
+                key={src.cloudinaryId}
+                src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${src.cloudinaryId}`}
+                alt="profile"
+                css={STYLES_QUESTION_PHOTO}
+                data-aos="fade-up"
+                data-aos-once="true"
+              />
+            );
+          })}
+        </div>
+      ) : null}
       {children}
     </section>
   );
 };
-
-const STYLES_MAIN = css`
-  ${cssForMediaSize({
-    max: MediaSize.TABLET,
-    contentCss: css`
-      ${verticalStackCss.xxxl};
-      align-items: flex-start;
-      justify-content: flex-start;
-    `
-  })}
-
-  ${cssForMediaSize({
-    min: MediaSize.DESKTOP,
-    contentCss: css`
-      ${horizontalStackCss.xxxl};
-      align-items: flex-start;
-      justify-content: flex-start;
-    `
-  })}
-`;
 
 const STYLES_PROFILE = css`
   ${cssForMediaSize({
@@ -195,7 +179,7 @@ const STYLES_PROFILE = css`
 
 const STYLES_ARTICLE = css`
   ${verticalStackCss.xxxl};
-  margin: ${rawSpacing.xxxl}px auto;
+  margin: ${rawSpacing.xl}px auto;
   align-items: flex-start;
 
   ${cssForMediaSize({
@@ -263,76 +247,75 @@ const InterviewPage: React.FC = () => {
       {isError && <div>error...</div>}
       {!isLoading && interview && (
         <React.Fragment>
-          <section css={STYLES_MAIN}>
-            <div css={STYLES_PROFILE}>
-              <img
-                src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${interview.profile.profileCloudinaryId}`}
-                alt="profile"
-                css={css`
-                  width: 100%;
-                  max-height: 400px;
-                  object-fit: cover;
+          <section css={STYLES_PROFILE}>
+            <img
+              src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${interview.profile.profileCloudinaryId}`}
+              alt="profile"
+              css={css`
+                width: 100%;
+                max-height: 400px;
+                object-fit: cover;
+              `}
+            />
+            <div
+              css={css`
+                ${verticalStackCss.xl};
+                align-items: flex-start;
+              `}
+            >
+              <H1>
+                {interview.profile.name} - {interview.profile.company}
+              </H1>
+              <P
+                contentCss={css`
+                  margin-top: -${rawSpacing.s}px;
+                  font-size: ${fontSize.medium}em;
                 `}
-              />
+              >
+                {interview.profile.description}
+              </P>
               <div
                 css={css`
-                  ${verticalStackCss.xl};
+                  ${verticalStackCss.s};
                   align-items: flex-start;
                 `}
               >
-                <H1>
-                  {interview.profile.name} - {interview.profile.company}
-                </H1>
-                <P
-                  contentCss={css`
-                    margin-top: -${rawSpacing.s}px;
-                    font-size: ${fontSize.medium}px;
-                  `}
-                >
-                  {interview.profile.description}
-                </P>
-                <div
-                  css={css`
-                    ${verticalStackCss.s};
-                    align-items: flex-start;
-                  `}
-                >
-                  {interview.profile.website && (
-                    <A
-                      href={interview.profile.website}
-                      contentCss={css`
-                        font-size: ${fontSize.medium}px;
-                      `}
-                    >
-                      {prettierUrl(interview.profile.website)}
-                    </A>
-                  )}
-                  {interview.profile.profileLinks &&
-                    interview.profile.profileLinks.map((link) => {
-                      const { platform, handle } = link;
-                      return (
-                        <span
-                          key={platform}
-                          css={css`
-                            font-size: ${fontSize.medium}px;
-                          `}
+                {interview.profile.website && (
+                  <A
+                    href={interview.profile.website}
+                    contentCss={css`
+                      font-size: ${fontSize.medium}em;
+                    `}
+                  >
+                    {prettierUrl(interview.profile.website)}
+                  </A>
+                )}
+                {interview.profile.profileLinks &&
+                  interview.profile.profileLinks.map((link) => {
+                    const { platform, handle } = link;
+                    return (
+                      <span
+                        key={platform}
+                        css={css`
+                          font-size: ${fontSize.medium}em;
+                        `}
+                      >
+                        {platform.charAt(0).toLowerCase() + platform.slice(1)}{' '}
+                        <A
+                          href={socialUrl({
+                            platform,
+                            handle
+                          })}
                         >
-                          {platform.charAt(0).toLowerCase() + platform.slice(1)}{' '}
-                          <A
-                            href={socialUrl({
-                              platform,
-                              handle
-                            })}
-                          >
-                            @{handle}
-                          </A>
-                        </span>
-                      );
-                    })}
-                </div>
+                          @{handle}
+                        </A>
+                      </span>
+                    );
+                  })}
               </div>
             </div>
           </section>
+
           <article css={STYLES_ARTICLE}>
             {interview.questions.map((block) => {
               const { question, answer, photos, links } = block;

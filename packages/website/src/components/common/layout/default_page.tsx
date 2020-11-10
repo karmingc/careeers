@@ -27,7 +27,7 @@ interface PageProps extends HeadProps {
 }
 
 const STYLES_PAGE = css`
-  margin-top: 75px; /* h1 header (43) + rawSpacing.m (16*2)*/
+  margin-top: 107px; /* h1 header (43) + rawSpacing.m (32*2)*/
   min-height: 500px;
   box-sizing: border-box;
 

@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React from 'react';
-import { rawSpacing, verticalStackCss } from 'theme';
 import { H1 } from '../system';
+import { rawSpacing, verticalStackCss } from 'theme';
 
 interface RelatedContentProps {
   pageTitle: string;
@@ -14,8 +14,8 @@ const RelatedContent: React.FC<RelatedContentProps> = React.memo((props) => {
   return (
     <aside
       css={css`
-        ${verticalStackCss.xxl}
-        margin-top: ${rawSpacing.xxl}px;
+        ${verticalStackCss.xl}
+        margin-top: ${rawSpacing.xl}px;
         width: 100%;
         align-items: flex-start;
 

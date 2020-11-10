@@ -27,7 +27,7 @@ const MasonryGrid: React.FC<MasonryProps> = React.memo((props) => {
         }
 
         .my-masonry-grid_column {
-          padding-left: ${rawSpacing.xxl}px; /* gutter size */
+          padding-left: ${rawSpacing.xl}px; /* gutter size */
         }
       `}
       className="my-masonry-grid"

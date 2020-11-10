@@ -62,6 +62,8 @@ const ResumesFeed: React.FC = () => {
   };
 
   useEffect(() => {
+    updateResumesFeedPage({ page: currPage });
+
     const fetchData = async () => {
       setIsError(false);
       setIsLoading(true);
@@ -86,7 +88,7 @@ const ResumesFeed: React.FC = () => {
       isError={isError}
       isLoading={isLoading}
       contentCss={css`
-        ${verticalStackCss.xxl}
+        ${verticalStackCss.xl}
         justify-content: flex-start;
         align-items: flex-start;
         ${fadeInAnim}
@@ -135,6 +137,7 @@ const ResumesFeed: React.FC = () => {
                   profileCloudinaryId={resume.profileCloudinaryId}
                   slug={resume.slug}
                   path="resumes"
+                  margin
                 />
               );
             })}

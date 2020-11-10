@@ -1,8 +1,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
 import css, { SerializedStyles } from '@emotion/css';
+import React from 'react';
 
+import { DefaultPageLayout } from 'components/common/layout/default_page';
+import { H1, H2, P } from 'components/common/system';
 import {
   cssForMediaSize,
   horizontalStackCss,
@@ -10,9 +12,7 @@ import {
   rawSpacing,
   verticalStackCss
 } from 'theme/';
-import { H1, H2, P } from 'components/common/system';
 
-import { DefaultPageLayout } from 'components/common/layout/default_page';
 import { fontSize } from 'theme/styles/font';
 
 const AppUrl = 'Careeers';
@@ -53,7 +53,7 @@ export const PrivacySection: React.FC<SectionProps> = ({
       {text && (
         <P
           contentCss={css`
-            font-size: ${fontSize.medium}px;
+            font-size: ${fontSize.medium}em;
           `}
         >
           {text}
@@ -68,7 +68,7 @@ const STYLES_MAIN = css`
   ${cssForMediaSize({
     max: MediaSize.TABLET,
     contentCss: css`
-      ${verticalStackCss.xxxl};
+      ${verticalStackCss.xl};
       align-items: flex-start;
       justify-content: flex-start;
 
@@ -82,13 +82,17 @@ const STYLES_MAIN = css`
   ${cssForMediaSize({
     min: MediaSize.DESKTOP,
     contentCss: css`
-      ${horizontalStackCss.xxxl}
+      ${horizontalStackCss.xl}
       justify-content: space-between;
       align-items: flex-start;
 
       /* consistent with resume one */
       div:first-of-type {
-        width: 30%;
+        width: calc(30% - ${rawSpacing.m}px);
+      }
+
+      div:last-of-type {
+        width: calc(70% - ${rawSpacing.m}px);
       }
     `
   })}

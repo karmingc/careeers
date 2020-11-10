@@ -21,6 +21,7 @@ import {
   rawSpacing,
   zIndex
 } from 'theme';
+import { removeTrailingSlash } from 'utilities';
 
 const STYLES_HEADER = css`
   position: fixed;
@@ -109,9 +110,9 @@ const STYLES_MENU_ICON = (isMenuOpen: boolean) => css`
 
 const STYLES_MENU_OVERLAY = (isMenuOpen: boolean) => css`
   position: fixed;
-  ${verticalStackCss.xxxl}
+  ${verticalStackCss.xl}
   justify-content: flex-start;
-  top: 75px; /* header(43px)+rawSpacing.m (16*2) */
+  top: 107px; /* header(43px)+rawSpacing.m (32*2) */
   left: 0;
   width: 100%;
   box-sizing: border-box;
@@ -128,7 +129,7 @@ const STYLES_MENU_OVERLAY = (isMenuOpen: boolean) => css`
   ${isMenuOpen
     ? `background-position: 0 -100%;    
     border-top: 1px solid ${theme.blurSoftGrey};
-    padding-top: ${rawSpacing.xxxl}px;
+    padding-top: ${rawSpacing.xl}px;
   height: 100vh;`
     : `animation: removeOverlay ${transitionTime.overlay}ms;            
   @keyframes removeOverlay {
@@ -187,18 +188,6 @@ const STYLES_NAV = ({ selected }: { selected: boolean }) => css`
     `
   })}
 `;
-/**
- * Find out which path
- * @param path
- */
-export function removeTrailingSlash(path: string): string {
-  const numSlash = (path.match(/[/]/g) || []).length;
-  if (numSlash <= 1) {
-    return path;
-  }
-  const position = path.indexOf('/', path.indexOf('/') + 1);
-  return path.substring(0, position);
-}
 
 /**
  * Page header for every page
@@ -267,12 +256,7 @@ const Header: React.FC = () => {
           `}
         >
           <H1
-            contentCss={[
-              css`
-                color: ${theme.fontPrimaryGrey};
-              `,
-              NotoSerif
-            ]}
+            contentCss={[NotoSerif]}
             onClick={isMenuOpen ? toggleMenu : undefined}
           >
             Careeers.
@@ -310,20 +294,11 @@ const Header: React.FC = () => {
           text-decoration: none;
         `}
       >
-        <H1
-          contentCss={[
-            css`
-              color: ${theme.fontPrimaryGrey};
-            `,
-            NotoSerif
-          ]}
-        >
-          Careeers.
-        </H1>
+        <H1 contentCss={[NotoSerif]}>Careeers.</H1>
       </Link>
       <nav
         css={css`
-          ${horizontalStackCss.xxl}
+          ${horizontalStackCss.xl}
         `}
       >
         {options.map((option) => {

@@ -31,6 +31,7 @@ const App = () => {
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
+        min-height: 100vh;
       `}
     >
       <Global styles={globalStyle} />
@@ -46,11 +47,15 @@ const App = () => {
               component={ResumesFeed}
             />
             <Route exact path="/resumes/:id" component={ResumePage} />
-            <Route exact path="/interviews" component={InterviewsFeed} />
+            <Route
+              exact
+              path={['/interviews', '/interviews/page/:id']}
+              component={InterviewsFeed}
+            />
             <Route exact path="/interviews/:id" component={InterviewPage} />
             <Route
               exact
-              path={['/resources', '/resources/page/:pageId']}
+              path={['/resources', '/resources/page/:id']}
               component={ResourcesFeed}
             />
             {/* <Route exact path="/about" component={AboutPage} /> */}

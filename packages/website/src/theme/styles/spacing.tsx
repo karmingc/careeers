@@ -6,6 +6,7 @@ import { mapValues } from 'utilities';
  * usinng 8pt grid
  * xs: 4, s: 8, m: 16, l: 24, xl: 32
  * xxl: 40, xxxl: 48, xxxxl: 56
+ * xxxxxl: 64
  */
 export const rawSpacing = {
   zero: 0,
@@ -16,13 +17,15 @@ export const rawSpacing = {
   xl: 32,
   xxl: 40,
   xxxl: 48,
-  xxxxl: 56
+  xxxxl: 56,
+  xxxxxl: 64
 };
 
 /**
  * Horizontal flex display
  * xs: 4, s: 8, m: 16, l: 24, xl: 32
  * xxl: 40, xxxl: 48, xxxxl: 56
+ * xxxxxl: 64
  */
 export const horizontalStackCss: {
   [key: string]: SerializedStyles;
@@ -48,6 +51,7 @@ export const horizontalStackCss: {
  * Vertical flex display
  * xs: 4, s: 8, m: 16, l: 24, xl: 32
  * xxl: 40, xxxl: 48, xxxxl: 56
+ * xxxxxl: 64
  */
 export const verticalStackCss: {
   [key: string]: SerializedStyles;

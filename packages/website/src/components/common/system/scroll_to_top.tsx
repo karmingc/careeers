@@ -7,20 +7,14 @@ import { useHistory, useLocation } from 'react-router-dom';
 const ScrollToTop: React.FC = () => {
   const { action } = useHistory();
   const { pathname } = useLocation();
-  const [currPath, setPath] = useState(pathname);
+  const [currPath, setCurrPath] = useState(pathname);
 
   useEffect(() => {
-    // don't scroll to the top when navigating around history
-    // const prevPathname = currPath;
     if (pathname !== currPath) {
-      setPath(pathname);
+      setCurrPath(pathname);
     }
 
-    if (
-      action !== 'POP'
-      // don't scroll to top if path name didnt change
-      //   stripTrailingSlash(prevPathname) !== stripTrailingSlash(pathname)
-    ) {
+    if (action !== 'POP') {
       window.scrollTo({
         left: 0,
         top: 0

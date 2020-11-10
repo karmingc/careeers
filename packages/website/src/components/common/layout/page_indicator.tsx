@@ -3,8 +3,14 @@ import { css, jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 
 import { Link } from 'react-router-dom';
-import { horizontalStackCss, outlineFocus, rawSpacing, theme } from 'theme';
-import { fontSize } from 'theme/styles/font';
+import {
+  horizontalStackCss,
+  MediaSize,
+  outlineFocus,
+  rawSpacing,
+  theme,
+  useMatchesMediaSize
+} from 'theme';
 
 interface PageIndicatorProps {
   numOfCards: number;
@@ -18,12 +24,28 @@ interface PageIndicatorProps {
  * less than 16 = 1 page, less than 32 = 2 pages...
  */
 const PageIndicator: React.FC<PageIndicatorProps> = React.memo((props) => {
+  const isPhone = useMatchesMediaSize({ max: MediaSize.PHONE });
+  const isTablet = useMatchesMediaSize({
+    min: MediaSize.TABLET,
+    max: MediaSize.TABLET
+  });
+
   const { numOfCards, path, currPageIndicator, setCurrPageIndicator } = props;
 
   const numOfPages = Math.ceil(numOfCards / 16);
   const arrayOfPages = useMemo(() => {
-    return Array.from(Array(numOfPages), (_, i) => i + 1);
-  }, [numOfPages]);
+    const start = isPhone
+      ? Math.max(currPageIndicator - 2, 0)
+      : isTablet
+      ? Math.max(currPageIndicator - 3, 0)
+      : Math.max(currPageIndicator - 5, 0);
+    const end = isPhone
+      ? currPageIndicator + 1
+      : isTablet
+      ? currPageIndicator + 2
+      : currPageIndicator + 4;
+    return Array.from(Array(numOfPages), (_, i) => i + 1).slice(start, end);
+  }, [numOfPages, currPageIndicator, isTablet, isPhone]);
 
   return (
     <div
@@ -50,7 +72,6 @@ const PageIndicator: React.FC<PageIndicatorProps> = React.memo((props) => {
                   ? theme.fontPrimaryWhite
                   : theme.fontPrimaryGrey};
                 padding: ${rawSpacing.m}px ${rawSpacing.l}px;
-                font-size: ${fontSize.medium}px;
                 border: none;
                 transition: background-color ease 500ms;
                 ${outlineFocus}

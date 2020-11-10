@@ -3,12 +3,13 @@ import { jsx } from '@emotion/core';
 import css from '@emotion/css/macro';
 import React from 'react';
 
+import Help from '../../../media/images/help.jpg';
 import { H1 } from '../system';
 import { DefaultPageLayout } from './default_page';
 import { fadeInAnim, verticalStackCss } from 'theme/';
 
 const STYLES_ERROR = css`
-  ${verticalStackCss.xxl}
+  ${verticalStackCss.xl}
   ${fadeInAnim}
 `;
 
@@ -20,7 +21,7 @@ const NotFoundPage: React.FC = () => {
         later. Here is something else in the mean time.
       </H1>
       <img
-        src={require('../../../media/images/help.jpg')}
+        src={Help}
         alt="banner"
         css={css`
           max-height: 500px;

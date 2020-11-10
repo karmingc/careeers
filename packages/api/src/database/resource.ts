@@ -18,16 +18,12 @@ async function resourcesHasId(request: Request): Promise<Resource | false> {
     .getOne();
 
   if (typeof queryResourceById === 'undefined') {
-    console.log({
-      error: `id: ${request.params.id} does not exist in Resources table`
-    });
     return false;
   }
   return queryResourceById;
 }
 
 /* GET METHODS */
-
 export async function getResourcesByGroup(
   request: Request,
   response: Response
@@ -39,9 +35,28 @@ export async function getResourcesByGroup(
     .offset((parseInt(request.params.group) - 1) * 16)
     .getMany();
 
+  if (typeof query === 'undefined' || query.length <= 0) {
+    response.status(404).send({
+      error: `resources/group/:${request.params.group} not found`
+    });
+    return;
+  }
+  response.status(200).send(query);
+  return;
+}
+
+export async function getResourcesByRandom(
+  request: Request,
+  response: Response
+): Promise<void> {
+  const query = await getManager()
+    .createQueryBuilder(Resource, 'resource')
+    .orderBy('RANDOM()')
+    .limit(4)
+    .getMany();
+
   if (typeof query === 'undefined') {
-    console.log({ error: 'Resources table does not exist' });
-    response.status(404).send({ error: 'Resources table does not exist' });
+    response.status(404).send({ error: 'Resources table not found' });
     return;
   }
   response.status(200).send(query);
@@ -62,7 +77,6 @@ export async function getResourcesCount(
     .getCount();
 
   if (typeof query === 'undefined') {
-    console.log({ error: 'Resources table does not exist' });
     response.status(404).send({ error: 'Resources table does not exist' });
     return;
   }
@@ -92,7 +106,6 @@ export async function addResource(request: Request, response: Response) {
     .values(queryValues)
     .execute();
 
-  console.log('added new entry in Resources', query, queryValues);
   response.status(200).send(query);
   return;
 }
@@ -136,10 +149,6 @@ export async function updateResourceById(
     .where('id = :id', { id: request.params.id })
     .execute();
 
-  console.log(
-    `updated ${request.params.id} in Resources table with`,
-    request.body
-  );
   response.status(200).send(query);
   return;
 }
@@ -174,7 +183,6 @@ export async function deleteResourceById(
     .where('id = :id', { id: request.params.id })
     .execute();
 
-  console.log(`deleted id: ${request.params.id} in Resources`);
   response.status(200).send(query);
   return;
 }

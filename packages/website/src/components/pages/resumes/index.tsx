@@ -30,7 +30,7 @@ const STYLES_MAIN = css`
   ${cssForMediaSize({
     max: MediaSize.TABLET,
     contentCss: css`
-      ${verticalStackCss.xxxl};
+      ${verticalStackCss.xl};
       align-items: flex-start;
       justify-content: flex-start;
     `
@@ -38,7 +38,7 @@ const STYLES_MAIN = css`
   ${cssForMediaSize({
     min: MediaSize.DESKTOP,
     contentCss: css`
-      ${horizontalStackCss.xxxl};
+      ${horizontalStackCss.xl};
       align-items: flex-start;
       justify-content: flex-start;
     `
@@ -54,17 +54,13 @@ const STYLES_PROFILE = css`
     max: MediaSize.TABLET,
     contentCss: css`
       width: 100%;
-      /* img {
-        width: calc(100% + ${rawSpacing.xxxl}px);
-        transform: translate(-${rawSpacing.l}px);
-      } */
     `
   })}
 
   ${cssForMediaSize({
     min: MediaSize.DESKTOP,
     contentCss: css`
-      width: 30%;
+      width: calc(30% - ${rawSpacing.m}px);
     `
   })}
 `;
@@ -84,7 +80,7 @@ const STYLES_RESUME = css`
   ${cssForMediaSize({
     min: MediaSize.DESKTOP,
     contentCss: css`
-      width: 70%;
+      width: calc(70% - ${rawSpacing.m}px);
     `
   })}
 `;
@@ -149,7 +145,7 @@ const ResumePage: React.FC = () => {
               </H1>
               <P
                 contentCss={css`
-                  font-size: ${fontSize.medium}px;
+                  font-size: ${fontSize.medium}em;
                   margin-top: -${rawSpacing.s}px;
                 `}
               >
@@ -165,7 +161,7 @@ const ResumePage: React.FC = () => {
                   <A
                     href={resume.profile.website}
                     contentCss={css`
-                      font-size: ${fontSize.medium}px;
+                      font-size: ${fontSize.medium}em;
                     `}
                   >
                     {prettierUrl(resume.profile.website)}
@@ -178,7 +174,7 @@ const ResumePage: React.FC = () => {
                       <span
                         key={`${platform}-${handle}`}
                         css={css`
-                          font-size: ${fontSize.medium}px;
+                          font-size: ${fontSize.medium}em;
                         `}
                       >
                         {platform.charAt(0).toLowerCase() + platform.slice(1)}{' '}
@@ -217,6 +213,7 @@ const ResumePage: React.FC = () => {
                         profileCloudinaryId={relatedResume.profileCloudinaryId}
                         slug={relatedResume.slug}
                         path="resumes"
+                        margin
                       />
                     );
                   })}

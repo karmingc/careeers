@@ -22,23 +22,23 @@ export const fontSize = {
   /**
    * h5 size
    */
-  x_small: 13.28,
+  x_small: 0.87,
   /**
    * p size, used for normal text
    */
-  small: 16,
+  small: 1,
   /**
    * h3 size, card title, headers for p size
    */
-  medium: 18.72,
+  medium: 1.17,
   /**
    * h2 size - page sub titles
    */
-  large: 24,
+  large: 1.5,
   /**
    * h1 size - used for page titles
    */
-  x_large: 32
+  x_large: 2
 };
 
 /**

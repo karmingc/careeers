@@ -9,11 +9,12 @@ import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
 
 interface PreviewProps extends ProfileProps {
   path: string;
+  margin: boolean;
 }
 
-const STYLES_CARD = css`
+const STYLES_CARD = ({ margin }: { margin: boolean }) => css`
   ${verticalStackCss.s}
-  margin-bottom: ${rawSpacing.xxxxl}px;
+  margin-bottom: ${margin ? rawSpacing.xxxxxl : 0}px;
   align-items: flex-start;
   text-decoration: none;
 
@@ -26,10 +27,10 @@ const STYLES_CARD = css`
   :hover {
     cursor: pointer;
 
-    img {
+    > div > img {
       opacity: 0.85;
     }
-    h3 {
+    > div > h3 {
       opacity: 0.75;
     }
   }
@@ -39,10 +40,18 @@ const STYLES_CARD = css`
  * Resume preview card
  */
 const PreviewCard: React.FC<PreviewProps> = React.memo((props) => {
-  const { name, company, description, profileCloudinaryId, slug, path } = props;
+  const {
+    name,
+    company,
+    description,
+    profileCloudinaryId,
+    slug,
+    path,
+    margin
+  } = props;
 
   return (
-    <Link css={STYLES_CARD} to={`/${path}/${slug}`}>
+    <Link css={STYLES_CARD({ margin })} to={`/${path}/${slug}`}>
       <div>
         <img
           css={css`

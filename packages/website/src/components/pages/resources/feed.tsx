@@ -56,7 +56,7 @@ const ResourcesFeed: React.FC = () => {
       isError={isError}
       isLoading={isLoading}
       contentCss={css`
-        ${verticalStackCss.xxl};
+        ${verticalStackCss.xl};
         align-items: flex-start;
         justify-content: flex-start;
         ${fadeInAnim}

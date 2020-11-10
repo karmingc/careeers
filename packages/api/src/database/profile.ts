@@ -21,9 +21,6 @@ async function profilesHasId(request: Request): Promise<Profile | false> {
     .getOne();
 
   if (typeof queryProfileById === 'undefined') {
-    console.log({
-      error: `id: ${request.params.id} does not exist in Profiles table`
-    });
     return false;
   }
   return queryProfileById;
@@ -46,11 +43,10 @@ export async function getProfilesByInterviewsByGroup(
     .offset((parseInt(request.params.group) - 1) * 16)
     .getMany();
 
-  if (typeof query === 'undefined') {
-    console.log({ error: 'Profiles/Interviews table does not exist' });
-    response
-      .status(404)
-      .send({ error: 'Profiles/Interviews table does not exist' });
+  if (typeof query === 'undefined' || query.length <= 0) {
+    response.status(404).send({
+      error: `profiles/interviews/group/:${request.params.group} does not exist`
+    });
     return;
   }
   response.status(200).send(query);
@@ -74,7 +70,6 @@ export async function getProfilesByInterviewsByRandom(
     .getMany();
 
   if (typeof query === 'undefined') {
-    console.log({ error: 'Profiles table does not exist' });
     response.status(404).send({ error: 'Profiles table does not exist' });
     return;
   }
@@ -99,9 +94,10 @@ export async function getProfilesByResumesByGroup(
     .offset((parseInt(request.params.group) - 1) * 16)
     .getMany();
 
-  if (typeof query === 'undefined') {
-    console.log({ error: 'Profiles table does not exist' });
-    response.status(404).send({ error: 'Profiles table does not exist' });
+  if (typeof query === 'undefined' || query.length <= 0) {
+    response.status(404).send({
+      error: `profiles/resumes/group/:${request.params.group} does not exist`
+    });
     return;
   }
   response.status(200).send(query);
@@ -126,7 +122,6 @@ export async function getProfilesByResumesByRelated(
     .getMany();
 
   if (typeof query === 'undefined') {
-    console.log({ error: 'Profiles table does not exist' });
     response.status(404).send({ error: 'Profiles table does not exist' });
     return;
   }
@@ -151,7 +146,6 @@ export async function getProfilesByResumesByRandom(
     .getMany();
 
   if (typeof query === 'undefined') {
-    console.log({ error: 'Profiles table does not exist' });
     response.status(404).send({ error: 'Profiles table does not exist' });
     return;
   }
@@ -186,7 +180,6 @@ export async function addProfile(
     .values(queryValues)
     .execute();
 
-  console.log('added new entry to Profiles', query, request.body);
   response.status(200).send(query);
   return;
 }
@@ -204,7 +197,6 @@ export async function addProfileLink(request: Request, response: Response) {
     .values(request.body)
     .execute();
 
-  console.log('added new entry to Profile_Links table', query, request.body);
   response.status(200).send(query);
   return;
 }
@@ -234,7 +226,6 @@ export async function deleteProfileById(
     .where('id = :id', { id: request.params.id })
     .execute();
 
-  console.log(`deleted id: ${request.params.id} in Profiles table`);
   response.status(200).send(query);
   return;
 }

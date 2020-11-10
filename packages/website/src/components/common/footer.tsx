@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { Link } from 'react-router-dom';
+
+import { H1, A } from './system';
 import {
   cssForMediaSize,
   horizontalStackCss,
@@ -11,8 +13,6 @@ import {
   verticalStackCss
 } from 'theme';
 import { fontSize, NotoSerif } from 'theme/styles/font';
-import { H1 } from './system';
-import { A } from './system/typography';
 
 const STYLES_FOOTER = css`
   box-sizing: border-box;
@@ -21,7 +21,7 @@ const STYLES_FOOTER = css`
   ${cssForMediaSize({
     max: MediaSize.TABLET,
     contentCss: css`
-      ${verticalStackCss.xxl}
+      ${verticalStackCss.xl}
       align-items: flex-start;
 
       width: ${size.page.width.tablet};
@@ -34,7 +34,7 @@ const STYLES_FOOTER = css`
     contentCss: css`
       width: ${size.page.width.desktop};
       padding: ${size.footer.padding.desktop};
-      ${horizontalStackCss.m}
+      ${horizontalStackCss.zero}
       justify-content: space-between;
     `
   })}
@@ -51,11 +51,11 @@ const STYLES_LOGO_SECTION = css`
     color: ${theme.fontPrimaryWhite};
   }
   span {
-    font-size: ${fontSize.x_small}px;
+    font-size: ${fontSize.x_small}em;
   }
 `;
 const STYLES_NAV_SECTION = css`
-  ${horizontalStackCss.m};
+  ${horizontalStackCss.xl};
 
   a,
   span {
@@ -81,9 +81,7 @@ const Footer: React.FC = () => {
       </div>
       <div css={STYLES_NAV_SECTION}>
         <Link to="/privacy">Privacy</Link>
-        <span>/</span>
         <A href="mailto:karmingc@hotmail.com">Email</A>
-        <span>/</span>
         <A href="https://github.com/karmingc/resumehub">Github</A>
       </div>
     </footer>

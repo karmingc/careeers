@@ -50,7 +50,7 @@ const InterviewsFeed: React.FC = () => {
       isError={isError}
       isLoading={isLoading}
       contentCss={css`
-        ${verticalStackCss.xxl}
+        ${verticalStackCss.xl}
         justify-content: flex-start;
         align-items: flex-start;
         ${fadeInAnim}
@@ -93,6 +93,7 @@ const InterviewsFeed: React.FC = () => {
                   profileCloudinaryId={interview.profileCloudinaryId}
                   slug={interview.slug}
                   path="interviews"
+                  margin
                 />
               );
             })}

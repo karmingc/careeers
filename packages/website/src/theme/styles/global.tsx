@@ -12,6 +12,24 @@ export const globalStyle = css`
     background-color: ${theme.backgroundWhite};
   }
 
+  /* html default values, can modify later if needed */
+  /* visit /system/typography for more */
+  h1 {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.17em;
+  }
+  h4,
+  p,
+  a,
+  button {
+    font-size: 1em;
+  }
+
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;

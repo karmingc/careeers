@@ -1,20 +1,22 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
-
 import React, { useEffect, useState } from 'react';
-import Banner from '../../../media/images/frame.jpg';
+import { useInView } from 'react-intersection-observer';
+import { Spring, config } from 'react-spring/renderprops';
+
 import PreviewCard from 'components/common/cards/preview';
+import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
 
-import PageIndicator from 'components/common/layout/page_indicator';
+import PageIndicator from 'components/common/page_indicator';
 
 import { H1, H2 } from 'components/common/system';
 import { updateResumesFeedPage } from 'context/resumes/actions';
 
-import { fadeInAnim, verticalStackCss } from 'theme';
+import { rawSpacing, verticalStackCss } from 'theme';
 
 /**
  * Props for additional social links of profile
@@ -55,6 +57,9 @@ const ResumesFeed: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [resumes, setResumes] = useState<ResumesFeedProps>();
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
 
   const updatePage = (page: number) => {
     setCurrPage(page);
@@ -91,38 +96,68 @@ const ResumesFeed: React.FC = () => {
         ${verticalStackCss.xl}
         justify-content: flex-start;
         align-items: flex-start;
-        ${fadeInAnim}
       `}
     >
       {currPage === 1 ? (
-        <React.Fragment>
-          <div
-            css={css`
-              ${verticalStackCss.s}
-              align-items: flex-start;
-            `}
+        <div
+          ref={ref}
+          css={css`
+            ${verticalStackCss.xl}
+            align-items: flex-start;
+            overflow: hidden;
+          `}
+        >
+          <Spring
+            from={{ opacity: 0, transform: 'translateY(15%)' }}
+            to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+            config={config.slow}
           >
-            <H1>Resumes</H1>
-            <H2
-              contentCss={css`
-                font-weight: normal;
-              `}
-            >
-              A point of reference.
-            </H2>
-          </div>
-          <img
-            src={Banner}
-            alt="banner"
-            css={css`
-              max-height: 500px;
-              object-fit: cover;
-              width: 100%;
-            `}
-          />
-        </React.Fragment>
+            {(springProps) => (
+              <React.Fragment>
+                <H1 style={springProps}>Resumes</H1>
+                <H2
+                  style={springProps}
+                  contentCss={css`
+                    font-weight: normal;
+                    margin-top: -${rawSpacing.l}px;
+                  `}
+                >
+                  A point of reference.
+                </H2>
+              </React.Fragment>
+            )}
+          </Spring>
+          <Spring
+            from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
+            to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+            config={config.slow}
+          >
+            {(springProps) => (
+              <CloudinaryImg
+                style={springProps}
+                cloudinaryId="careeers/base/frame_tsq8wf"
+                alt="Humans contemplating the art in a museum"
+                contentCss={css`
+                  max-height: 500px;
+                  object-fit: cover;
+                  width: 100%;
+                `}
+              />
+            )}
+          </Spring>
+        </div>
       ) : (
-        <H1>Resumes</H1>
+        <Spring
+          from={{ opacity: 0, transform: 'translateY(15%)' }}
+          to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+          config={config.slow}
+        >
+          {(springProps) => (
+            <div ref={ref}>
+              <H1 style={springProps}>Resumes</H1>
+            </div>
+          )}
+        </Spring>
       )}
       {resumes && (
         <React.Fragment>

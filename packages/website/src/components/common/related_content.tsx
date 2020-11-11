@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React from 'react';
-import { H1 } from '../system';
+import { H1 } from './system';
 import { rawSpacing, verticalStackCss } from 'theme';
 
 interface RelatedContentProps {

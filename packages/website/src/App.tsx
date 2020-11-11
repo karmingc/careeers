@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { css, Global, jsx } from '@emotion/core';
-import AOS from 'aos';
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import 'aos/dist/aos.css';
 
 import HomePage from './components/pages/home';
 import Footer from 'components/common/footer';
 import Header from 'components/common/header';
 
-import NotFoundPage from 'components/common/layout/not_found';
+import NotFoundPage from 'components/common/not_found';
 import ScrollToTop from 'components/common/system/scroll_to_top';
 
 import InterviewPage from 'components/pages/interviews';
@@ -20,8 +19,6 @@ import ResumePage from 'components/pages/resumes';
 import ResumesFeed from 'components/pages/resumes/feed';
 import { ContextProviders } from 'context';
 import { globalStyle } from 'theme/styles/global';
-
-AOS.init();
 
 const App = () => {
   return (

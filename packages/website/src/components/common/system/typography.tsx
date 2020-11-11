@@ -9,6 +9,7 @@ interface TextProps {
   onClick?: () => void;
   children: string | number | ReactText[] | React.ReactNode;
   contentCss?: SerializedStyles | SerializedStyles[];
+  style?: any;
 }
 
 const STYLES_BASE = css`
@@ -28,9 +29,9 @@ const STYLES_BASE = css`
  * @param props contentCss if needed
  */
 export const H1 = React.memo<TextProps>((props) => {
-  const { contentCss, children, onClick } = props;
+  const { contentCss, children, onClick, style } = props;
   return (
-    <h1 onClick={onClick} css={[STYLES_BASE, contentCss]}>
+    <h1 onClick={onClick} css={[STYLES_BASE, contentCss]} style={style}>
       {children}
     </h1>
   );
@@ -43,9 +44,9 @@ export const H1 = React.memo<TextProps>((props) => {
  * @param props contentCss if needed
  */
 export const H2 = React.memo<TextProps>((props) => {
-  const { contentCss, children, onClick } = props;
+  const { contentCss, children, onClick, style } = props;
   return (
-    <h2 onClick={onClick} css={[STYLES_BASE, contentCss]}>
+    <h2 onClick={onClick} css={[STYLES_BASE, contentCss]} style={style}>
       {children}
     </h2>
   );
@@ -58,9 +59,9 @@ export const H2 = React.memo<TextProps>((props) => {
  * @param props contentCss if needed
  */
 export const H3 = React.memo<TextProps>((props) => {
-  const { contentCss, children, onClick } = props;
+  const { contentCss, children, onClick, style } = props;
   return (
-    <h3 onClick={onClick} css={[STYLES_BASE, contentCss]}>
+    <h3 onClick={onClick} css={[STYLES_BASE, contentCss]} style={style}>
       {children}
     </h3>
   );
@@ -72,9 +73,9 @@ export const H3 = React.memo<TextProps>((props) => {
  * @param props contentCss if needed
  */
 export const H4 = React.memo<TextProps>((props) => {
-  const { contentCss, children, onClick } = props;
+  const { contentCss, children, onClick, style } = props;
   return (
-    <h4 onClick={onClick} css={[STYLES_BASE, contentCss]}>
+    <h4 onClick={onClick} css={[STYLES_BASE, contentCss]} style={style}>
       {children}
     </h4>
   );
@@ -86,9 +87,9 @@ export const H4 = React.memo<TextProps>((props) => {
  * @param props contentCss if needed
  */
 export const H5 = React.memo<TextProps>((props) => {
-  const { contentCss, children, onClick } = props;
+  const { contentCss, children, onClick, style } = props;
   return (
-    <h5 onClick={onClick} css={[STYLES_BASE, contentCss]}>
+    <h5 onClick={onClick} css={[STYLES_BASE, contentCss]} style={style}>
       {children}
     </h5>
   );
@@ -103,17 +104,23 @@ const STYLES_TEXT = css`
  * Default padding: rawSpacing.m
  */
 export const P = React.memo<TextProps>((props) => {
-  const { contentCss, children } = props;
-  return <p css={[STYLES_BASE, STYLES_TEXT, contentCss]}>{children}</p>;
+  const { contentCss, children, style } = props;
+  return (
+    <p css={[STYLES_BASE, STYLES_TEXT, contentCss]} style={style}>
+      {children}
+    </p>
+  );
 });
 
 interface AProps extends TextProps {
   href: string;
+  style?: any;
 }
 export const A = React.memo<AProps>((props) => {
-  const { contentCss, children, href } = props;
+  const { contentCss, children, href, style } = props;
   return (
     <a
+      style={style}
       href={href}
       target="_blank"
       rel="noopener noreferrer"

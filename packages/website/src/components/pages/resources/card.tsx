@@ -1,8 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React from 'react';
+import { useInView } from 'react-intersection-observer';
+import { Spring } from 'react-spring/renderprops';
 
 import { ResourcesProps } from './feed';
+import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { H3, P } from 'components/common/system';
 import { A } from 'components/common/system/typography';
 import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
@@ -32,34 +35,44 @@ const STYLES_IMG = css`
 
 const ResourcesCard: React.FC<ResourcesProps> = React.memo((props) => {
   const { cloudinaryId, description, link, name } = props;
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
   return (
-    <div css={STYLES_CARD}>
-      <div>
-        <A href={link}>
-          <img
-            css={STYLES_IMG}
-            src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${cloudinaryId}`}
-            alt={name}
-          />
-        </A>
-        <H3>{name}</H3>
-      </div>
-      <P
-        contentCss={css`
-          color: ${theme.fontSecondaryGrey};
-        `}
-      >
-        {description}
-      </P>
-      <A
-        href={link}
-        contentCss={css`
-          word-wrap: break-word;
-        `}
-      >
-        {prettierUrl(link)}
-      </A>
-    </div>
+    <Spring
+      from={{ opacity: 0, transform: 'translateY(15%)' }}
+      to={inView ? { opacity: 1, transform: 'translateY(0)' } : {}}
+    >
+      {(springProps) => (
+        <div ref={ref} style={springProps} css={STYLES_CARD}>
+          <div>
+            <A href={link}>
+              <CloudinaryImg
+                contentCss={STYLES_IMG}
+                cloudinaryId={cloudinaryId}
+                alt={`${name}'s logo`}
+              />
+            </A>
+            <H3>{name}</H3>
+          </div>
+          <P
+            contentCss={css`
+              color: ${theme.fontSecondaryGrey};
+            `}
+          >
+            {description}
+          </P>
+          <A
+            href={link}
+            contentCss={css`
+              word-wrap: break-word;
+            `}
+          >
+            {prettierUrl(link)}
+          </A>
+        </div>
+      )}
+    </Spring>
   );
 });
 export default ResourcesCard;

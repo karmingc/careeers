@@ -2,21 +2,22 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 
-// import ResourcesCard from '../resources/card';
-import Support from '../../../media/images/support.jpg';
+import { Spring, config } from 'react-spring/renderprops';
+
 import ResourcesCard from '../resources/card';
 import { ResourcesProps } from '../resources/feed';
 import { ProfileProps } from '../resumes/feed';
 import PreviewCard from 'components/common/cards/preview';
+import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { Icon, IconName, IconSize } from 'components/common/icons';
 import CardGridLayout from 'components/common/layout/card_grid';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 
 import { H1 } from 'components/common/system';
 import {
-  fadeInAnim,
   horizontalStackCss,
   MediaSize,
   rawSpacing,
@@ -86,11 +87,15 @@ const HomeSection: React.FC<HomeSectionProps> = React.memo((props) => {
 const HomePage: React.FC = () => {
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
+  const [isBannerLoaded, setIsBannerLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [resumes, setResumes] = useState<ProfileProps[]>();
   const [interviews, setInterviews] = useState<ProfileProps[]>();
   const [resources, setResources] = useState<ResourcesProps[]>();
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -123,38 +128,63 @@ const HomePage: React.FC = () => {
         ${verticalStackCss.xl};
         align-items: flex-start;
         justify-content: flex-start;
-        ${fadeInAnim}
       `}
     >
       <div
+        ref={ref}
         css={css`
           position: relative;
+          overflow: hidden;
         `}
       >
-        <H1
-          contentCss={css`
-            position: absolute;
-            top: ${rawSpacing.xl}px;
-            left: ${rawSpacing.xxl}px;
-            color: ${theme.fontPrimaryWhite};
-          `}
+        <Spring
+          from={{ opacity: 0, transform: 'translateY(15%)' }}
+          to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+          config={config.slow}
         >
-          Educate. <br />
-          Empower. <br />
-          Grow. <br />
-          Together.
-        </H1>
-        <img
-          src={Support}
-          alt="banner"
-          css={css`
-            max-height: 500px;
-            object-fit: cover;
-            width: 100%;
-          `}
-        />
+          {(springProps) => (
+            <H1
+              style={springProps}
+              contentCss={css`
+                position: absolute;
+                top: ${rawSpacing.xl}px;
+                left: ${rawSpacing.xxl}px;
+                color: ${theme.fontPrimaryWhite};
+                z-index: 1;
+              `}
+            >
+              Educate. <br />
+              Empower. <br />
+              Grow. <br />
+              Together.
+            </H1>
+          )}
+        </Spring>
+        <Spring
+          from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
+          to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+          config={config.slow}
+        >
+          {(springProps) => (
+            <CloudinaryImg
+              style={springProps}
+              cloudinaryId="careeers/base/support_af6lxm"
+              alt="Two kids walking on a road"
+              contentCss={css`
+                max-height: 500px;
+                object-fit: cover;
+                width: 100%;
+                z-index: 0;
+              `}
+              onLoad={() => {
+                setIsBannerLoaded(true);
+              }}
+            />
+          )}
+        </Spring>
       </div>
-      {interviews && (
+
+      {isBannerLoaded && interviews && (
         <HomeSection path="interviews">
           {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
             return (
@@ -172,7 +202,7 @@ const HomePage: React.FC = () => {
           })}
         </HomeSection>
       )}
-      {resumes && (
+      {isBannerLoaded && resumes && (
         <HomeSection path="resumes">
           {resumes.slice(0, isDesktop ? 4 : 2).map((resume) => {
             return (
@@ -190,7 +220,7 @@ const HomePage: React.FC = () => {
           })}
         </HomeSection>
       )}
-      {resources && (
+      {isBannerLoaded && resources && (
         <HomeSection path="resources">
           {resources.slice(0, isDesktop ? 4 : 2).map((resource) => {
             return (

@@ -2,16 +2,18 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { Spring, config } from 'react-spring/renderprops';
 
-import Reading from '../../../media/images/reading.jpg';
 import ResourcesCard from './card';
+import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
-import PageIndicator from 'components/common/layout/page_indicator';
+import PageIndicator from 'components/common/page_indicator';
 
 import { H1, H2 } from 'components/common/system';
-import { fadeInAnim, verticalStackCss } from 'theme';
+import { rawSpacing, verticalStackCss } from 'theme';
 
 export interface ResourcesProps {
   name: string;
@@ -30,6 +32,9 @@ const ResourcesFeed: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [resources, setResources] = useState<ResourcesFeedProps>();
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,36 +64,56 @@ const ResourcesFeed: React.FC = () => {
         ${verticalStackCss.xl};
         align-items: flex-start;
         justify-content: flex-start;
-        ${fadeInAnim}
       `}
     >
       {currPage === 1 ? (
-        <React.Fragment>
-          <div
-            css={css`
-              ${verticalStackCss.s}
-              align-items: flex-start;
-            `}
+        <div
+          ref={ref}
+          css={css`
+            ${verticalStackCss.xl}
+            align-items: flex-start;
+            overflow: hidden;
+          `}
+        >
+          <Spring
+            from={{ opacity: 0, transform: 'translateY(15%)' }}
+            to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+            config={config.slow}
           >
-            <H1>Resources</H1>
-            <H2
-              contentCss={css`
-                font-weight: normal;
-              `}
-            >
-              Knowledge is endless.
-            </H2>
-          </div>
-          <img
-            src={Reading}
-            alt="banner"
-            css={css`
-              max-height: 500px;
-              object-fit: cover;
-              width: 100%;
-            `}
-          />
-        </React.Fragment>
+            {(springProps) => (
+              <React.Fragment>
+                <H1 style={springProps}>Resources</H1>
+                <H2
+                  style={springProps}
+                  contentCss={css`
+                    font-weight: normal;
+                    margin-top: -${rawSpacing.l}px;
+                  `}
+                >
+                  Knowledge is endless.
+                </H2>
+              </React.Fragment>
+            )}
+          </Spring>
+          <Spring
+            from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
+            to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+            config={config.slow}
+          >
+            {(springProps) => (
+              <CloudinaryImg
+                style={springProps}
+                cloudinaryId="careeers/base/reading_xip4po"
+                alt="Senior reading the newspaper in the park"
+                contentCss={css`
+                  max-height: 500px;
+                  object-fit: cover;
+                  width: 100%;
+                `}
+              />
+            )}
+          </Spring>
+        </div>
       ) : (
         <H1>Resources</H1>
       )}

@@ -1,8 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import React from 'react';
+import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
+import { Spring } from 'react-spring/renderprops';
 
+import { CloudinaryImg } from '../cloudinary_img';
 import { H3, P } from '../system';
 import { ProfileProps } from 'components/pages/resumes/feed';
 import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
@@ -50,29 +53,45 @@ const PreviewCard: React.FC<PreviewProps> = React.memo((props) => {
     margin
   } = props;
 
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
+
   return (
-    <Link css={STYLES_CARD({ margin })} to={`/${path}/${slug}`}>
-      <div>
-        <img
-          css={css`
-            width: 100%;
-            transition: all ease ${transitionTime.standard}ms;
-          `}
-          src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${profileCloudinaryId}`}
-          alt={name}
-        />
-        <H3>
-          {name} — {company}
-        </H3>
-      </div>
-      <P
-        contentCss={css`
-          color: ${theme.fontSecondaryGrey};
-        `}
-      >
-        {description}
-      </P>
-    </Link>
+    <Spring
+      from={{ opacity: 0, transform: 'translateY(15%)' }}
+      to={inView ? { opacity: 1, transform: 'translateY(0)' } : {}}
+    >
+      {(springProps) => (
+        <Link
+          ref={ref}
+          style={springProps}
+          css={STYLES_CARD({ margin })}
+          to={`/${path}/${slug}`}
+        >
+          <div>
+            <CloudinaryImg
+              contentCss={css`
+                width: 100%;
+                transition: all ease ${transitionTime.standard}ms;
+              `}
+              cloudinaryId={profileCloudinaryId}
+              alt={`${name}'s profile image`}
+            />
+            <H3>
+              {name} — {company}
+            </H3>
+          </div>
+          <P
+            contentCss={css`
+              color: ${theme.fontSecondaryGrey};
+            `}
+          >
+            {description}
+          </P>
+        </Link>
+      )}
+    </Spring>
   );
 });
 

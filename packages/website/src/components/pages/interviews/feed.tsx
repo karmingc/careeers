@@ -2,17 +2,20 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Idea from '../../../media/images/idea.jpg';
+import { useInView } from 'react-intersection-observer';
+import { Spring, config } from 'react-spring/renderprops';
+
 import { ProfileProps } from '../resumes/feed';
 import PreviewCard from 'components/common/cards/preview';
+import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
 
-import PageIndicator from 'components/common/layout/page_indicator';
+import PageIndicator from 'components/common/page_indicator';
 import { H1, H2 } from 'components/common/system';
-import { fadeInAnim, verticalStackCss } from 'theme';
+import { rawSpacing, verticalStackCss } from 'theme';
 
 interface InterviewsFeedProps {
   count: number;
@@ -24,6 +27,9 @@ const InterviewsFeed: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [interviews, setInterviews] = useState<InterviewsFeedProps>();
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,33 +59,56 @@ const InterviewsFeed: React.FC = () => {
         ${verticalStackCss.xl}
         justify-content: flex-start;
         align-items: flex-start;
-        ${fadeInAnim}
+        overflow: hidden;
       `}
     >
       <div
+        ref={ref}
         css={css`
-          ${verticalStackCss.s}
+          ${verticalStackCss.xl}
           align-items: flex-start;
+          overflow: hidden;
         `}
       >
-        <H1>Interviews</H1>
-        <H2
-          contentCss={css`
-            font-weight: normal;
-          `}
+        <Spring
+          from={{ opacity: 0, transform: 'translateY(15%)' }}
+          to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+          config={config.slow}
         >
-          Be Inspired. To Inspire.
-        </H2>
+          {(springProps) => (
+            <React.Fragment>
+              <H1 style={springProps}>Interviews</H1>
+              <H2
+                style={springProps}
+                contentCss={css`
+                  font-weight: normal;
+                  margin-top: -${rawSpacing.l}px;
+                `}
+              >
+                Be Inspired. To Inspire.
+              </H2>
+            </React.Fragment>
+          )}
+        </Spring>
+        <Spring
+          from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
+          to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+          config={config.slow}
+        >
+          {(springProps) => (
+            <CloudinaryImg
+              style={springProps}
+              cloudinaryId="careeers/base/idea_odayya"
+              alt="Steps with inspiring idea quote"
+              contentCss={css`
+                max-height: 500px;
+                object-fit: cover;
+                width: 100%;
+              `}
+            />
+          )}
+        </Spring>
       </div>
-      <img
-        src={Idea}
-        alt="banner"
-        css={css`
-          max-height: 500px;
-          object-fit: cover;
-          width: 100%;
-        `}
-      />
       {interviews && (
         <React.Fragment>
           <MasonryGrid>

@@ -3,9 +3,9 @@ import { jsx } from '@emotion/core';
 import css from '@emotion/css/macro';
 import React from 'react';
 
-import Help from '../../../media/images/help.jpg';
-import { H1 } from '../system';
-import { DefaultPageLayout } from './default_page';
+import { CloudinaryImg } from './cloudinary_img';
+import { DefaultPageLayout } from './layout/default_page';
+import { H1 } from './system';
 import { fadeInAnim, verticalStackCss } from 'theme/';
 
 const STYLES_ERROR = css`
@@ -20,10 +20,10 @@ const NotFoundPage: React.FC = () => {
         Seems like we have encountered an error...Please message our team or try
         later. Here is something else in the mean time.
       </H1>
-      <img
-        src={Help}
-        alt="banner"
-        css={css`
+      <CloudinaryImg
+        cloudinaryId="careeers/base/help_n0s1qh.jpg"
+        alt="Person holding a sign during BLM protest"
+        contentCss={css`
           max-height: 500px;
           object-fit: cover;
           width: 100%;

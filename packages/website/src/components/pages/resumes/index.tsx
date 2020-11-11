@@ -2,15 +2,18 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { Spring, config } from 'react-spring/renderprops';
 
 import { ProfileProps, ResumesProps } from './feed';
 import PreviewCard from 'components/common/cards/preview';
+import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { useMatchesPathSlugId } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
 
-import PreviousHeader from 'components/common/layout/previous_header';
-import RelatedContent from 'components/common/layout/related_content';
+import PreviousLink from 'components/common/previous_link';
+import RelatedContent from 'components/common/related_content';
 import { H1, P, A } from 'components/common/system';
 
 import { ResumesContext } from 'context/resumes';
@@ -27,6 +30,7 @@ import { fontSize } from 'theme/styles/font';
 import { prettierUrl, socialUrl } from 'utilities';
 
 const STYLES_MAIN = css`
+  overflow: hidden;
   ${cssForMediaSize({
     max: MediaSize.TABLET,
     contentCss: css`
@@ -42,7 +46,7 @@ const STYLES_MAIN = css`
       align-items: flex-start;
       justify-content: flex-start;
     `
-  })}
+  })};
 `;
 
 const STYLES_PROFILE = css`
@@ -69,6 +73,7 @@ const STYLES_RESUME = css`
   img {
     width: 100%;
     border: 1px solid ${theme.activeGrey};
+    box-sizing: border-box;
   }
 
   ${cssForMediaSize({
@@ -95,6 +100,10 @@ const ResumePage: React.FC = () => {
 
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       setIsError(false);
@@ -118,7 +127,7 @@ const ResumePage: React.FC = () => {
 
   return (
     <DefaultPageLayout
-      pageTitle="Resume ID"
+      pageTitle={`${resume && resume.profile.name}`}
       isError={isError}
       isLoading={isLoading}
       contentCss={css`
@@ -128,75 +137,112 @@ const ResumePage: React.FC = () => {
     >
       {resume && (
         <React.Fragment>
-          <PreviousHeader path="resumes" pageIndex={resumesState.page} />
-          <section css={STYLES_MAIN}>
+          <PreviousLink path="resumes" pageIndex={resumesState.page} />
+          <section ref={ref} css={STYLES_MAIN}>
             <div css={STYLES_PROFILE}>
-              <img
-                src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${resume.profile.profileCloudinaryId}`}
-                alt="profile"
-                css={css`
-                  width: 100%;
-                  max-height: 400px;
-                  object-fit: cover;
-                `}
-              />
-              <H1>
-                {resume.profile.name} - {resume.profile.company}
-              </H1>
-              <P
-                contentCss={css`
-                  font-size: ${fontSize.medium}em;
-                  margin-top: -${rawSpacing.s}px;
-                `}
+              <Spring
+                from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
+                to={
+                  inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}
+                }
+                config={config.slow}
               >
-                {resume.profile.description}
-              </P>
-              <div
-                css={css`
-                  ${verticalStackCss.s};
-                  align-items: flex-start;
-                `}
-              >
-                {resume.profile.website && (
-                  <A
-                    href={resume.profile.website}
+                {(springProps) => (
+                  <CloudinaryImg
+                    style={springProps}
+                    cloudinaryId={resume.profile.profileCloudinaryId}
+                    alt={`${resume.profile.name}'s profile image`}
                     contentCss={css`
-                      font-size: ${fontSize.medium}em;
+                      width: 100%;
+                      max-height: 400px;
+                      object-fit: cover;
+                    `}
+                  />
+                )}
+              </Spring>
+              <Spring
+                from={{ opacity: 0, transform: 'translateY(15%)' }}
+                to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+                config={config.slow}
+              >
+                {(springProps) => (
+                  <div
+                    style={springProps}
+                    css={css`
+                      ${verticalStackCss.xl}
+                      align-items: flex-start;
+                      justify-content: flex-start;
                     `}
                   >
-                    {prettierUrl(resume.profile.website)}
-                  </A>
-                )}
-                {resume.profile.profileLinks &&
-                  resume.profile.profileLinks.map((link) => {
-                    const { platform, handle } = link;
-                    return (
-                      <span
-                        key={`${platform}-${handle}`}
-                        css={css`
-                          font-size: ${fontSize.medium}em;
-                        `}
-                      >
-                        {platform.charAt(0).toLowerCase() + platform.slice(1)}{' '}
+                    <H1>
+                      {resume.profile.name} - {resume.profile.company}
+                    </H1>
+                    <P
+                      contentCss={css`
+                        font-size: ${fontSize.medium}em;
+                        margin-top: -${rawSpacing.s}px;
+                      `}
+                    >
+                      {resume.profile.description}
+                    </P>
+                    <div
+                      css={css`
+                        ${verticalStackCss.s};
+                        align-items: flex-start;
+                      `}
+                    >
+                      {resume.profile.website && (
                         <A
-                          href={socialUrl({
-                            platform,
-                            handle
-                          })}
+                          href={resume.profile.website}
+                          contentCss={css`
+                            font-size: ${fontSize.medium}em;
+                          `}
                         >
-                          @{handle}
+                          {prettierUrl(resume.profile.website)}
                         </A>
-                      </span>
-                    );
-                  })}
-              </div>
+                      )}
+                      {resume.profile.profileLinks &&
+                        resume.profile.profileLinks.map((link) => {
+                          const { platform, handle } = link;
+                          return (
+                            <span
+                              key={`${platform}-${handle}`}
+                              css={css`
+                                font-size: ${fontSize.medium}em;
+                              `}
+                            >
+                              {platform.charAt(0).toLowerCase() +
+                                platform.slice(1)}{' '}
+                              <A
+                                href={socialUrl({
+                                  platform,
+                                  handle
+                                })}
+                              >
+                                @{handle}
+                              </A>
+                            </span>
+                          );
+                        })}
+                    </div>
+                  </div>
+                )}
+              </Spring>
             </div>
-            <div css={STYLES_RESUME}>
-              <img
-                src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${resume.resumeCloudinaryId}`}
-                alt="resume"
-              />
-            </div>
+            <Spring
+              from={{ opacity: 0, transform: 'translateY(15%)' }}
+              to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+              config={config.slow}
+            >
+              {(springProps) => (
+                <div style={springProps} css={STYLES_RESUME}>
+                  <CloudinaryImg
+                    cloudinaryId={resume.resumeCloudinaryId}
+                    alt={`${resume.profile.name}'s resume`}
+                  />
+                </div>
+              )}
+            </Spring>
           </section>
           {relatedResumes && (
             <RelatedContent pageTitle="Resumes">

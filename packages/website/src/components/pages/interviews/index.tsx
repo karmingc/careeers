@@ -2,14 +2,17 @@
 import { css, jsx, SerializedStyles } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { Spring, config } from 'react-spring/renderprops';
 
 // import PreviewCard from 'components/common/cards/preview';
 
 import { ProfileProps } from '../resumes/feed';
+import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { useMatchesPathSlugId } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 // import MasonryGrid from 'components/common/layout/masonry';
-import PreviousHeader from 'components/common/layout/previous_header';
+import PreviousLink from 'components/common/previous_link';
 // import RelatedContent from 'components/common/layout/related_content';
 import { H1, P, A, H2 } from 'components/common/system';
 
@@ -100,6 +103,10 @@ export const InterviewQuestion: React.FC<InterviewQuestionProps> = ({
   links,
   children
 }) => {
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
+
   return (
     <section css={STYLES_QUESTION}>
       <div css={STYLES_QUESTION_DIV}>
@@ -137,17 +144,25 @@ export const InterviewQuestion: React.FC<InterviewQuestionProps> = ({
         </div>
       ) : null}
       {photos.length > 0 ? (
-        <div css={STYLES_QUESTION_PHOTO}>
+        <div ref={ref} css={STYLES_QUESTION_PHOTO}>
           {photos.map((src) => {
+            const { cloudinaryId } = src;
             return (
-              <img
-                key={src.cloudinaryId}
-                src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${src.cloudinaryId}`}
-                alt="profile"
-                css={STYLES_QUESTION_PHOTO}
-                data-aos="fade-up"
-                data-aos-once="true"
-              />
+              <Spring
+                from={{ opacity: 0, transform: 'translateY(15%)' }}
+                to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+                config={config.slow}
+                key={cloudinaryId}
+              >
+                {(springProps) => (
+                  <CloudinaryImg
+                    style={springProps}
+                    cloudinaryId={cloudinaryId}
+                    alt="photo for question"
+                    css={STYLES_QUESTION_PHOTO}
+                  />
+                )}
+              </Spring>
             );
           })}
         </div>
@@ -158,6 +173,7 @@ export const InterviewQuestion: React.FC<InterviewQuestionProps> = ({
 };
 
 const STYLES_PROFILE = css`
+  overflow: hidden;
   ${cssForMediaSize({
     max: MediaSize.TABLET,
     contentCss: css`
@@ -214,7 +230,9 @@ const InterviewPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const slug = useMatchesPathSlugId();
-
+  const [ref, inView] = useInView({
+    threshold: 0.25
+  });
   // const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
   useEffect(() => {
@@ -237,83 +255,103 @@ const InterviewPage: React.FC = () => {
 
   return (
     <DefaultPageLayout
-      pageTitle="Resume ID"
+      pageTitle={`${interview && interview.profile.name}`}
+      isError={isError}
+      isLoading={isLoading}
       contentCss={css`
         ${verticalStackCss.xl}
         align-items: flex-start;
       `}
     >
-      <PreviousHeader path="interviews" pageIndex={1} />
-      {isError && <div>error...</div>}
-      {!isLoading && interview && (
+      <PreviousLink path="interviews" pageIndex={1} />
+      {interview && (
         <React.Fragment>
-          <section css={STYLES_PROFILE}>
-            <img
-              src={`https://res.cloudinary.com/dbmvvyt3x/image/upload/${interview.profile.profileCloudinaryId}`}
-              alt="profile"
-              css={css`
-                width: 100%;
-                max-height: 400px;
-                object-fit: cover;
-              `}
-            />
-            <div
-              css={css`
-                ${verticalStackCss.xl};
-                align-items: flex-start;
-              `}
+          <section ref={ref} css={STYLES_PROFILE}>
+            <Spring
+              from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
+              to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+              config={config.slow}
             >
-              <H1>
-                {interview.profile.name} - {interview.profile.company}
-              </H1>
-              <P
-                contentCss={css`
-                  margin-top: -${rawSpacing.s}px;
-                  font-size: ${fontSize.medium}em;
-                `}
-              >
-                {interview.profile.description}
-              </P>
-              <div
-                css={css`
-                  ${verticalStackCss.s};
-                  align-items: flex-start;
-                `}
-              >
-                {interview.profile.website && (
-                  <A
-                    href={interview.profile.website}
+              {(springProps) => (
+                <CloudinaryImg
+                  style={springProps}
+                  alt={`${interview.profile.name}'s profile image`}
+                  cloudinaryId={interview.profile.profileCloudinaryId}
+                  contentCss={css`
+                    width: 100%;
+                    max-height: 400px;
+                    object-fit: cover;
+                  `}
+                />
+              )}
+            </Spring>
+            <Spring
+              from={{ opacity: 0, transform: 'translateY(15%)' }}
+              to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+              config={config.slow}
+            >
+              {(springProps) => (
+                <div
+                  style={springProps}
+                  css={css`
+                    ${verticalStackCss.xl};
+                    align-items: flex-start;
+                  `}
+                >
+                  <H1>
+                    {interview.profile.name} - {interview.profile.company}
+                  </H1>
+                  <P
                     contentCss={css`
+                      margin-top: -${rawSpacing.s}px;
                       font-size: ${fontSize.medium}em;
                     `}
                   >
-                    {prettierUrl(interview.profile.website)}
-                  </A>
-                )}
-                {interview.profile.profileLinks &&
-                  interview.profile.profileLinks.map((link) => {
-                    const { platform, handle } = link;
-                    return (
-                      <span
-                        key={platform}
-                        css={css`
+                    {interview.profile.description}
+                  </P>
+                  <div
+                    css={css`
+                      ${verticalStackCss.s};
+                      align-items: flex-start;
+                    `}
+                  >
+                    {interview.profile.website && (
+                      <A
+                        href={interview.profile.website}
+                        contentCss={css`
                           font-size: ${fontSize.medium}em;
                         `}
                       >
-                        {platform.charAt(0).toLowerCase() + platform.slice(1)}{' '}
-                        <A
-                          href={socialUrl({
-                            platform,
-                            handle
-                          })}
-                        >
-                          @{handle}
-                        </A>
-                      </span>
-                    );
-                  })}
-              </div>
-            </div>
+                        {prettierUrl(interview.profile.website)}
+                      </A>
+                    )}
+                    {interview.profile.profileLinks &&
+                      interview.profile.profileLinks.map((link) => {
+                        const { platform, handle } = link;
+                        return (
+                          <span
+                            key={platform}
+                            css={css`
+                              font-size: ${fontSize.medium}em;
+                            `}
+                          >
+                            {platform.charAt(0).toLowerCase() +
+                              platform.slice(1)}{' '}
+                            <A
+                              href={socialUrl({
+                                platform,
+                                handle
+                              })}
+                            >
+                              @{handle}
+                            </A>
+                          </span>
+                        );
+                      })}
+                  </div>
+                </div>
+              )}
+            </Spring>
           </section>
 
           <article css={STYLES_ARTICLE}>

@@ -2,11 +2,11 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, IconName, IconSize } from '../icons';
+import { Icon, IconName, IconSize } from './icons';
 import { horizontalStackCss, theme, transitionTime } from 'theme';
 import { fontSize } from 'theme/styles/font';
 
-interface PreviousHeaderProps {
+interface PreviousLinkProps {
   path: string;
   pageIndex: number;
 }
@@ -37,7 +37,7 @@ const STYLES_MAIN = css`
  * Adding previous page button to the top of page
  * @param path add the path for it
  */
-const PreviousHeader: React.FC<PreviousHeaderProps> = React.memo((props) => {
+const PreviousLink: React.FC<PreviousLinkProps> = React.memo((props) => {
   const { path, pageIndex } = props;
   return (
     <Link to={`/${path}/page/${pageIndex}`} css={STYLES_MAIN}>
@@ -67,4 +67,4 @@ const PreviousHeader: React.FC<PreviousHeaderProps> = React.memo((props) => {
   );
 });
 
-export default PreviousHeader;
+export default PreviousLink;

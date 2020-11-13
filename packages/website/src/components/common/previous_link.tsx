@@ -3,6 +3,7 @@ import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, IconName, IconSize } from './icons';
+import { setGaEvent } from 'routes/ga_tracking';
 import { horizontalStackCss, theme, transitionTime } from 'theme';
 import { fontSize } from 'theme/styles/font';
 
@@ -40,7 +41,17 @@ const STYLES_MAIN = css`
 const PreviousLink: React.FC<PreviousLinkProps> = React.memo((props) => {
   const { path, pageIndex } = props;
   return (
-    <Link to={`/${path}/page/${pageIndex}`} css={STYLES_MAIN}>
+    <Link
+      to={`/${path}/page/${pageIndex}`}
+      css={STYLES_MAIN}
+      onClick={() => {
+        setGaEvent({
+          category: 'buttons',
+          action: 'clicked',
+          label: `${path}/back/${pageIndex}`
+        });
+      }}
+    >
       <Icon
         name={IconName.ArrowLeft}
         size={IconSize.MEDIUM}

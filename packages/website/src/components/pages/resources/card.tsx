@@ -8,6 +8,7 @@ import { ResourcesProps } from './feed';
 import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { H3, P } from 'components/common/system';
 import { A } from 'components/common/system/typography';
+import { setGaEvent } from 'routes/ga_tracking';
 import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
 import { prettierUrl } from 'utilities';
 
@@ -46,7 +47,16 @@ const ResourcesCard: React.FC<ResourcesProps> = React.memo((props) => {
       {(springProps) => (
         <div ref={ref} style={springProps} css={STYLES_CARD}>
           <div>
-            <A href={link}>
+            <A
+              href={link}
+              onClick={() => {
+                setGaEvent({
+                  category: 'cards',
+                  action: 'image clicked from resources feed',
+                  label: `${name}`
+                });
+              }}
+            >
               <CloudinaryImg
                 contentCss={STYLES_IMG}
                 cloudinaryId={cloudinaryId}
@@ -67,6 +77,13 @@ const ResourcesCard: React.FC<ResourcesProps> = React.memo((props) => {
             contentCss={css`
               word-wrap: break-word;
             `}
+            onClick={() => {
+              setGaEvent({
+                category: 'cards',
+                action: 'link clicked from resources feed',
+                label: `${name}`
+              });
+            }}
           >
             {prettierUrl(link)}
           </A>

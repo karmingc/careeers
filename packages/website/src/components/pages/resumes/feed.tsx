@@ -173,6 +173,7 @@ const ResumesFeed: React.FC = () => {
                   slug={resume.slug}
                   path="resumes"
                   margin
+                  source="feed"
                 />
               );
             })}

@@ -8,11 +8,16 @@ import { Spring } from 'react-spring/renderprops';
 import { CloudinaryImg } from '../cloudinary_img';
 import { H3, P } from '../system';
 import { ProfileProps } from 'components/pages/resumes/feed';
+import { setGaEvent } from 'routes/ga_tracking';
 import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
 
 interface PreviewProps extends ProfileProps {
   path: string;
   margin: boolean;
+  /**
+   * for GA, knowing if it's from feed or related
+   */
+  source?: string;
 }
 
 const STYLES_CARD = ({ margin }: { margin: boolean }) => css`
@@ -50,7 +55,8 @@ const PreviewCard: React.FC<PreviewProps> = React.memo((props) => {
     profileCloudinaryId,
     slug,
     path,
-    margin
+    margin,
+    source
   } = props;
 
   const [ref, inView] = useInView({
@@ -68,6 +74,13 @@ const PreviewCard: React.FC<PreviewProps> = React.memo((props) => {
           style={springProps}
           css={STYLES_CARD({ margin })}
           to={`/${path}/${slug}`}
+          onClick={() => {
+            setGaEvent({
+              category: 'cards',
+              action: `clicked from ${source}`,
+              label: `/${path}/${slug}`
+            });
+          }}
         >
           <div>
             <CloudinaryImg

@@ -117,13 +117,14 @@ interface AProps extends TextProps {
   style?: any;
 }
 export const A = React.memo<AProps>((props) => {
-  const { contentCss, children, href, style } = props;
+  const { contentCss, children, href, style, onClick } = props;
   return (
     <a
       style={style}
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={onClick}
       css={[
         STYLES_BASE,
         STYLES_TEXT,

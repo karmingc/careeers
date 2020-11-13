@@ -17,6 +17,7 @@ import CardGridLayout from 'components/common/layout/card_grid';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 
 import { H1 } from 'components/common/system';
+import { setGaEvent } from 'routes/ga_tracking';
 import {
   horizontalStackCss,
   MediaSize,
@@ -45,7 +46,14 @@ const HomeSection: React.FC<HomeSectionProps> = React.memo((props) => {
     >
       {' '}
       <Link
-        to={path}
+        to={`/${path}`}
+        onClick={() => {
+          setGaEvent({
+            category: 'section headers',
+            action: 'clicked from home',
+            label: `${path}`
+          });
+        }}
         css={css`
           ${horizontalStackCss.s}
           text-decoration: none;
@@ -197,6 +205,7 @@ const HomePage: React.FC = () => {
                 slug={interview.slug}
                 path="interviews"
                 margin={false}
+                source="home"
               />
             );
           })}
@@ -215,6 +224,7 @@ const HomePage: React.FC = () => {
                 slug={resume.slug}
                 path="resumes"
                 margin={false}
+                source="home"
               />
             );
           })}

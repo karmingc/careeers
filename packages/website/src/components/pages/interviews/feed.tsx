@@ -123,6 +123,7 @@ const InterviewsFeed: React.FC = () => {
                   slug={interview.slug}
                   path="interviews"
                   margin
+                  source="feed"
                 />
               );
             })}

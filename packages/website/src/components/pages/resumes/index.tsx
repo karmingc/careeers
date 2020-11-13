@@ -260,6 +260,7 @@ const ResumePage: React.FC = () => {
                         slug={relatedResume.slug}
                         path="resumes"
                         margin
+                        source="related"
                       />
                     );
                   })}

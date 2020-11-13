@@ -9,7 +9,7 @@ interface CloudinaryImgProps {
   cloudinaryId: string;
   alt: string;
   contentCss?: SerializedStyles | SerializedStyles[];
-  style?: any;
+  style?: React.CSSProperties;
   onLoad?: () => void;
 }
 
@@ -19,6 +19,7 @@ interface CloudinaryImgProps {
 // will need to add animations
 export const CloudinaryImg = React.memo<CloudinaryImgProps>((props) => {
   const { cloudinaryId, alt, contentCss, style, onLoad } = props;
+
   return (
     <img
       style={style}

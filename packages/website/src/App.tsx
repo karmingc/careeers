@@ -1,23 +1,11 @@
 /** @jsx jsx */
 import { css, Global, jsx } from '@emotion/core';
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import HomePage from './components/pages/home';
-import Footer from 'components/common/footer';
-import Header from 'components/common/header';
-
-import NotFoundPage from 'components/common/not_found';
-import ScrollToTop from 'components/common/system/scroll_to_top';
-
-import InterviewPage from 'components/pages/interviews';
-import InterviewsFeed from 'components/pages/interviews/feed';
-// import AboutPage from 'components/pages/about';
-import PrivacyPage from 'components/pages/privacy';
-import ResourcesFeed from 'components/pages/resources/feed';
-import ResumePage from 'components/pages/resumes';
-import ResumesFeed from 'components/pages/resumes/feed';
 import { ContextProviders } from 'context';
+import { Routes } from 'routes';
+
 import { globalStyle } from 'theme/styles/global';
 
 const App = () => {
@@ -32,37 +20,11 @@ const App = () => {
       `}
     >
       <Global styles={globalStyle} />
-      <ContextProviders>
-        <Router>
-          <ScrollToTop />
-          <Header />
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route
-              exact
-              path={['/resumes', '/resumes/page/:pageId']}
-              component={ResumesFeed}
-            />
-            <Route exact path="/resumes/:id" component={ResumePage} />
-            <Route
-              exact
-              path={['/interviews', '/interviews/page/:id']}
-              component={InterviewsFeed}
-            />
-            <Route exact path="/interviews/:id" component={InterviewPage} />
-            <Route
-              exact
-              path={['/resources', '/resources/page/:id']}
-              component={ResourcesFeed}
-            />
-            {/* <Route exact path="/about" component={AboutPage} /> */}
-            <Route exact path="/privacy" component={PrivacyPage} />
-
-            <Route path="*" component={NotFoundPage} />
-          </Switch>
-          <Footer />
-        </Router>
-      </ContextProviders>
+      <Router>
+        <ContextProviders>
+          <Routes />
+        </ContextProviders>
+      </Router>
     </div>
   );
 };

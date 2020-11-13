@@ -20,9 +20,6 @@ async function resumesHasId(request: Request): Promise<Resume | false> {
     .getOne();
 
   if (typeof queryResumeById === 'undefined') {
-    console.log({
-      error: `id: ${request.params.id} does not exist in Resume table`
-    });
     return false;
   }
   return queryResumeById;
@@ -35,7 +32,6 @@ export async function getResumesCount(request: Request, response: Response) {
     .getCount();
 
   if (typeof query === 'undefined') {
-    console.log({ error: 'Resumes table does not exist' });
     response.status(404).send({ error: 'Resumes table does not exist' });
     return;
   }
@@ -60,8 +56,8 @@ export async function getResumeBySlug(
     .getOne();
 
   if (typeof query === 'undefined') {
-    console.log({
-      error: `slug: ${request.params.slug} does not exist in Profiles table`
+    response.status(404).send({
+      error: `${request.params.slug} does not exist in profiles/resumes`
     });
     return;
   }
@@ -96,7 +92,6 @@ export async function addResume(
     .values({ resumeCloudinaryId: queryValues.resumeCloudinaryId })
     .execute();
 
-  console.log('added new entry to Resumes table', query, queryValues);
   response.status(200).send(query);
   return;
 }
@@ -141,10 +136,6 @@ export async function updateResumeById(
     .where('id = :id', { id: request.params.id })
     .execute();
 
-  console.log(
-    `updated ${request.params.id} in Resumes table with`,
-    request.body
-  );
   response.status(200).send(query);
   return;
 }
@@ -176,7 +167,6 @@ export async function deleteResumeById(request: Request, response: Response) {
     .where('id = :id', { id: request.params.id })
     .execute();
 
-  console.log(`deleted id: ${request.params.id} in Resumes`);
   response.status(200).send(query);
   return;
 }

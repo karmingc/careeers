@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 
 import { CloudinaryImg } from '../cloudinary_img';
 import { H1 } from '../system';
+import { setGaError } from 'routes/ga_tracking';
 import {
   size,
   MediaSize,
@@ -69,6 +70,8 @@ export const DefaultPageLayout: React.FC<PageProps> = ({
   isLoading
 }) => {
   if (isError) {
+    setGaError();
+
     return (
       <main css={[STYLES_PAGE, STYLES_ERROR]}>
         <HelmetComponent pageTitle="Page Error" />

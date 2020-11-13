@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import css from '@emotion/css/macro';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { CloudinaryImg } from './cloudinary_img';
 import { DefaultPageLayout } from './layout/default_page';
 import { H1 } from './system';
+import { setGaError } from 'routes/ga_tracking';
 import { fadeInAnim, verticalStackCss } from 'theme/';
 
 const STYLES_ERROR = css`
@@ -14,8 +15,11 @@ const STYLES_ERROR = css`
 `;
 
 const NotFoundPage: React.FC = () => {
+  useEffect(() => {
+    setGaError();
+  }, []);
   return (
-    <DefaultPageLayout pageTitle="PAGE ERROR" contentCss={STYLES_ERROR}>
+    <DefaultPageLayout pageTitle="Page Error" contentCss={STYLES_ERROR}>
       <H1>
         Seems like we have encountered an error...Please message our team or try
         later. Here is something else in the mean time.

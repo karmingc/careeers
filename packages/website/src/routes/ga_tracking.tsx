@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import { useLocation } from 'react-router-dom';
 
+// currently using ga universal analytics as react-ga
+// does not seem to support GA4 at the moment
+
 export const useGaPageTracking = () => {
   const location = useLocation();
   const [initialized, setInitialized] = useState(false);
@@ -31,5 +34,12 @@ export const setGaEvent = ({
     category,
     action,
     label
+  });
+};
+
+export const setGaError = () => {
+  ReactGA.exception({
+    description: 'An error ocurred',
+    fatal: true
   });
 };

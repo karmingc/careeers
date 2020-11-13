@@ -26,8 +26,7 @@ export async function getInterviewsCount(
     .getCount();
 
   if (typeof query === 'undefined') {
-    console.log({ error: 'Interviews table does not exist' });
-    response.status(404).send({ error: 'Interviews table does not exist' });
+    response.status(404).send({ error: 'interviews table does not exist' });
     return;
   }
   response.status(200).send({ count: query });
@@ -55,8 +54,8 @@ export async function getInterviewBySlug(
     .getOne();
 
   if (typeof query === 'undefined') {
-    console.log({
-      error: `slug: ${request.params.slug} does not exist in Profiles/Interviews table`
+    response.status(404).send({
+      error: `${request.params.slug} does not exist in profiles/interviews`
     });
     return;
   }
@@ -80,7 +79,6 @@ export async function addInterview(
     .values(request.body)
     .execute();
 
-  console.log('added new entry to Interviews table', query);
   response.status(200).send(query);
   return;
 }
@@ -101,11 +99,8 @@ export async function addInterviewQuestion(
     .values(request.body)
     .execute();
 
-  console.log(
-    `added new entry to Interview Questions table for id: ${request.body.interview}`,
-    query
-  );
   response.status(200).send(query);
+  return;
 }
 
 /**
@@ -132,11 +127,8 @@ export async function addInterviewQuestionPhoto(
     .values(queryValues)
     .execute();
 
-  console.log(
-    `added new entry to Interview Photos table for id: ${request.body.question}`,
-    query
-  );
   response.status(200).send(query);
+  return;
 }
 
 /**
@@ -155,9 +147,6 @@ export async function addInterviewQuestionLink(
     .values(request.body)
     .execute();
 
-  console.log(
-    `added new entry to Interview Links table for id: ${request.body.question}`,
-    query
-  );
   response.status(200).send(query);
+  return;
 }

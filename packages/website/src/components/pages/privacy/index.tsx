@@ -142,8 +142,20 @@ const PrivacyPage: React.FC = () => {
         />
         <PrivacySection title="You must not in any situation:">
           {' '}
-          <li>Reproduce, duplicate or copy material from {AppUrl}</li>
-          <li>Redistribute, sell, rent or sub-license content from {AppUrl}</li>
+          <li
+            css={css`
+              font-size: ${fontSize.medium}em;
+            `}
+          >
+            Reproduce, duplicate or copy material from {AppUrl}
+          </li>
+          <li
+            css={css`
+              font-size: ${fontSize.medium}em;
+            `}
+          >
+            Redistribute, sell, rent or sub-license content from {AppUrl}
+          </li>
         </PrivacySection>
         <PrivacySection
           title={"Children's Information"}

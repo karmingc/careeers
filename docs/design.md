@@ -67,7 +67,7 @@ For e.g, if we have H1 and P together, the spacing in between should be spacing.
 
 ## Animation
 
-For our animation, we use [react-spring](https://www.react-spring.io/). In short, while it is possible add duration or easing prop, React Spring leverages native physics and feels natural by default.
+For our animation, we use [react-spring](https://www.react-spring.io/). In short, while it is possible add duration or easing prop, React Spring leverages native physics and feels natural by default. Additionally, please take a look at the performance [tab](https://www.react-spring.io/docs/props/performance). It will be useful in the long run in understading how each animation does not require re-render per frame.
 
 Unless specified otherwise, please follow these animations for consistency.
 

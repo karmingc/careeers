@@ -2,8 +2,8 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { Spring, config } from 'react-spring/renderprops';
+
+import { Spring, config, animated } from 'react-spring/renderprops';
 
 import { ProfileProps, ResumesProps } from './feed';
 import PreviewCard from 'components/common/cards/preview';
@@ -100,19 +100,17 @@ const ResumePage: React.FC = () => {
 
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
-  const [ref, inView] = useInView({
-    threshold: 0.25
-  });
-
   useEffect(() => {
     const fetchData = async () => {
       setIsError(false);
       setIsLoading(true);
 
       try {
-        const result = await axios(`/api/resumes/${slug}`);
+        const result = await axios(
+          `${process.env.REACT_APP_API_ORIGIN}/api/resumes/${slug}`
+        );
         const relatedResult = await axios(
-          `/api/profiles/resumes/related/${slug}`
+          `${process.env.REACT_APP_API_ORIGIN}/api/profiles/resumes/related/${slug}`
         );
         setResume(result.data);
         setRelatedResumes(relatedResult.data);
@@ -138,31 +136,31 @@ const ResumePage: React.FC = () => {
       {resume && (
         <React.Fragment>
           <PreviousLink path="resumes" pageIndex={resumesState.page} />
-          <section ref={ref} css={STYLES_MAIN}>
+          <section css={STYLES_MAIN}>
             <div css={STYLES_PROFILE}>
               <Spring
+                native
                 from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
-                to={
-                  inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}
-                }
+                to={{ opacity: 1, transform: 'translate(0%, 0%)' }}
                 config={config.slow}
               >
                 {(springProps) => (
-                  <CloudinaryImg
-                    style={springProps}
-                    cloudinaryId={resume.profile.profileCloudinaryId}
-                    alt={`${resume.profile.name}'s profile image`}
-                    contentCss={css`
-                      width: 100%;
-                      max-height: 400px;
-                      object-fit: cover;
-                    `}
-                  />
+                  <animated.div style={springProps}>
+                    <CloudinaryImg
+                      cloudinaryId={resume.profile.profileCloudinaryId}
+                      alt={`${resume.profile.name}'s profile image`}
+                      contentCss={css`
+                        width: 100%;
+                        max-height: 400px;
+                        object-fit: cover;
+                      `}
+                    />
+                  </animated.div>
                 )}
               </Spring>
               <Spring
                 from={{ opacity: 0, transform: 'translateY(15%)' }}
-                to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+                to={{ opacity: 1, transform: 'translateY(0%)' }}
                 config={config.slow}
               >
                 {(springProps) => (
@@ -230,17 +228,18 @@ const ResumePage: React.FC = () => {
               </Spring>
             </div>
             <Spring
+              native
               from={{ opacity: 0, transform: 'translateY(15%)' }}
-              to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+              to={{ opacity: 1, transform: 'translateY(0%)' }}
               config={config.slow}
             >
               {(springProps) => (
-                <div style={springProps} css={STYLES_RESUME}>
+                <animated.div style={springProps} css={STYLES_RESUME}>
                   <CloudinaryImg
                     cloudinaryId={resume.resumeCloudinaryId}
                     alt={`${resume.profile.name}'s resume`}
                   />
-                </div>
+                </animated.div>
               )}
             </Spring>
           </section>

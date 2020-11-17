@@ -3,17 +3,15 @@ import { css, jsx, SerializedStyles } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Spring, config } from 'react-spring/renderprops';
-
-// import PreviewCard from 'components/common/cards/preview';
+import { Spring, Trail, config, animated } from 'react-spring/renderprops';
 
 import { ProfileProps } from '../resumes/feed';
 import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { useMatchesPathSlugId } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
-// import MasonryGrid from 'components/common/layout/masonry';
+
 import PreviousLink from 'components/common/previous_link';
-// import RelatedContent from 'components/common/layout/related_content';
+
 import { H1, P, A, H2 } from 'components/common/system';
 
 import {
@@ -22,7 +20,6 @@ import {
   MediaSize,
   NotoSerif,
   rawSpacing,
-  // useMatchesMediaSize,
   verticalStackCss
 } from 'theme';
 import { fontSize } from 'theme/styles/font';
@@ -79,14 +76,15 @@ const STYLES_QUESTION_PHOTO = css`
   ${horizontalStackCss.m}
   flex-wrap: wrap;
 
-  > img:nth-of-type(2n) {
+  width: 100%;
+
+  > div:nth-of-type(2n) {
     margin-right: 0px;
   }
 
-  > img {
+  > div {
     width: calc(50% - ${rawSpacing.s}px);
     margin-bottom: ${rawSpacing.m}px;
-    object-fit: cover;
   }
 `;
 
@@ -145,26 +143,27 @@ export const InterviewQuestion: React.FC<InterviewQuestionProps> = ({
       ) : null}
       {photos.length > 0 ? (
         <div ref={ref} css={STYLES_QUESTION_PHOTO}>
-          {photos.map((src) => {
-            const { cloudinaryId } = src;
-            return (
-              <Spring
-                from={{ opacity: 0, transform: 'translateY(15%)' }}
-                to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
-                config={config.slow}
-                key={cloudinaryId}
-              >
-                {(springProps) => (
-                  <CloudinaryImg
-                    style={springProps}
-                    cloudinaryId={cloudinaryId}
-                    alt="photo for question"
-                    css={STYLES_QUESTION_PHOTO}
-                  />
-                )}
-              </Spring>
-            );
-          })}
+          <Trail
+            native
+            from={{ opacity: 0, transform: 'translateY(15%)' }}
+            to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+            config={config.slow}
+            keys={(photo) => photo.cloudinaryId}
+            items={photos}
+          >
+            {(photo) => (springProps) => (
+              <animated.div style={springProps}>
+                <CloudinaryImg
+                  cloudinaryId={photo.cloudinaryId}
+                  alt="photo for question"
+                  contentCss={css`
+                    width: 100%;
+                    object-fit: cover;
+                  `}
+                />
+              </animated.div>
+            )}
+          </Trail>
         </div>
       ) : null}
       {children}
@@ -230,9 +229,7 @@ const InterviewPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const slug = useMatchesPathSlugId();
-  const [ref, inView] = useInView({
-    threshold: 0.25
-  });
+
   // const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
 
   useEffect(() => {
@@ -241,7 +238,9 @@ const InterviewPage: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const result = await axios(`/api/interviews/${slug}`);
+        const result = await axios(
+          `${process.env.REACT_APP_API_ORIGIN}/api/interviews/${slug}`
+        );
 
         setInterview(result.data);
       } catch (error) {
@@ -266,28 +265,30 @@ const InterviewPage: React.FC = () => {
       <PreviousLink path="interviews" pageIndex={1} />
       {interview && (
         <React.Fragment>
-          <section ref={ref} css={STYLES_PROFILE}>
+          <section css={STYLES_PROFILE}>
             <Spring
+              native
               from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
-              to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+              to={{ opacity: 1, transform: 'translate(0%, 0%)' }}
               config={config.slow}
             >
               {(springProps) => (
-                <CloudinaryImg
-                  style={springProps}
-                  alt={`${interview.profile.name}'s profile image`}
-                  cloudinaryId={interview.profile.profileCloudinaryId}
-                  contentCss={css`
-                    width: 100%;
-                    max-height: 400px;
-                    object-fit: cover;
-                  `}
-                />
+                <animated.div style={springProps}>
+                  <CloudinaryImg
+                    alt={`${interview.profile.name}'s profile image`}
+                    cloudinaryId={interview.profile.profileCloudinaryId}
+                    contentCss={css`
+                      width: 100%;
+                      max-height: 400px;
+                      object-fit: cover;
+                    `}
+                  />
+                </animated.div>
               )}
             </Spring>
             <Spring
               from={{ opacity: 0, transform: 'translateY(15%)' }}
-              to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+              to={{ opacity: 1, transform: 'translateY(0%)' }}
               config={config.slow}
             >
               {(springProps) => (
@@ -370,20 +371,6 @@ const InterviewPage: React.FC = () => {
           </article>
         </React.Fragment>
       )}
-
-      {/* <RelatedContent pageTitle="Interviews">
-        <MasonryGrid>
-          {interviews.slice(0, isDesktop ? 4 : 2).map((interview) => {
-            return (
-              <PreviewCard
-                key={interview.name}
-                resume={interview}
-                type="interview"
-              />
-            );
-          })}
-        </MasonryGrid>
-      </RelatedContent> */}
     </DefaultPageLayout>
   );
 };

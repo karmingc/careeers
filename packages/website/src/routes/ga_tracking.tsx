@@ -10,8 +10,10 @@ export const useGaPageTracking = () => {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    ReactGA.initialize(`${process.env.REACT_APP_GA_MEASUREMENT_ID}`);
-    setInitialized(true);
+    if (process.env.NODE_ENV === 'production') {
+      ReactGA.initialize(`${process.env.REACT_APP_GA_MEASUREMENT_ID}`);
+      setInitialized(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -30,16 +32,20 @@ export const setGaEvent = ({
   action: string;
   label: string;
 }) => {
-  ReactGA.event({
-    category,
-    action,
-    label
-  });
+  if (process.env.NODE_ENV === 'production') {
+    ReactGA.event({
+      category,
+      action,
+      label
+    });
+  }
 };
 
 export const setGaError = () => {
-  ReactGA.exception({
-    description: 'An error ocurred',
-    fatal: true
-  });
+  if (process.env.NODE_ENV === 'production') {
+    ReactGA.exception({
+      description: 'An error ocurred',
+      fatal: true
+    });
+  }
 };

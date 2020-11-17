@@ -2,8 +2,7 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { Spring, config } from 'react-spring/renderprops';
+import { Spring, config, animated } from 'react-spring/renderprops';
 
 import { ProfileProps } from '../resumes/feed';
 import PreviewCard from 'components/common/cards/preview';
@@ -27,9 +26,6 @@ const InterviewsFeed: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [interviews, setInterviews] = useState<InterviewsFeedProps>();
-  const [ref, inView] = useInView({
-    threshold: 0.25
-  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,8 +34,10 @@ const InterviewsFeed: React.FC = () => {
 
       try {
         const [list, interviewsInfo] = await Promise.all([
-          axios.get(`/api/profiles/interviews/group/${currPage}`),
-          axios.get('/api/interviews/count')
+          axios.get(
+            `${process.env.REACT_APP_API_ORIGIN}/api/profiles/interviews/group/${currPage}`
+          ),
+          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/interviews/count`)
         ]);
         setInterviews({ list: list.data, count: interviewsInfo.data.count });
       } catch (error) {
@@ -63,7 +61,6 @@ const InterviewsFeed: React.FC = () => {
       `}
     >
       <div
-        ref={ref}
         css={css`
           ${verticalStackCss.xl}
           align-items: flex-start;
@@ -72,7 +69,7 @@ const InterviewsFeed: React.FC = () => {
       >
         <Spring
           from={{ opacity: 0, transform: 'translateY(15%)' }}
-          to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+          to={{ opacity: 1, transform: 'translateY(0%)' }}
           config={config.slow}
         >
           {(springProps) => (
@@ -91,21 +88,23 @@ const InterviewsFeed: React.FC = () => {
           )}
         </Spring>
         <Spring
+          native
           from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
-          to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+          to={{ opacity: 1, transform: 'translate(0%, 0%)' }}
           config={config.slow}
         >
           {(springProps) => (
-            <CloudinaryImg
-              style={springProps}
-              cloudinaryId="careeers/base/idea_odayya"
-              alt="Steps with inspiring idea quote"
-              contentCss={css`
-                max-height: 500px;
-                object-fit: cover;
-                width: 100%;
-              `}
-            />
+            <animated.div style={springProps}>
+              <CloudinaryImg
+                cloudinaryId="careeers/base/idea_odayya"
+                alt="Steps with inspiring idea quote"
+                contentCss={css`
+                  max-height: 500px;
+                  object-fit: cover;
+                  width: 100%;
+                `}
+              />
+            </animated.div>
           )}
         </Spring>
       </div>

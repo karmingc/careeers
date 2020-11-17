@@ -2,8 +2,8 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { Spring, config } from 'react-spring/renderprops';
+
+import { Spring, config, animated } from 'react-spring/renderprops';
 
 import PreviewCard from 'components/common/cards/preview';
 import { CloudinaryImg } from 'components/common/cloudinary_img';
@@ -57,9 +57,6 @@ const ResumesFeed: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [resumes, setResumes] = useState<ResumesFeedProps>();
-  const [ref, inView] = useInView({
-    threshold: 0.25
-  });
 
   const updatePage = (page: number) => {
     setCurrPage(page);
@@ -75,8 +72,10 @@ const ResumesFeed: React.FC = () => {
 
       try {
         const [list, resumesInfo] = await Promise.all([
-          axios.get(`/api/profiles/resumes/group/${currPage}`),
-          axios.get('/api/resumes/count')
+          axios.get(
+            `${process.env.REACT_APP_API_ORIGIN}/api/profiles/resumes/group/${currPage}`
+          ),
+          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resumes/count`)
         ]);
         setResumes({ list: list.data, count: resumesInfo.data.count });
       } catch (error) {
@@ -100,7 +99,6 @@ const ResumesFeed: React.FC = () => {
     >
       {currPage === 1 ? (
         <div
-          ref={ref}
           css={css`
             ${verticalStackCss.xl}
             align-items: flex-start;
@@ -109,7 +107,7 @@ const ResumesFeed: React.FC = () => {
         >
           <Spring
             from={{ opacity: 0, transform: 'translateY(15%)' }}
-            to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+            to={{ opacity: 1, transform: 'translateY(0%)' }}
             config={config.slow}
           >
             {(springProps) => (
@@ -128,32 +126,34 @@ const ResumesFeed: React.FC = () => {
             )}
           </Spring>
           <Spring
+            native
             from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
-            to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+            to={{ opacity: 1, transform: 'translate(0%, 0%)' }}
             config={config.slow}
           >
             {(springProps) => (
-              <CloudinaryImg
-                style={springProps}
-                cloudinaryId="careeers/base/frame_tsq8wf"
-                alt="Humans contemplating the art in a museum"
-                contentCss={css`
-                  max-height: 500px;
-                  object-fit: cover;
-                  width: 100%;
-                `}
-              />
+              <animated.div style={springProps}>
+                <CloudinaryImg
+                  cloudinaryId="careeers/base/frame_tsq8wf"
+                  alt="Humans contemplating the art in a museum"
+                  contentCss={css`
+                    max-height: 500px;
+                    object-fit: cover;
+                    width: 100%;
+                  `}
+                />
+              </animated.div>
             )}
           </Spring>
         </div>
       ) : (
         <Spring
           from={{ opacity: 0, transform: 'translateY(15%)' }}
-          to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+          to={{ opacity: 1, transform: 'translateY(0%)' }}
           config={config.slow}
         >
           {(springProps) => (
-            <div ref={ref}>
+            <div>
               <H1 style={springProps}>Resumes</H1>
             </div>
           )}

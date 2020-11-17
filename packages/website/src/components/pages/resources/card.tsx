@@ -2,7 +2,7 @@
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Spring } from 'react-spring/renderprops';
+import { animated, Spring } from 'react-spring/renderprops';
 
 import { ResourcesProps } from './feed';
 import { CloudinaryImg } from 'components/common/cloudinary_img';
@@ -41,11 +41,12 @@ const ResourcesCard: React.FC<ResourcesProps> = React.memo((props) => {
   });
   return (
     <Spring
+      native
       from={{ opacity: 0, transform: 'translateY(15%)' }}
       to={inView ? { opacity: 1, transform: 'translateY(0)' } : {}}
     >
       {(springProps) => (
-        <div ref={ref} style={springProps} css={STYLES_CARD}>
+        <animated.div ref={ref} style={springProps} css={STYLES_CARD}>
           <div>
             <A
               href={link}
@@ -87,7 +88,7 @@ const ResourcesCard: React.FC<ResourcesProps> = React.memo((props) => {
           >
             {prettierUrl(link)}
           </A>
-        </div>
+        </animated.div>
       )}
     </Spring>
   );

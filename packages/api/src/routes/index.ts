@@ -33,8 +33,10 @@ import {
 } from '../database/interview';
 
 import { HTTP } from '../helpers/https';
+import { getGaMeasurementId } from './keys';
 
 export const ApiRoutes = [
+  { path: '/google/id', method: HTTP.GET, action: getGaMeasurementId },
   {
     path: '/profiles/interviews/group/:group',
     method: HTTP.GET,

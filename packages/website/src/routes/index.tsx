@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import loadable from '@loadable/component';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { useGaPageTracking } from './ga_tracking';
@@ -9,16 +9,12 @@ import { useGaPageTracking } from './ga_tracking';
 import Footer from 'components/common/footer';
 import Header from 'components/common/header';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
+import NotFoundPage from 'components/common/not_found';
 import ScrollToTop from 'components/common/system/scroll_to_top';
 
 const lazyLoadingFallback = {
   fallback: <DefaultPageLayout pageTitle="loading" isLoading />
 };
-
-const NotFoundPage = loadable(
-  () => import('components/common/not_found'),
-  lazyLoadingFallback
-);
 
 export enum RouteName {
   HOME = '/',
@@ -66,7 +62,24 @@ const clientRoutes = {
   }
 };
 
-const createRoutes = () => {
+// const CreateRoutes: React.FC = React.memo(() => {
+//   const mapRoutes = useMemo(() => {
+//     return Object.entries(clientRoutes).map(([path, route]) => (
+//       <Route
+//         key={path}
+//         exact
+//         path={path}
+//         component={() => {
+//           return (
+//             <route.lazyComponent fallback={lazyLoadingFallback.fallback} />
+//           );
+//         }}
+//       />
+//     ));
+//   }, []);
+//   return <React.Fragment>{mapRoutes}</React.Fragment>;
+// });
+const CreateRoutes = () => {
   return Object.entries(clientRoutes).map(([path, route]) => (
     <Route
       key={path}
@@ -81,14 +94,19 @@ const createRoutes = () => {
 
 export const Routes: React.FC = () => {
   useGaPageTracking();
+  const [routes, setRoutes] = useState();
+
+  useEffect(() => {
+    setRoutes(CreateRoutes());
+  }, []);
 
   return (
     <React.Fragment>
       <ScrollToTop />
       <Header />
       <Switch>
-        {createRoutes()}
-        <Route path="*" component={NotFoundPage} />
+        {routes}
+        <Route component={NotFoundPage} />
       </Switch>
       <Footer />
     </React.Fragment>

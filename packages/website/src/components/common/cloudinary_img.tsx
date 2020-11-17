@@ -2,7 +2,7 @@
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
 
-const cloudinaryUrl = 'https://res.cloudinary.com/dbmvvyt3x/image/upload/';
+const cloudinaryUrl = `${process.env.REACT_APP_CLOUDINARY_BASE_URL}`;
 
 interface CloudinaryImgProps {
   key?: string;
@@ -23,7 +23,7 @@ export const CloudinaryImg = React.memo<CloudinaryImgProps>((props) => {
   return (
     <img
       style={style}
-      src={`${cloudinaryUrl}${cloudinaryId}`}
+      src={`${cloudinaryUrl}q_auto,f_auto,fl_progressive/${cloudinaryId}`}
       alt={alt}
       css={contentCss}
       onLoad={onLoad}

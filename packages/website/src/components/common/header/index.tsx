@@ -7,6 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { H1 } from '../system';
 import { Scroll, useMatchesScrollDirection } from './nav_helpers';
 
+import { setGaEvent } from 'routes/ga_tracking';
 import {
   horizontalStackCss,
   theme,
@@ -199,9 +200,14 @@ const Header: React.FC = () => {
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
   const scrollDirection = useMatchesScrollDirection();
 
-  const toggleMenu = () => {
+  const toggleMenu = (path: string) => {
     if (isMenuOpen) {
       setMenu(false);
+      setGaEvent({
+        category: 'page navigation',
+        action: 'clicked from header',
+        label: `${path}`
+      });
     } else {
       setMenu(true);
     }
@@ -209,7 +215,7 @@ const Header: React.FC = () => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' && toggleMenu) {
-      toggleMenu();
+      toggleMenu('/home');
     }
   };
 
@@ -241,7 +247,9 @@ const Header: React.FC = () => {
           role="button"
           css={STYLES_MENU_ICON(isMenuOpen)}
           onKeyDown={handleKeyPress}
-          onClick={toggleMenu}
+          onClick={() => {
+            toggleMenu('/home');
+          }}
           tabIndex={0}
         >
           <span />
@@ -257,7 +265,13 @@ const Header: React.FC = () => {
         >
           <H1
             contentCss={[NotoSerif]}
-            onClick={isMenuOpen ? toggleMenu : undefined}
+            onClick={
+              isMenuOpen
+                ? () => {
+                    toggleMenu('/home');
+                  }
+                : undefined
+            }
           >
             Careeers.
           </H1>
@@ -274,7 +288,9 @@ const Header: React.FC = () => {
                     selected:
                       removeTrailingSlash(currentPathname) === path ?? false
                   })}
-                  onClick={toggleMenu}
+                  onClick={() => {
+                    toggleMenu(`${path}`);
+                  }}
                   to={path}
                 >
                   {name.charAt(0).toUpperCase() + name.slice(1)}
@@ -293,6 +309,13 @@ const Header: React.FC = () => {
         css={css`
           text-decoration: none;
         `}
+        onClick={() => {
+          setGaEvent({
+            category: 'page navigation',
+            action: 'clicked from header',
+            label: '/home'
+          });
+        }}
       >
         <H1 contentCss={[NotoSerif]}>Careeers.</H1>
       </Link>
@@ -310,6 +333,13 @@ const Header: React.FC = () => {
                 selected: removeTrailingSlash(currentPathname) === path ?? false
               })}
               to={path}
+              onClick={() => {
+                setGaEvent({
+                  category: 'page navigation',
+                  action: 'clicked from header',
+                  label: `${path}`
+                });
+              }}
             >
               {name.charAt(0).toUpperCase() + name.slice(1)}
             </Link>

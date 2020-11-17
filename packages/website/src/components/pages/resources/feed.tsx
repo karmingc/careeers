@@ -2,8 +2,8 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { Spring, config } from 'react-spring/renderprops';
+
+import { Spring, config, animated } from 'react-spring/renderprops';
 
 import ResourcesCard from './card';
 import { CloudinaryImg } from 'components/common/cloudinary_img';
@@ -32,9 +32,6 @@ const ResourcesFeed: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [resources, setResources] = useState<ResourcesFeedProps>();
-  const [ref, inView] = useInView({
-    threshold: 0.25
-  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,8 +40,10 @@ const ResourcesFeed: React.FC = () => {
 
       try {
         const [list, resourcesInfo] = await Promise.all([
-          axios.get(`/api/resources/group/${currPage}`),
-          axios.get('/api/resources/count')
+          axios.get(
+            `${process.env.REACT_APP_API_ORIGIN}/api/resources/group/${currPage}`
+          ),
+          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resources/count`)
         ]);
         setResources({ list: list.data, count: resourcesInfo.data.count });
       } catch (error) {
@@ -68,7 +67,6 @@ const ResourcesFeed: React.FC = () => {
     >
       {currPage === 1 ? (
         <div
-          ref={ref}
           css={css`
             ${verticalStackCss.xl}
             align-items: flex-start;
@@ -77,7 +75,7 @@ const ResourcesFeed: React.FC = () => {
         >
           <Spring
             from={{ opacity: 0, transform: 'translateY(15%)' }}
-            to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+            to={{ opacity: 1, transform: 'translateY(0%)' }}
             config={config.slow}
           >
             {(springProps) => (
@@ -96,21 +94,23 @@ const ResourcesFeed: React.FC = () => {
             )}
           </Spring>
           <Spring
+            native
             from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
-            to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+            to={{ opacity: 1, transform: 'translate(0%, 0%)' }}
             config={config.slow}
           >
             {(springProps) => (
-              <CloudinaryImg
-                style={springProps}
-                cloudinaryId="careeers/base/reading_xip4po"
-                alt="Senior reading the newspaper in the park"
-                contentCss={css`
-                  max-height: 500px;
-                  object-fit: cover;
-                  width: 100%;
-                `}
-              />
+              <animated.div style={springProps}>
+                <CloudinaryImg
+                  cloudinaryId="careeers/base/reading_xip4po"
+                  alt="Senior reading the newspaper in the park"
+                  contentCss={css`
+                    max-height: 500px;
+                    object-fit: cover;
+                    width: 100%;
+                  `}
+                />
+              </animated.div>
             )}
           </Spring>
         </div>

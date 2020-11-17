@@ -2,10 +2,10 @@
 import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+
 import { Link } from 'react-router-dom';
 
-import { Spring, config } from 'react-spring/renderprops';
+import { Spring, config, animated } from 'react-spring/renderprops';
 
 import ResourcesCard from '../resources/card';
 import { ResourcesProps } from '../resources/feed';
@@ -19,6 +19,7 @@ import { DefaultPageLayout } from 'components/common/layout/default_page';
 import { H1 } from 'components/common/system';
 import { setGaEvent } from 'routes/ga_tracking';
 import {
+  cssForMediaSize,
   horizontalStackCss,
   MediaSize,
   rawSpacing,
@@ -27,6 +28,7 @@ import {
   useMatchesMediaSize,
   verticalStackCss
 } from 'theme';
+import { fontSize } from 'theme/styles/font';
 
 interface HomeSectionProps {
   children: React.ReactNode;
@@ -49,9 +51,9 @@ const HomeSection: React.FC<HomeSectionProps> = React.memo((props) => {
         to={`/${path}`}
         onClick={() => {
           setGaEvent({
-            category: 'section headers',
+            category: 'page navigation',
             action: 'clicked from home',
-            label: `${path}`
+            label: `/${path}`
           });
         }}
         css={css`
@@ -101,9 +103,6 @@ const HomePage: React.FC = () => {
   const [resumes, setResumes] = useState<ProfileProps[]>();
   const [interviews, setInterviews] = useState<ProfileProps[]>();
   const [resources, setResources] = useState<ResourcesProps[]>();
-  const [ref, inView] = useInView({
-    threshold: 0.25
-  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,9 +111,13 @@ const HomePage: React.FC = () => {
 
       try {
         const [resumesList, interviewsList, resourcesList] = await Promise.all([
-          axios.get('/api/profiles/resumes/random'),
-          axios.get('/api/profiles/interviews/random'),
-          axios.get('/api/resources/random')
+          axios.get(
+            `${process.env.REACT_APP_API_ORIGIN}/api/profiles/resumes/random`
+          ),
+          axios.get(
+            `${process.env.REACT_APP_API_ORIGIN}/api/profiles/interviews/random`
+          ),
+          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resources/random`)
         ]);
         setResumes(resumesList.data);
         setInterviews(interviewsList.data);
@@ -139,7 +142,6 @@ const HomePage: React.FC = () => {
       `}
     >
       <div
-        ref={ref}
         css={css`
           position: relative;
           overflow: hidden;
@@ -147,7 +149,7 @@ const HomePage: React.FC = () => {
       >
         <Spring
           from={{ opacity: 0, transform: 'translateY(15%)' }}
-          to={inView ? { opacity: 1, transform: 'translateY(0%)' } : {}}
+          to={{ opacity: 1, transform: 'translateY(0%)' }}
           config={config.slow}
         >
           {(springProps) => (
@@ -159,6 +161,14 @@ const HomePage: React.FC = () => {
                 left: ${rawSpacing.xxl}px;
                 color: ${theme.fontPrimaryWhite};
                 z-index: 1;
+
+                /* for small phones */
+                ${cssForMediaSize({
+                  max: MediaSize.PHONE,
+                  contentCss: css`
+                    ${fontSize.medium}em
+                  `
+                })}
               `}
             >
               Educate. <br />
@@ -169,25 +179,27 @@ const HomePage: React.FC = () => {
           )}
         </Spring>
         <Spring
+          native
           from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
-          to={inView ? { opacity: 1, transform: 'translate(0%, 0%)' } : {}}
+          to={{ opacity: 1, transform: 'translate(0%, 0%)' }}
           config={config.slow}
         >
           {(springProps) => (
-            <CloudinaryImg
-              style={springProps}
-              cloudinaryId="careeers/base/support_af6lxm"
-              alt="Two kids walking on a road"
-              contentCss={css`
-                max-height: 500px;
-                object-fit: cover;
-                width: 100%;
-                z-index: 0;
-              `}
-              onLoad={() => {
-                setIsBannerLoaded(true);
-              }}
-            />
+            <animated.div style={springProps}>
+              <CloudinaryImg
+                cloudinaryId="careeers/base/support_af6lxm"
+                alt="Two kids walking on a road"
+                contentCss={css`
+                  max-height: 500px;
+                  object-fit: cover;
+                  width: 100%;
+                  z-index: 0;
+                `}
+                onLoad={() => {
+                  setIsBannerLoaded(true);
+                }}
+              />
+            </animated.div>
           )}
         </Spring>
       </div>

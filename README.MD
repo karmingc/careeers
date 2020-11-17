@@ -1,6 +1,6 @@
-# Resumehub
+# Careeers
 
-Resumehub's official source code, covering the frontend + backend.
+Careeers's official source code, covering the frontend + backend.
 <br/>
 Visit live: https://www.careeers.org
 
@@ -15,7 +15,7 @@ Resumehub's redesign was released on March 23rd, 2020 and hasn't been maintained
 - accessibility
 
 <br/>
-As a result, a redesign is currently underway.
+As of Nov 15th, ResumeHub has been renamed and fully migrated to Careeers.
 
 ### Timeline
 

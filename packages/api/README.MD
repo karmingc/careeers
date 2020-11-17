@@ -1,6 +1,6 @@
-# Resumehub API
+# Careeers API
 
-Resumehub uses [Express](https://expressjs.com/).
+Careeers uses [Express](https://expressjs.com/).
 
 ## Requirements
 

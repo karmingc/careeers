@@ -1,4 +1,4 @@
-# Resumehub.org website
+# careeers.org website
 
 The website was created using [create-react-app](https://create-react-app.dev/), which had all the necessary configurations to run React in any environment.
 

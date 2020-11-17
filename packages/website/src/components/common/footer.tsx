@@ -82,7 +82,7 @@ const Footer: React.FC = () => {
       <div css={STYLES_NAV_SECTION}>
         <Link to="/privacy">Privacy</Link>
         <A href="mailto:support@careeers.org">Email</A>
-        <A href="https://github.com/karmingc/resumehub">Github</A>
+        <A href="https://github.com/karmingc/careeers">Github</A>
       </div>
     </footer>
   );

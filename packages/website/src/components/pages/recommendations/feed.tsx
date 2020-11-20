@@ -3,16 +3,17 @@ import { css, jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-import { Spring, config } from 'react-spring/renderprops';
+import { Spring, config, animated } from 'react-spring/renderprops';
 
-import ExternalCard, { ProfileProps } from 'components/common/cards/external';
-// import { CloudinaryImg } from 'components/common/cloudinary_img';
+import { ExternalCard, ProfileProps } from 'components/common/cards/external';
+import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 import MasonryGrid from 'components/common/layout/masonry';
 
 import PageIndicator from 'components/common/page_indicator';
 import { A, H1, H2, P } from 'components/common/system';
+import { setGaEvent } from 'routes/ga_tracking';
 import { rawSpacing, verticalStackCss } from 'theme';
 
 interface RecommendationsProps {
@@ -104,7 +105,7 @@ const RecommendationsFeed: React.FC = () => {
               </React.Fragment>
             )}
           </Spring>
-          {/* <Spring
+          <Spring
             native
             from={{ opacity: 0, transform: 'translate(-15%, 0%)' }}
             to={{ opacity: 1, transform: 'translate(0%, 0%)' }}
@@ -113,17 +114,17 @@ const RecommendationsFeed: React.FC = () => {
             {(springProps) => (
               <animated.div style={springProps}>
                 <CloudinaryImg
-                  cloudinaryId="careeers/base/brian-mcgowan-I0fDR8xtApA-unsplash_jvjvlw.jpg"
+                  cloudinaryId="careeers/base/spacex-6SbFGnQTE8s-unsplash_qgibzg"
                   alt="Astronaut in space"
                   contentCss={css`
-                    max-height: 500px;
+                    max-height: 400px;
                     object-fit: cover;
                     width: 100%;
                   `}
                 />
               </animated.div>
             )}
-          </Spring> */}
+          </Spring>
         </div>
       ) : (
         <H1>Recommendations</H1>
@@ -144,6 +145,7 @@ const RecommendationsFeed: React.FC = () => {
                   company={profile.company}
                   profileLinks={profile.profileLinks}
                 >
+                  ~
                   <ul
                     css={css`
                       ${verticalStackCss.m}
@@ -169,6 +171,14 @@ const RecommendationsFeed: React.FC = () => {
                               contentCss={css`
                                 font-weight: bold;
                               `}
+                              onClick={() => {
+                                setGaEvent({
+                                  category: 'cards',
+                                  action:
+                                    'link clicked from recommendations feed',
+                                  label: `${title}`
+                                });
+                              }}
                             >
                               {title}{' '}
                             </A>

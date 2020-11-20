@@ -10,6 +10,7 @@ import { A } from 'components/common/system/typography';
 
 // import { setGaEvent } from 'routes/ga_tracking';
 import { ProfileLinksProps } from 'components/pages/resumes/feed';
+import { setGaEvent } from 'routes/ga_tracking';
 import { rawSpacing, theme, transitionTime, verticalStackCss } from 'theme';
 import { socialUrl } from 'utilities';
 // import { prettierUrl } from 'utilities';
@@ -19,7 +20,7 @@ export interface ProfileProps {
   slug: string;
   company: string;
   description: string;
-  website: string;
+  website?: string;
   profileCloudinaryId: string;
   /** use first available */
   profileLinks: ProfileLinksProps[];
@@ -52,7 +53,7 @@ const STYLES_IMG = css`
   }
 `;
 
-const ExternalCard: React.FC<ExternalCardProps> = React.memo((props) => {
+export const ExternalCard: React.FC<ExternalCardProps> = React.memo((props) => {
   const {
     profileCloudinaryId,
     description,
@@ -63,7 +64,7 @@ const ExternalCard: React.FC<ExternalCardProps> = React.memo((props) => {
   } = props;
 
   const [ref, inView] = useInView({
-    threshold: 0.25
+    threshold: 0.1
   });
   return (
     <Spring
@@ -79,11 +80,18 @@ const ExternalCard: React.FC<ExternalCardProps> = React.memo((props) => {
                 platform: profileLinks[0].platform,
                 handle: profileLinks[0].handle
               })}`}
+              onClick={() => {
+                setGaEvent({
+                  category: 'cards',
+                  action: 'image clicked from recommendations feed',
+                  label: `${name}`
+                });
+              }}
             >
               <CloudinaryImg
                 contentCss={STYLES_IMG}
                 cloudinaryId={profileCloudinaryId}
-                alt={`${name}'s logo`}
+                alt={`${name}'s profile picture`}
               />
             </A>
             <H3>
@@ -103,4 +111,3 @@ const ExternalCard: React.FC<ExternalCardProps> = React.memo((props) => {
     </Spring>
   );
 });
-export default ExternalCard;

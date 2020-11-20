@@ -190,7 +190,7 @@ const HomePage: React.FC = () => {
                 cloudinaryId="careeers/base/support_af6lxm"
                 alt="Two kids walking on a road"
                 contentCss={css`
-                  max-height: 500px;
+                  max-height: 400px;
                   object-fit: cover;
                   width: 100%;
                   z-index: 0;

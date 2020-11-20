@@ -3,6 +3,7 @@ import { css, jsx } from '@emotion/core';
 import { Link } from 'react-router-dom';
 
 import { H1, A } from './system';
+import { setGaEvent } from 'routes/ga_tracking';
 import {
   cssForMediaSize,
   horizontalStackCss,
@@ -73,6 +74,30 @@ const STYLES_NAV_SECTION = css`
 `;
 
 const Footer: React.FC = () => {
+  const gaPrivacy = () => {
+    setGaEvent({
+      category: 'page navigation',
+      action: 'clicked from footer',
+      label: '/privacy'
+    });
+  };
+
+  const gaEmail = () => {
+    setGaEvent({
+      category: 'page navigation',
+      action: 'clicked from footer',
+      label: '/email'
+    });
+  };
+
+  const gaGithub = () => {
+    setGaEvent({
+      category: 'page navigation',
+      action: 'clicked from footer',
+      label: '/github'
+    });
+  };
+
   return (
     <footer css={STYLES_FOOTER}>
       <div css={STYLES_LOGO_SECTION}>
@@ -80,9 +105,15 @@ const Footer: React.FC = () => {
         <span>© 2020 Careeers. All rights reserved.</span>
       </div>
       <div css={STYLES_NAV_SECTION}>
-        <Link to="/privacy">Privacy</Link>
-        <A href="mailto:support@careeers.org">Email</A>
-        <A href="https://github.com/karmingc/careeers">Github</A>
+        <Link to="/privacy" onClick={gaPrivacy}>
+          Privacy
+        </Link>
+        <A href="mailto:support@careeers.org" onClick={gaEmail}>
+          Email
+        </A>
+        <A href="https://github.com/karmingc/careeers" onClick={gaGithub}>
+          Github
+        </A>
       </div>
     </footer>
   );

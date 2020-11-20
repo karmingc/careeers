@@ -28,7 +28,7 @@ const NotFoundPage: React.FC = () => {
         cloudinaryId="careeers/base/help_n0s1qh.jpg"
         alt="Person holding a sign during BLM protest"
         contentCss={css`
-          max-height: 500px;
+          max-height: 400px;
           object-fit: cover;
           width: 100%;
         `}

@@ -99,7 +99,7 @@ const InterviewsFeed: React.FC = () => {
                 cloudinaryId="careeers/base/idea_odayya"
                 alt="Steps with inspiring idea quote"
                 contentCss={css`
-                  max-height: 500px;
+                  max-height: 400px;
                   object-fit: cover;
                   width: 100%;
                 `}

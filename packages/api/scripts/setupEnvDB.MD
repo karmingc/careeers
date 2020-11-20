@@ -45,3 +45,21 @@ if custom format:
 ```bash
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U testuser -d careeers ./dump.sql
 ```
+
+For heroku
+
+```bash
+heroku pg:psql --app YOUR_APP_NAME_HERE < dump.sql
+```
+
+<!-- https://devcenter.heroku.com/articles/heroku-postgres-import-export -->
+
+or with public url with AWS s3
+
+```bash
+aws s3 presign s3://your-bucket-address/your-object
+```
+
+```bash
+heroku pg:backups:restore '<SIGNED URL>' DATABASE_URL
+```

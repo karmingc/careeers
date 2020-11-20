@@ -5,10 +5,16 @@ import { Profile } from '../entities/profile';
 import { Recommendation } from '../entities/recommendation';
 
 /* GET METHODS */
+
+/**
+ * Number of profiles that have recommendations
+ * @param request
+ * @param response
+ */
 export async function getRecommendationsUniqueCount(
   request: Request,
   response: Response
-) {
+): Promise<void> {
   const query = await getManager()
     .createQueryBuilder(Recommendation, 'recommendation')
     .select('COUNT(DISTINCT(recommendation.profile)) AS count')
@@ -27,6 +33,12 @@ export async function getRecommendationsUniqueCount(
   return;
 }
 
+/**
+ * Gets 16 entries from params.id - 1 (starts at 0) * 16 onward
+ * from Profiles related to Recommendations table
+ * @param request
+ * @param response
+ */
 export async function getProfilesByRecommendationsByGroup(
   request: Request,
   response: Response

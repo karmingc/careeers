@@ -31,14 +31,20 @@ import {
   addInterviewQuestionPhoto,
   addInterviewQuestionLink
 } from '../database/interview';
+import {
+  getRecommendationsUniqueCount,
+  getProfilesByRecommendationsByGroup,
+  addRecommendation
+} from '../database/recommendation';
 
 import { HTTP } from '../helpers/https';
 import { getGaMeasurementId } from './keys';
 
 export const ApiRoutes = [
   { path: '/google/id', method: HTTP.GET, action: getGaMeasurementId },
+  /* profiles */
   {
-    path: '/profiles/interviews/group/:group',
+    path: '/profiles/interviews/group/:id',
     method: HTTP.GET,
     action: getProfilesByInterviewsByGroup
   },
@@ -48,7 +54,7 @@ export const ApiRoutes = [
     action: getProfilesByInterviewsByRandom
   },
   {
-    path: '/profiles/resumes/group/:group',
+    path: '/profiles/resumes/group/:id',
     method: HTTP.GET,
     action: getProfilesByResumesByGroup
   },
@@ -100,5 +106,17 @@ export const ApiRoutes = [
   { path: '/resources/count', method: HTTP.GET, action: getResourcesCount },
   { path: '/resources', method: HTTP.POST, action: addResource },
   { path: '/resources/:id', method: HTTP.PUT, action: updateResourceById },
-  { path: '/resources/:id', method: HTTP.DELETE, action: deleteResourceById }
+  { path: '/resources/:id', method: HTTP.DELETE, action: deleteResourceById },
+  /* recommendations */
+  {
+    path: '/recommendations/count',
+    method: HTTP.GET,
+    action: getRecommendationsUniqueCount
+  },
+  {
+    path: '/recommendations/group/:id',
+    method: HTTP.GET,
+    action: getProfilesByRecommendationsByGroup
+  },
+  { path: '/recommendations', method: HTTP.POST, action: addRecommendation }
 ];

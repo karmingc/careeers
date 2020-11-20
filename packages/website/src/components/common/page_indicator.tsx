@@ -63,6 +63,7 @@ const PageIndicator: React.FC<PageIndicatorProps> = React.memo((props) => {
           >
             <button
               type="button"
+              aria-label="page indicator"
               tabIndex={-1}
               css={css`
                 background-color: ${currPageIndicator === pageIndicator

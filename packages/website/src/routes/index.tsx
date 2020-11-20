@@ -26,6 +26,8 @@ export enum RouteName {
   INTERVIEWS_ID = '/interviews/:id',
   RESOURCES_FEED = '/resources',
   RESOURCES_FEED_PAGE = '/resources/page/:id',
+  RECOMMENDATIONS_FEED = '/recommendations',
+  RECOMMENDATIONS_FEED_PAGE = '/recommendations/page/:id',
   PRIVACY = '/privacy'
 }
 
@@ -56,6 +58,16 @@ const clientRoutes = {
   },
   [RouteName.RESOURCES_FEED_PAGE]: {
     lazyComponent: loadable(() => import('components/pages/resources/feed'))
+  },
+  [RouteName.RECOMMENDATIONS_FEED]: {
+    lazyComponent: loadable(
+      () => import('components/pages/recommendations/feed')
+    )
+  },
+  [RouteName.RECOMMENDATIONS_FEED_PAGE]: {
+    lazyComponent: loadable(
+      () => import('components/pages/recommendations/feed')
+    )
   },
   [RouteName.PRIVACY]: {
     lazyComponent: loadable(() => import('components/pages/privacy'))

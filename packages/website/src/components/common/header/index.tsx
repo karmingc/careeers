@@ -231,8 +231,8 @@ const Header: React.FC = () => {
   const options = [
     { path: '/interviews', name: 'interviews' },
     { path: '/resumes', name: 'resumes' },
-    { path: '/resources', name: 'resources' }
-    // { path: '/about', name: 'about' }
+    { path: '/resources', name: 'resources' },
+    { path: '/recommendations', name: 'recommendations' }
   ];
 
   if (scrollDirection === Scroll.DOWN) {
@@ -245,6 +245,7 @@ const Header: React.FC = () => {
       <header css={STYLES_HEADER}>
         <div
           role="button"
+          aria-label="menu bar icon"
           css={STYLES_MENU_ICON(isMenuOpen)}
           onKeyDown={handleKeyPress}
           onClick={() => {

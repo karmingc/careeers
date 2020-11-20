@@ -58,6 +58,9 @@ const STYLES_PROFILE = css`
     max: MediaSize.TABLET,
     contentCss: css`
       width: 100%;
+      > div {
+        width: 100%;
+      }
     `
   })}
 
@@ -69,10 +72,10 @@ const STYLES_PROFILE = css`
   })}
 `;
 
-const STYLES_RESUME = css`
+const STYLES_RESUME = ({ isLoading }: { isLoading: boolean }) => css`
   img {
     width: 100%;
-    border: 1px solid ${theme.activeGrey};
+    border: ${isLoading ? '' : `1px solid ${theme.activeGrey}`};
     box-sizing: border-box;
   }
 
@@ -96,6 +99,7 @@ const ResumePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const slug = useMatchesPathSlugId();
+
   const resumesState = useContext(ResumesContext);
 
   const isDesktop = useMatchesMediaSize({ min: MediaSize.DESKTOP });
@@ -159,12 +163,13 @@ const ResumePage: React.FC = () => {
                 )}
               </Spring>
               <Spring
+                native
                 from={{ opacity: 0, transform: 'translateY(15%)' }}
                 to={{ opacity: 1, transform: 'translateY(0%)' }}
                 config={config.slow}
               >
                 {(springProps) => (
-                  <div
+                  <animated.div
                     style={springProps}
                     css={css`
                       ${verticalStackCss.xl}
@@ -223,7 +228,7 @@ const ResumePage: React.FC = () => {
                           );
                         })}
                     </div>
-                  </div>
+                  </animated.div>
                 )}
               </Spring>
             </div>
@@ -234,7 +239,10 @@ const ResumePage: React.FC = () => {
               config={config.slow}
             >
               {(springProps) => (
-                <animated.div style={springProps} css={STYLES_RESUME}>
+                <animated.div
+                  style={springProps}
+                  css={STYLES_RESUME({ isLoading })}
+                >
                   <CloudinaryImg
                     cloudinaryId={resume.resumeCloudinaryId}
                     alt={`${resume.profile.name}'s resume`}

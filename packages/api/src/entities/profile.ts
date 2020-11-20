@@ -3,6 +3,7 @@ import { CommonBaseEntity } from './common_base';
 import { Resume } from './resume';
 import { Resource } from './resource';
 import { Interview } from './interview';
+import { Recommendation } from './recommendation';
 import { ProfileLink } from './profile_link';
 
 @Entity({ name: 'profiles' })
@@ -50,4 +51,9 @@ export class Profile extends CommonBaseEntity {
     onDelete: 'CASCADE'
   })
   profileLinks: ProfileLink[];
+
+  @OneToMany(() => Recommendation, (recommendation) => recommendation.profile, {
+    onDelete: 'CASCADE'
+  })
+  recommendations: Recommendation[];
 }

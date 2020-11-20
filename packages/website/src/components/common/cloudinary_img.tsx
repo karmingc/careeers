@@ -13,10 +13,8 @@ interface CloudinaryImgProps {
   onLoad?: () => void;
 }
 
-// image are currently sized below 1000 pixels, if we receive larger ones
-// will need to consider using transformations to fetch appropriate size
-
-// will need to add animations
+// https://cloudinary.com/blog/responsive_images_with_srcset_sizes_and_cloudinary
+// src set
 export const CloudinaryImg = React.memo<CloudinaryImgProps>((props) => {
   const { cloudinaryId, alt, contentCss, style, onLoad } = props;
 

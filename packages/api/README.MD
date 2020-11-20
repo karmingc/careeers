@@ -9,7 +9,7 @@ Careeers uses [Express](https://expressjs.com/).
 
 ## File structure
 
-_In progress..._
+_In progress..._s
 
 ## Dependencies
 

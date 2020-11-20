@@ -46,9 +46,9 @@ const PreviousLink: React.FC<PreviousLinkProps> = React.memo((props) => {
       css={STYLES_MAIN}
       onClick={() => {
         setGaEvent({
-          category: 'buttons',
-          action: 'clicked',
-          label: `${path}/back/${pageIndex}`
+          category: 'page navigation',
+          action: `clicked from ${path}`,
+          label: `/${path}/back/${pageIndex}`
         });
       }}
     >

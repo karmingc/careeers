@@ -40,12 +40,12 @@ export async function getProfilesByInterviewsByGroup(
     .innerJoin('profile.interview', 'interview')
     .orderBy('profile.id')
     .limit(16)
-    .offset((parseInt(request.params.group) - 1) * 16)
+    .offset((parseInt(request.params.id) - 1) * 16)
     .getMany();
 
   if (typeof query === 'undefined' || query.length <= 0) {
     response.status(404).send({
-      error: `profiles/interviews/group/:${request.params.group} does not exist`
+      error: `profiles/interviews/group/:${request.params.id} does not exist`
     });
     return;
   }
@@ -91,12 +91,12 @@ export async function getProfilesByResumesByGroup(
     .innerJoin('profile.resume', 'resume')
     .orderBy('profile.id')
     .limit(16)
-    .offset((parseInt(request.params.group) - 1) * 16)
+    .offset((parseInt(request.params.id) - 1) * 16)
     .getMany();
 
   if (typeof query === 'undefined' || query.length <= 0) {
     response.status(404).send({
-      error: `profiles/resumes/group/:${request.params.group} does not exist`
+      error: `profiles/resumes/group/:${request.params.id} does not exist`
     });
     return;
   }

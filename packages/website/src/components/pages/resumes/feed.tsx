@@ -137,7 +137,7 @@ const ResumesFeed: React.FC = () => {
                   cloudinaryId="careeers/base/frame_tsq8wf"
                   alt="Humans contemplating the art in a museum"
                   contentCss={css`
-                    max-height: 400px;
+                    max-height: 500px;
                     object-fit: cover;
                     width: 100%;
                   `}

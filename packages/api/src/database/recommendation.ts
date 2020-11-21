@@ -62,6 +62,33 @@ export async function getProfilesByRecommendationsByGroup(
   return;
 }
 
+/**
+ * Get 4 profiles with recommendations, used in homepage
+ * @param request
+ * @param response
+ */
+export async function getProfilesByRecommendationsByRandom(
+  request: Request,
+  response: Response
+) {
+  const query = await getManager()
+    .createQueryBuilder(Profile, 'profile')
+    .innerJoinAndSelect('profile.profileLinks', 'profileLinks')
+    .innerJoinAndSelect('profile.recommendations', 'recommendations')
+    .orderBy('RANDOM()')
+    .limit(4)
+    .getMany();
+
+  if (typeof query === 'undefined') {
+    response
+      .status(404)
+      .send({ error: 'Profiles/Recommendations table does not exist' });
+    return;
+  }
+  response.status(200).send(query);
+  return;
+}
+
 /* POST METHODS */
 /**
  * Insert an entry into Recommendation table for its profile

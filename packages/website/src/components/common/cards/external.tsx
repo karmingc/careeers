@@ -27,6 +27,7 @@ export interface ProfileProps {
 }
 
 interface ExternalCardProps extends ProfileProps {
+  path: string;
   children?: React.ReactNode;
 }
 
@@ -60,7 +61,8 @@ export const ExternalCard: React.FC<ExternalCardProps> = React.memo((props) => {
     company,
     name,
     children,
-    profileLinks
+    profileLinks,
+    path
   } = props;
 
   const [ref, inView] = useInView({
@@ -83,7 +85,7 @@ export const ExternalCard: React.FC<ExternalCardProps> = React.memo((props) => {
               onClick={() => {
                 setGaEvent({
                   category: 'cards',
-                  action: 'image clicked from recommendations feed',
+                  action: `image clicked from ${path.slice(1)} feed`,
                   label: `${name}`
                 });
               }}

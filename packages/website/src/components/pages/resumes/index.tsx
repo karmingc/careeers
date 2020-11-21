@@ -155,7 +155,7 @@ const ResumePage: React.FC = () => {
                       alt={`${resume.profile.name}'s profile image`}
                       contentCss={css`
                         width: 100%;
-                        max-height: 400px;
+                        max-height: 500px;
                         object-fit: cover;
                       `}
                     />

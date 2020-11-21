@@ -7,16 +7,18 @@ import { Link } from 'react-router-dom';
 
 import { Spring, config, animated } from 'react-spring/renderprops';
 
+import { ProfileRecommendationsProps } from '../recommendations/feed';
 import ResourcesCard from '../resources/card';
 import { ResourcesProps } from '../resources/feed';
 import { ProfileProps } from '../resumes/feed';
+import { ExternalCard } from 'components/common/cards/external';
 import PreviewCard from 'components/common/cards/preview';
 import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { Icon, IconName, IconSize } from 'components/common/icons';
 import CardGridLayout from 'components/common/layout/card_grid';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 
-import { H1 } from 'components/common/system';
+import { A, H1, P } from 'components/common/system';
 import { setGaEvent } from 'routes/ga_tracking';
 import {
   cssForMediaSize,
@@ -103,6 +105,9 @@ const HomePage: React.FC = () => {
   const [resumes, setResumes] = useState<ProfileProps[]>();
   const [interviews, setInterviews] = useState<ProfileProps[]>();
   const [resources, setResources] = useState<ResourcesProps[]>();
+  const [recommendations, setRecommendations] = useState<
+    ProfileRecommendationsProps[]
+  >();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,18 +115,27 @@ const HomePage: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const [resumesList, interviewsList, resourcesList] = await Promise.all([
+        const [
+          resumesList,
+          interviewsList,
+          resourcesList,
+          recommendationsList
+        ] = await Promise.all([
           axios.get(
             `${process.env.REACT_APP_API_ORIGIN}/api/profiles/resumes/random`
           ),
           axios.get(
             `${process.env.REACT_APP_API_ORIGIN}/api/profiles/interviews/random`
           ),
-          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resources/random`)
+          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resources/random`),
+          axios.get(
+            `${process.env.REACT_APP_API_ORIGIN}/api/recommendations/random`
+          )
         ]);
         setResumes(resumesList.data);
         setInterviews(interviewsList.data);
         setResources(resourcesList.data);
+        setRecommendations(recommendationsList.data);
       } catch (error) {
         setIsError(true);
       }
@@ -190,7 +204,7 @@ const HomePage: React.FC = () => {
                 cloudinaryId="careeers/base/support_af6lxm"
                 alt="Two kids walking on a road"
                 contentCss={css`
-                  max-height: 400px;
+                  max-height: 500px;
                   object-fit: cover;
                   width: 100%;
                   z-index: 0;
@@ -253,6 +267,80 @@ const HomePage: React.FC = () => {
                 link={resource.link}
                 cloudinaryId={resource.cloudinaryId}
               />
+            );
+          })}
+        </HomeSection>
+      )}
+      {isBannerLoaded && recommendations && (
+        <HomeSection path="recommendations">
+          {recommendations.slice(0, isDesktop ? 4 : 2).map((profile) => {
+            return (
+              <ExternalCard
+                key={profile.name}
+                name={profile.name}
+                description={profile.description}
+                profileCloudinaryId={profile.profileCloudinaryId}
+                website={profile.website}
+                slug={profile.slug}
+                company={profile.company}
+                profileLinks={profile.profileLinks}
+                path="/home"
+              >
+                <span>~</span>
+                <ul
+                  css={css`
+                    ${verticalStackCss.m}
+                    list-style-type: none;
+                    margin-top: ${rawSpacing.zero}px;
+                    padding: 0;
+
+                    > li {
+                      /* margin: 0; */
+                      ${verticalStackCss.s}
+                      align-items: flex-start;
+                      width: 100%;
+                    }
+                  `}
+                >
+                  {profile.recommendations.map((recommendation) => {
+                    const { link, type, title, description } = recommendation;
+                    if (type === 'RESOURCE' && link) {
+                      return (
+                        <li key={title}>
+                          <A
+                            href={link}
+                            contentCss={css`
+                              font-weight: bold;
+                            `}
+                            onClick={() => {
+                              setGaEvent({
+                                category: 'cards',
+                                action: 'link clicked from home feed',
+                                label: `${title}`
+                              });
+                            }}
+                          >
+                            {title}{' '}
+                          </A>
+                          <P>{description}</P>
+                        </li>
+                      );
+                    }
+                    return (
+                      <li key={title}>
+                        <P
+                          contentCss={css`
+                            font-weight: bold;
+                          `}
+                        >
+                          {title}
+                        </P>
+                        <P>{description}</P>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </ExternalCard>
             );
           })}
         </HomeSection>

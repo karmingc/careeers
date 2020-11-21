@@ -117,7 +117,7 @@ const RecommendationsFeed: React.FC = () => {
                   cloudinaryId="careeers/base/spacex-6SbFGnQTE8s-unsplash_qgibzg"
                   alt="Astronaut in space"
                   contentCss={css`
-                    max-height: 400px;
+                    max-height: 500px;
                     object-fit: cover;
                     width: 100%;
                   `}
@@ -144,13 +144,14 @@ const RecommendationsFeed: React.FC = () => {
                   slug={profile.slug}
                   company={profile.company}
                   profileLinks={profile.profileLinks}
+                  path="/recommendations"
                 >
-                  ~
+                  <span>~</span>
                   <ul
                     css={css`
                       ${verticalStackCss.m}
                       list-style-type: none;
-                      margin-top: ${rawSpacing.s}px;
+                      margin-top: ${rawSpacing.zero}px;
                       padding: 0;
 
                       > li {

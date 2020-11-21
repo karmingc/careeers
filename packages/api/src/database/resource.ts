@@ -94,10 +94,10 @@ export async function addResource(request: Request, response: Response) {
   const queryValues = request.body;
 
   /* obtains the cloudinary Id that can be fetched directly with base url */
-  queryValues.cloudinaryId = await uploadPhotoToCloudinary(
-    request.body.cloudinaryId,
-    '/resources'
-  );
+  // queryValues.cloudinaryId = await uploadPhotoToCloudinary(
+  //   request.body.cloudinaryId,
+  //   '/resources'
+  // );
 
   const query = await getManager()
     .createQueryBuilder()

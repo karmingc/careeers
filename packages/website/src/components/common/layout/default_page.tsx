@@ -29,7 +29,7 @@ interface PageProps extends HeadProps {
 
 const STYLES_PAGE = css`
   margin-top: 107px; /* h1 header (43) + rawSpacing.m (32*2)*/
-  min-height: 400px;
+  min-height: 500px;
   box-sizing: border-box;
 
   ${cssForMediaSize({
@@ -83,7 +83,7 @@ export const DefaultPageLayout: React.FC<PageProps> = ({
           cloudinaryId="careeers/base/help_n0s1qh.jpg"
           alt="Person holding a sign during BLM protest"
           contentCss={css`
-            max-height: 400px;
+            max-height: 500px;
             object-fit: cover;
             width: 100%;
           `}

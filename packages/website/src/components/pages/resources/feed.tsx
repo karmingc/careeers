@@ -105,7 +105,7 @@ const ResourcesFeed: React.FC = () => {
                   cloudinaryId="careeers/base/reading_xip4po"
                   alt="Senior reading the newspaper in the park"
                   contentCss={css`
-                    max-height: 400px;
+                    max-height: 500px;
                     object-fit: cover;
                     width: 100%;
                   `}

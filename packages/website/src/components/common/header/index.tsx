@@ -232,7 +232,8 @@ const Header: React.FC = () => {
     { path: '/interviews', name: 'interviews' },
     { path: '/resumes', name: 'resumes' },
     { path: '/resources', name: 'resources' },
-    { path: '/recommendations', name: 'recommendations' }
+    { path: '/recommendations', name: 'recommendations' },
+    { path: '/jobs', name: 'jobs' }
   ];
 
   if (scrollDirection === Scroll.DOWN) {

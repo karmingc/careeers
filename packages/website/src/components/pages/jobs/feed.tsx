@@ -5,7 +5,9 @@ import React, { useEffect, useState } from 'react';
 
 import { Spring, config, animated } from 'react-spring/renderprops';
 
-import ResourcesCard from './card';
+import ResourcesCard from '../resources/card';
+import { ResourcesFeedProps } from '../resources/feed';
+
 import { CloudinaryImg } from 'components/common/cloudinary_img';
 import { useMatchesPathPageNumber } from 'components/common/header/nav_helpers';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
@@ -15,19 +17,7 @@ import PageIndicator from 'components/common/page_indicator';
 import { H1, H2 } from 'components/common/system';
 import { rawSpacing, verticalStackCss } from 'theme';
 
-export interface ResourcesProps {
-  name: string;
-  description: string;
-  link: string;
-  cloudinaryId: string;
-}
-
-export interface ResourcesFeedProps {
-  count: number;
-  list: ResourcesProps[];
-}
-
-const ResourcesFeed: React.FC = () => {
+const JobsFeed: React.FC = () => {
   const [currPage, setCurrPage] = useState(useMatchesPathPageNumber());
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -41,9 +31,9 @@ const ResourcesFeed: React.FC = () => {
       try {
         const [list, resourcesInfo] = await Promise.all([
           axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/resources/group/${currPage}`
+            `${process.env.REACT_APP_API_ORIGIN}/api/jobs/group/${currPage}`
           ),
-          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resources/count`)
+          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/jobs/count`)
         ]);
         setResources({ list: list.data, count: resourcesInfo.data.count });
       } catch (error) {
@@ -56,7 +46,7 @@ const ResourcesFeed: React.FC = () => {
 
   return (
     <DefaultPageLayout
-      pageTitle="Resources"
+      pageTitle="Jobs"
       isError={isError}
       isLoading={isLoading}
       contentCss={css`
@@ -80,7 +70,7 @@ const ResourcesFeed: React.FC = () => {
           >
             {(springProps) => (
               <React.Fragment>
-                <H1 style={springProps}>Resources</H1>
+                <H1 style={springProps}>Jobs</H1>
                 <H2
                   style={springProps}
                   contentCss={css`
@@ -88,7 +78,7 @@ const ResourcesFeed: React.FC = () => {
                     margin-top: -${rawSpacing.l}px;
                   `}
                 >
-                  Knowledge is endless.
+                  Experience is the best way to learn.
                 </H2>
               </React.Fragment>
             )}
@@ -102,8 +92,8 @@ const ResourcesFeed: React.FC = () => {
             {(springProps) => (
               <animated.div style={springProps}>
                 <CloudinaryImg
-                  cloudinaryId="careeers/base/reading_xip4po"
-                  alt="Senior reading the newspaper in the park"
+                  cloudinaryId="careeers/base/work_hygi2p"
+                  alt="Hard work in manufacturing company"
                   contentCss={css`
                     max-height: 500px;
                     object-fit: cover;
@@ -115,7 +105,7 @@ const ResourcesFeed: React.FC = () => {
           </Spring>
         </div>
       ) : (
-        <H1>Resources</H1>
+        <H1>Jobs</H1>
       )}
       {resources ? (
         <React.Fragment>
@@ -144,4 +134,4 @@ const ResourcesFeed: React.FC = () => {
   );
 };
 
-export default ResourcesFeed;
+export default JobsFeed;

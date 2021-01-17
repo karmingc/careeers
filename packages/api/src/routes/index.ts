@@ -6,6 +6,7 @@ import {
   deleteResourceById,
   getResourcesCount
 } from '../database/resource';
+import { getJobsByGroup, getJobsByRandom, getJobsCount } from '../database/job';
 import {
   getResumesCount,
   getResumeBySlug,
@@ -124,5 +125,15 @@ export const ApiRoutes = [
     path: '/recommendations/random',
     method: HTTP.GET,
     action: getProfilesByRecommendationsByRandom
-  }
+  },
+  // jobs
+  /* resources */
+  { path: '/jobs/random', method: HTTP.GET, action: getJobsByRandom },
+  {
+    path: '/jobs/group/:group',
+    method: HTTP.GET,
+    action: getJobsByGroup
+  },
+  { path: '/jobs/count', method: HTTP.GET, action: getJobsCount }
+  // { path: '/jobs', method: HTTP.POST, action: addJobs }
 ];

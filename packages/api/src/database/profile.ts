@@ -89,7 +89,7 @@ export async function getProfilesByResumesByGroup(
   const query = await getManager()
     .createQueryBuilder(Profile, 'profile')
     .innerJoin('profile.resume', 'resume')
-    .orderBy('profile.id')
+    .orderBy('profile.id', 'DESC')
     .limit(16)
     .offset((parseInt(request.params.id) - 1) * 16)
     .getMany();

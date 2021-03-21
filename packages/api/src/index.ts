@@ -32,7 +32,13 @@ createConnection({
   entities: [__dirname + '/entities/{*.ts,*.js}'],
   synchronize: true,
   logging: false,
-  cache: true
+  cache: true,
+  ssl: true,
+  extra: {
+    ssl: {
+      rejectUnauthorized: false
+    }
+  }
 })
   .then(async (connection) => {
     ApiRoutes.forEach((route) => {

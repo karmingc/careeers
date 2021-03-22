@@ -111,6 +111,9 @@ const Footer: React.FC = () => {
         <A href="mailto:support@careeers.org" onClick={gaEmail}>
           Email
         </A>
+        <A href="mailto:submission@careeers.org" onClick={gaEmail}>
+          Submit
+        </A>
         <A href="https://github.com/karmingc/careeers" onClick={gaGithub}>
           Github
         </A>

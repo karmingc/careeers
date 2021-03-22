@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
@@ -19,6 +18,7 @@ import CardGridLayout from 'components/common/layout/card_grid';
 import { DefaultPageLayout } from 'components/common/layout/default_page';
 
 import { A, H1, P } from 'components/common/system';
+import { fetchHomeFeed } from 'routes/apiRoutes';
 import { setGaEvent } from 'routes/ga_tracking';
 import {
   cssForMediaSize,
@@ -116,26 +116,15 @@ const HomePage: React.FC = () => {
 
       try {
         const [
-          resumesList,
-          interviewsList,
-          resourcesList,
-          recommendationsList
-        ] = await Promise.all([
-          axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/profiles/resumes/random`
-          ),
-          axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/profiles/interviews/random`
-          ),
-          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resources/random`),
-          axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/recommendations/random`
-          )
-        ]);
-        setResumes(resumesList.data);
-        setInterviews(interviewsList.data);
-        setResources(resourcesList.data);
-        setRecommendations(recommendationsList.data);
+          resumesMeta,
+          interviewsMeta,
+          resourcesMeta,
+          recommendationsMeta
+        ] = await fetchHomeFeed();
+        setResumes(resumesMeta.data);
+        setInterviews(interviewsMeta.data);
+        setResources(resourcesMeta.data);
+        setRecommendations(recommendationsMeta.data);
       } catch (error) {
         setIsError(true);
       }

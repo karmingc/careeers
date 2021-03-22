@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import { Spring, config, animated } from 'react-spring/renderprops';
@@ -13,6 +12,7 @@ import MasonryGrid from 'components/common/layout/masonry';
 
 import PageIndicator from 'components/common/page_indicator';
 import { A, H1, H2, P } from 'components/common/system';
+import { ApiRouteName, fetchFeed } from 'routes/apiRoutes';
 import { setGaEvent } from 'routes/ga_tracking';
 import { rawSpacing, verticalStackCss } from 'theme';
 
@@ -46,17 +46,14 @@ const RecommendationsFeed: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const [list, recommendationsInfo] = await Promise.all([
-          axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/recommendations/group/${currPage}`
-          ),
-          axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/recommendations/count`
-          )
-        ]);
+        const [recommendationsMeta, feedMeta] = await fetchFeed({
+          page: currPage,
+          group: ApiRouteName.RECOMMENDATIONS_GROUP,
+          count: ApiRouteName.RECOMMENDATIONS_COUNT
+        });
         setRecommendations({
-          list: list.data,
-          count: recommendationsInfo.data.count
+          list: recommendationsMeta.data,
+          count: feedMeta.data.count
         });
       } catch (error) {
         setIsError(true);
@@ -68,7 +65,7 @@ const RecommendationsFeed: React.FC = () => {
 
   return (
     <DefaultPageLayout
-      pageTitle="Resources"
+      pageTitle="Recommendations"
       isError={isError}
       isLoading={isLoading}
       contentCss={css`

@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { Spring, config, animated } from 'react-spring/renderprops';
@@ -17,6 +16,7 @@ import RelatedContent from 'components/common/related_content';
 import { H1, P, A } from 'components/common/system';
 
 import { ResumesContext } from 'context/resumes';
+import { fetchResume } from 'context/resumes/actions';
 import {
   cssForMediaSize,
   horizontalStackCss,
@@ -110,14 +110,9 @@ const ResumePage: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const result = await axios(
-          `${process.env.REACT_APP_API_ORIGIN}/api/resumes/${slug}`
-        );
-        const relatedResult = await axios(
-          `${process.env.REACT_APP_API_ORIGIN}/api/profiles/resumes/related/${slug}`
-        );
-        setResume(result.data);
-        setRelatedResumes(relatedResult.data);
+        const [resumeMeta, relatedResumesMeta] = await fetchResume({ slug });
+        setResume(resumeMeta.data);
+        setRelatedResumes(relatedResumesMeta.data);
       } catch (error) {
         setIsError(true);
       }

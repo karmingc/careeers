@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Spring, config, animated } from 'react-spring/renderprops';
 
@@ -14,6 +13,8 @@ import MasonryGrid from 'components/common/layout/masonry';
 
 import PageIndicator from 'components/common/page_indicator';
 import { H1, H2 } from 'components/common/system';
+
+import { ApiRouteName, fetchFeed } from 'routes/apiRoutes';
 import { rawSpacing, verticalStackCss } from 'theme';
 
 interface InterviewsFeedProps {
@@ -33,13 +34,15 @@ const InterviewsFeed: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const [list, interviewsInfo] = await Promise.all([
-          axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/profiles/interviews/group/${currPage}`
-          ),
-          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/interviews/count`)
-        ]);
-        setInterviews({ list: list.data, count: interviewsInfo.data.count });
+        const [interviewsMeta, feedMeta] = await fetchFeed({
+          page: currPage,
+          group: ApiRouteName.INTERVIEWS_GROUP,
+          count: ApiRouteName.INTERVIEWS_COUNT
+        });
+        setInterviews({
+          list: interviewsMeta.data,
+          count: feedMeta.data.count
+        });
       } catch (error) {
         setIsError(true);
       }

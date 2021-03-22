@@ -1,9 +1,8 @@
 /** @jsx jsx */
 import { css, Global, jsx } from '@emotion/core';
-
 import { BrowserRouter as Router } from 'react-router-dom';
-
 import { ContextProviders } from 'context';
+
 import { Routes } from 'routes';
 
 import { globalStyle } from 'theme/styles/global';

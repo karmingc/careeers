@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx, SerializedStyles } from '@emotion/core';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Spring, Trail, config, animated } from 'react-spring/renderprops';
@@ -14,6 +13,7 @@ import PreviousLink from 'components/common/previous_link';
 
 import { H1, P, A, H2 } from 'components/common/system';
 
+import { fetchInterview } from 'context/interviews/actions';
 import {
   cssForMediaSize,
   horizontalStackCss,
@@ -238,11 +238,9 @@ const InterviewPage: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const result = await axios(
-          `${process.env.REACT_APP_API_ORIGIN}/api/interviews/${slug}`
-        );
+        const [interviewMeta] = await fetchInterview({ slug });
 
-        setInterview(result.data);
+        setInterview(interviewMeta.data);
       } catch (error) {
         setIsError(true);
       }

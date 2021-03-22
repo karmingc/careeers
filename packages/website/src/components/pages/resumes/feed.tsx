@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import { Spring, config, animated } from 'react-spring/renderprops';
@@ -15,7 +14,7 @@ import PageIndicator from 'components/common/page_indicator';
 
 import { H1, H2 } from 'components/common/system';
 import { updateResumesFeedPage } from 'context/resumes/actions';
-
+import { ApiRouteName, fetchFeed } from 'routes/apiRoutes';
 import { rawSpacing, verticalStackCss } from 'theme';
 
 /**
@@ -47,7 +46,7 @@ export interface ResumesProps {
   profile: ProfileProps;
 }
 
-interface ResumesFeedProps {
+export interface ResumesFeedProps {
   count: number;
   list: ProfileProps[];
 }
@@ -71,13 +70,12 @@ const ResumesFeed: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const [list, resumesInfo] = await Promise.all([
-          axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/profiles/resumes/group/${currPage}`
-          ),
-          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resumes/count`)
-        ]);
-        setResumes({ list: list.data, count: resumesInfo.data.count });
+        const [resumesMeta, feedMeta] = await fetchFeed({
+          page: currPage,
+          group: ApiRouteName.RESUMES_GROUP,
+          count: ApiRouteName.RESUMES_COUNT
+        });
+        setResumes({ list: resumesMeta.data, count: feedMeta.data.count });
       } catch (error) {
         setIsError(true);
       }

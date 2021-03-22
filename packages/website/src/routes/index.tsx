@@ -12,9 +12,7 @@ import { DefaultPageLayout } from 'components/common/layout/default_page';
 import NotFoundPage from 'components/common/not_found';
 import ScrollToTop from 'components/common/system/scroll_to_top';
 
-const lazyLoadingFallback = {
-  fallback: <DefaultPageLayout pageTitle="loading" isLoading />
-};
+const lazyLoadingFallback = <DefaultPageLayout pageTitle="loading" isLoading />;
 
 export enum RouteName {
   HOME = '/',
@@ -85,7 +83,7 @@ const CreateRoutes = () => {
       exact
       path={path}
       component={() => {
-        return <route.lazyComponent fallback={lazyLoadingFallback.fallback} />;
+        return <route.lazyComponent fallback={lazyLoadingFallback} />;
       }}
     />
   ));

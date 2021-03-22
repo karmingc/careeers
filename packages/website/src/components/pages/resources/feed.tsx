@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import { Spring, config, animated } from 'react-spring/renderprops';
@@ -13,6 +12,7 @@ import MasonryGrid from 'components/common/layout/masonry';
 import PageIndicator from 'components/common/page_indicator';
 
 import { H1, H2 } from 'components/common/system';
+import { ApiRouteName, fetchFeed } from 'routes/apiRoutes';
 import { rawSpacing, verticalStackCss } from 'theme';
 
 export interface ResourcesProps {
@@ -39,13 +39,16 @@ const ResourcesFeed: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const [list, resourcesInfo] = await Promise.all([
-          axios.get(
-            `${process.env.REACT_APP_API_ORIGIN}/api/resources/group/${currPage}`
-          ),
-          axios.get(`${process.env.REACT_APP_API_ORIGIN}/api/resources/count`)
-        ]);
-        setResources({ list: list.data, count: resourcesInfo.data.count });
+        const [resourcesMeta, feedMeta] = await fetchFeed({
+          page: currPage,
+          group: ApiRouteName.RESOURCES_GROUP,
+          count: ApiRouteName.RESOURCES_COUNT
+        });
+
+        setResources({
+          list: resourcesMeta.data,
+          count: feedMeta.data.count
+        });
       } catch (error) {
         setIsError(true);
       }

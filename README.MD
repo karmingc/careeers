@@ -1,3 +1,5 @@
+# IMPORTANT: the site is no longer actively maitained.
+
 # Careeers
 
 Careeers's official source code, covering the frontend + backend.
